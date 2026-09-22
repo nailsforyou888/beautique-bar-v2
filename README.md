@@ -1,17 +1,13 @@
-# Beautique Bar — approved Concept C
+# Beautique Bar V2 — desktop homepage
 
-The owner reviewed three interactive desktop opening concepts and selected Concept C: Cinematic Reveal. They said: “i love number 3”.
+**Concept C is the approved direction.** The complete desktop homepage starts at [`index.html`](index.html).
 
-## Review this direction
-Start with c.html. It uses shared.css and shared.js.
-The opening photograph separates into two panels as the visitor scrolls, revealing a salon interior. The sequence then resolves into a warm stone background with the statement “Your everyday beauty ritual.”
+Run `python3 -m http.server 8766 --bind 127.0.0.1` in this repository and visit http://127.0.0.1:8766/.
 
-Preserve large editorial typography, photographic depth, native forward/reverse scrolling, restrained motion and visible booking. The intended next stage is extending Concept C into a local desktop homepage prototype. Other concepts are included only as comparison context.
+Flow: cinematic split reveal → ritual statement → brand → nails → services → salon experience → two locations → review → lookbook → booking.
 
-## Scope
-This is a temporary prototype, not the production website. Do not deploy, change the live website, Ads, analytics, booking systems, DNS or production settings without separate authorization. Existing Fresha links open the current booking pages; no booking is created automatically.
+The original [`c.html`](c.html), `shared.css` and `shared.js` are preserved unchanged. The homepage has separate `homepage.css` and `homepage.js`.
 
-## Viewing
-Extract this archive. Serve its root with a local static HTTP server and open design/concepts/c.html. Images and fonts currently reference public external URLs and require internet access. An AI chat can inspect the HTML/CSS/JavaScript but may not be able to run or visually render them.
+Read [`PROTOTYPE.md`](PROTOTYPE.md) for design decisions, temporary image provenance and owner review points.
 
-Concept C is the approved direction. The original static direction board was rejected; do not return to polishing that board.
+Public GitHub visibility does not deploy a website. This is a desktop prototype only; no production, booking infrastructure, advertising or analytics changes. Desktop approval comes before mobile or final photography.
