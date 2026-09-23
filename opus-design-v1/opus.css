@@ -55,7 +55,7 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .stone-ground{position:absolute;inset:0;background:#c9bead}
 .window{position:absolute;inset:0;overflow:hidden;background:var(--espresso);will-change:clip-path}
 .window img{position:absolute;inset:0;will-change:transform,opacity}
-.win-salon{object-position:50% 62%;transform:scale(1.18)}
+.win-salon{object-position:50% 58%;transform:scale(1.18)}
 .win-hands{opacity:0;object-position:46% 50%}
 .veil{position:absolute;inset:0;background:var(--espresso);opacity:.5}
 .door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;will-change:transform}
