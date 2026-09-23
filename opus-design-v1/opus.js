@@ -11,15 +11,13 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const header = $('.site-header');
-  const opening = $('.opening');
+  const opening = $('.opening'), stage = $('.stage');
   const o = {
     win: $('.window'), salon: $('.win-salon'), hands: $('.win-hands'), veil: $('.veil'),
     dl: $('.door-l'), dr: $('.door-r'), seam: $('.seam'),
     kicker: $('.kicker'), tOut: $('.t-out'), tIn: $('.t-in'), come: $('.come-in'),
     rl: $('.r-left'), rr: $('.r-right'), cue: $('.cue')
   };
-  const room = $('.room'), roomPhoto = $('.room-photo'), roomImg = $('.room-photo img'),
-        roomCopy = $('.room-copy'), roomWords = $('.room-words');
 
   const progress = el => {
     const r = el.getBoundingClientRect();
@@ -28,61 +26,64 @@
 
   let openingBgDark = true;
 
+  /* Opening timeline (p = 0…1 across the pinned scene)
+     0.00–0.08  read: headline alone, nothing moves
+     0.08–0.36  doors part; headline clears early (gone by .26)
+     0.26–0.40  the salon, clean — no copy
+     0.40–0.60  "Come in. Switch off." surfaces and leaves
+     0.60–0.64  the salon again, a beat to register "we're inside"
+     0.64–0.82  the room contracts into a window; hands dissolve in
+     0.80–0.90  "Your everyday / beauty ritual.", then holds to 1.00          */
   function drawOpening(p) {
-    const vw = innerWidth / 100, vh = innerHeight / 100;
-    // 1 · the seam appears, doors part
-    const seamIn = range(p, .015, .09), split = range(p, .07, .40);
+    const vw = innerWidth / 100;
+    const seamIn = range(p, .03, .09), split = range(p, .08, .36);
     o.seam.style.transform = `scaleY(${seamIn})`;
-    o.seam.style.opacity = 1 - range(p, .12, .2);
+    o.seam.style.opacity = 1 - range(p, .12, .18);
     const push = 1 + .05 * split;
     o.dl.style.transform = `translate3d(${-101 * split}%,0,0) scale(${push})`;
     o.dr.style.transform = `translate3d(${101 * split}%,0,0) scale(${push})`;
     o.dl.style.transformOrigin = '100% 50%'; o.dr.style.transformOrigin = '0 50%';
-    o.cue.style.opacity = .85 * (1 - range(p, 0, .05));
-    o.kicker.style.opacity = 1 - range(p, .03, .14);
+    o.cue.style.opacity = .85 * (1 - range(p, 0, .04));
+    o.kicker.style.opacity = 1 - range(p, .05, .12);
 
-    // "Outside, the city." belongs to the outside — it leaves with the left door.
+    // "Outside, the city." belongs to the outside — it leaves with the left door, and fades early.
     o.tOut.style.transform = `translate3d(${-52 * vw * split}px,0,0)`;
-    o.tOut.style.opacity = 1 - range(p, .16, .36);
-    // "Inside, your time." belongs to the inside — it stays, then gives way.
-    const inOut = range(p, .40, .49);
+    o.tOut.style.opacity = 1 - range(p, .10, .19);
+    // "Inside, your time." stays a moment longer, then clears so the room is seen on its own.
+    const inOut = range(p, .15, .26);
     o.tIn.style.opacity = 1 - inOut;
-    o.tIn.style.transform = `translate3d(0,${-30 * inOut}px,0)`;
+    o.tIn.style.transform = `translate3d(0,${-24 * inOut}px,0)`;
 
-    // 2 · the room: lights come up, lens settles
-    o.salon.style.transform = `scale(${lerp(1.2, 1, range(p, .07, .62))})`;
-    const come = range(p, .45, .53) * (1 - range(p, .58, .64));
+    o.salon.style.transform = `scale(${lerp(1.2, 1, range(p, .08, .6))})`;
+    const come = range(p, .40, .47) * (1 - range(p, .54, .60));
     o.come.style.opacity = come;
-    o.come.style.transform = `translate3d(0,${lerp(24, 0, range(p, .45, .55))}px,0)`;
+    o.come.style.transform = `translate3d(0,${lerp(22, 0, range(p, .40, .49))}px,0)`;
 
-    // 3 · the room contracts into a window on warm stone
-    const w = range(p, .60, .82);
+    const w = range(p, .64, .82);
     const ins = `inset(${w * 12}vh ${w * 35.5}vw ${w * 12}vh ${w * 35.5}vw)`;
-    o.win.style.clipPath = ins;
-    o.win.style.webkitClipPath = ins;
-    o.veil.style.opacity = lerp(.5, .18, split) * (1 - range(p, .62, .8));
-    const h = range(p, .70, .86);
+    o.win.style.clipPath = ins; o.win.style.webkitClipPath = ins;
+    // brighter once open; a touch darker only while copy sits on the photo
+    o.veil.style.opacity = (lerp(.5, .12, split) + .2 * come + .22 * (1 - inOut) * split) * (1 - range(p, .64, .78));
+    const h = range(p, .72, .86);
     o.hands.style.opacity = h;
-    o.hands.style.transform = `scale(${lerp(1.14, 1, range(p, .70, .98))})`;
+    o.hands.style.transform = `scale(${lerp(1.12, 1, range(p, .72, 1))})`;
 
-    // 4 · the ritual is spoken either side of the window
-    const r = range(p, .78, .93);
+    const r = range(p, .80, .90);
     o.rl.style.opacity = r; o.rr.style.opacity = r;
-    o.rl.style.transform = `translateY(-50%) translate3d(${lerp(-26, 0, r)}px,0,0)`;
-    o.rr.style.transform = `translateY(-50%) translate3d(${lerp(26, 0, r)}px,0,0)`;
+    o.rl.style.transform = `translateY(-50%) translate3d(${lerp(-24, 0, r)}px,0,0)`;
+    o.rr.style.transform = `translateY(-50%) translate3d(${lerp(24, 0, r)}px,0,0)`;
 
+    stage.style.setProperty('--scrim', (1 - range(p, .64, .74)).toFixed(3));
     openingBgDark = w < .45;
   }
 
-  function drawRoom(p) {
-    const a = range(p, .02, .55);
-    const ins = `inset(${lerp(20, 0, a)}vh ${lerp(41, 0, a)}vw ${lerp(20, 0, a)}vh ${lerp(41, 0, a)}vw)`;
-    roomPhoto.style.clipPath = ins; roomPhoto.style.webkitClipPath = ins;
-    roomImg.style.transform = `scale(${lerp(1.3, 1.02, a)}) translate3d(0,${lerp(0, -2, p)}%,0)`;
-    const c = range(p, .5, .72);
-    roomCopy.style.opacity = c;
-    roomCopy.style.transform = `translate3d(0,${lerp(24, 0, c)}px,0)`;
-    roomWords.style.opacity = range(p, .6, .8);
+  // The salons: one quiet parallax on the comfort detail — the only scroll-linked motion after the opening.
+  const room = $('.room'), roomDetail = $('.room-detail');
+  function drawRoom() {
+    const r = room.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const t = clamp((innerHeight - r.top) / (innerHeight + r.height)); // 0 → 1 while on screen
+    roomDetail.style.transform = `translate3d(0,${lerp(50, -50, t)}px,0)`;
   }
 
   // Section-aware header: tone follows whatever sits beneath it.
@@ -108,7 +109,7 @@
     queued = false;
     if (!reduced.matches) {
       drawOpening(progress(opening));
-      drawRoom(progress(room));
+      drawRoom();
     }
     drawHeader();
   }
@@ -120,7 +121,7 @@
 
   function applyMotionPreference() {
     if (reduced.matches) {
-      [...Object.values(o), roomPhoto, roomImg, roomCopy, roomWords].forEach(el => el && el.removeAttribute('style'));
+      [...Object.values(o), roomDetail, stage].forEach(el => el && el.removeAttribute('style'));
     }
     schedule();
   }
@@ -130,7 +131,7 @@
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
   }), { threshold: .15 });
-  $$('.reveal, .story').forEach(el => io.observe(el));
+  $$('.reveal, .story, .room-main').forEach(el => io.observe(el));
 
   // Nails index follows the story in view
   const stories = $$('.story'), idx = $$('.nail-index li');

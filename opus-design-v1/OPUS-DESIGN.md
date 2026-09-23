@@ -14,13 +14,13 @@ The whole page is one idea told twice: stepping from the city into your own time
 1. **Opening (the strongest motion).** A hand-care photograph sits whole, a single hairline seam appears down its centre, and the image parts like two doors. The headline is split by meaning: *Outside, the city.* is printed on the outside and leaves with the left door; *Inside, your time.* stays, because it belongs to the room behind. The salon comes up out of darkness, *Come in. Switch off.* surfaces, then the entire room contracts into a single portrait window on warm stone, the interior dissolves into hands at rest, and the line *Your everyday · beauty ritual.* is spoken either side of that window. One continuous, reversible scene; no cuts.
 2. **Nails.** A giant sticky *Nails.* with a live index (Manicure → Pedicure → Shellac → Bio Gel → Acrylic) that tracks the editorial image column as you scroll.
 3. **Beyond nails.** One sticky photograph, re-masked (wiped upward) as Lashes, Hair removal and Skin pass through the viewport; also responds to hover and keyboard focus.
-4. **The salons.** A quieter second aperture: a narrow slit of the real interior opens to full bleed. *Settle in. We'll take it from here.* Clean · Calm · Close to home.
+4. **The salons.** Atmosphere rather than another reveal: a tall interior photograph, an overlapping comfort detail with a gentle parallax, and a real client line about the ambiance. *Settle in. We'll take it from here.* Clean · Calm · Close to home.
 5. **Two addresses. One ritual.** Both salons at identical size, side by side, each with Book (solid, strongest), Explore, Directions and phone.
 6. **In their words.** One large verbatim review plus three short ones. No stars, counts or awards.
 7. **The little details.** Lookbook on a 12-column editorial grid with mixed proportions and one full-width image.
 8. **Make time for yourself.** Dark close with both salons as large booking rows.
 
-Motion arc: WOW (opening) → CALM (nails, slow scale-settle only) → DISCOVER (service mask) → TRUST (one aperture, then static) → BOOK (no motion beyond hover).
+Motion arc: WOW (opening) → CALM (nails, slow scale-settle only) → DISCOVER (service mask) → TRUST (one gentle parallax, then static) → BOOK (no motion beyond hover).
 
 ## Preserved from Concept C
 
@@ -36,7 +36,7 @@ Motion arc: WOW (opening) → CALM (nails, slow scale-settle only) → DISCOVER 
 - **Header:** transparent and section-aware. Light text over dark/photo scenes; ink text with a frosted linen bar over light sections; tone flips mid-opening when the stone appears. Book stays visible throughout (solid ink on light sections).
 - **Nails:** five verified services, each with its own image and two-word line, plus a live index — instead of two grouped stories.
 - **Services:** masked wipe instead of crossfade; nails removed from this list (they have their own chapter).
-- **Salon experience:** replaced the static dark hero with a scroll-driven aperture.
+- **Salon experience:** a composed place + comfort + client-voice section (pass 2 replaced the earlier aperture reveal).
 - **Locations:** equal weight (Concept C staggered them and gave Yonge a taller photo); added phone numbers; Book is a solid button.
 - **Reviews:** one lead + three supporting verbatim quotes chosen to cover longevity, cleanliness/relaxation, space and a named technician.
 - **Interior grade:** the real salon photos have strong blue LED light; a CSS warm/desaturate grade pulls them into the palette until they are reshot.
@@ -56,7 +56,7 @@ All images are hot-linked from beautiquebar.com and should be licensed, optimise
 | Bio Gel | svc-biogel (500px) | Bio Gel result macro, natural length |
 | Acrylic | **FINAL PHOTOGRAPHY REQUIRED** | Sculpted almond set, side-profile macro |
 | Lashes / Hair removal / Skin | 500px service images | One art-directed macro per service in the same light |
-| The salons aperture | interior-banner | Polish wall + stations, one client mid-appointment, no faces |
+| The salons | interior-banner | Polish wall + stations, one client mid-appointment, no faces |
 | Yonge card | interior-loc | Wide interior from the entrance |
 | Lookbook | salon-mauve, blog, svc-shellac, salon-apply | Real client work (with permission), hands, salon details |
 | Lookbook material | **FINAL PHOTOGRAPHY REQUIRED** | Extreme macro of polish / chrome texture |
@@ -72,9 +72,31 @@ All images are hot-linked from beautiquebar.com and should be licensed, optimise
 
 - The opening tells a story rather than performing an effect: the words move with the layer they belong to, and the ending *becomes* the next section instead of covering it.
 - Nails read unmistakably as the flagship: five named services, largest type on the page, a navigable index.
-- A single motion vocabulary — apertures and masks — used three times at decreasing intensity, so the page feels designed as one piece.
+- One strong motion moment, then masks and a single parallax at decreasing intensity, so the page feels designed as one piece.
 - Both salons are commercially equal, and booking is never more than one click away (header, each salon, the close, the dialog).
 
 ## Content sources
 
 Services, links, phones and reviews verified on beautiquebar.com on 22 Sep 2026. Reviews are verbatim from the homepage; underlying Google reviews were not independently authenticated. Bridlewood shows only the street address (floor detail left out, as in Concept C). Body piercing exists on the site but was left off the homepage as outside the requested set.
+
+---
+
+## Refinement pass 2 (23 Sep 2026)
+
+Same design, polished for review at 1440 × 900 (also checked at 1280 × 720). Full photo shot list: [`PHOTOGRAPHY.md`](PHOTOGRAPHY.md).
+
+**Timing / motion**
+- Opening redistributed within the same 460vh: headline alone for the first 8 %, doors part 8–36 %, *Outside, the city.* gone by 19 % and *Inside, your time.* by 26 %.
+- Clean salon moment (26–40 %) with no copy; *Come in. Switch off.* 40–60 % over a slightly deeper veil; another short hold (60–64 %).
+- Window contraction 64–82 %, hands dissolve 72–86 %, *Your everyday beauty ritual.* fully readable by 90 % and held to the end.
+- Salon section is no longer a second aperture reveal: a static editorial composition (place photo + comfort detail + a real client line) with one gentle parallax on the detail image. It's the only scroll-linked motion after the opening.
+- Services: image wipe shortened (0.85 s), the outgoing photo stays underneath so the frame is never empty, service images load eagerly, rows tightened (52vh → 36vh).
+
+**Typography / readability**
+- Ritual statement: lighter warm stone ground (#c9bead) and deeper ink; eyebrows darker.
+- Small text raised to 11.5 px minimum (eyebrows, captions, numbers, footer); nav 13 px, links 13.5 px, body copy 14–14.5 px; inactive nail/service names 55 % / 50 % opacity (were 42 % / 35 %).
+- Larger click targets: nav links, text links, dialog close (44 × 44), Book buttons.
+- Header label is now **Book Appointment**; a soft top scrim keeps the light header legible over bright opening photography and fades out when the stone appears.
+- Final CTA rows now carry an explicit **Book** button each.
+
+**Deliberately not changed:** Nails section layout and type size, the two-location layout, lookbook grid, final CTA copy, palette, fonts.
