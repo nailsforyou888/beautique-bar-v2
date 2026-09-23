@@ -20,7 +20,7 @@ Full-site staging build in the approved Opus V5 design. Every public URL of beau
 | 7 | `/skin/facials/` | `skin/facials/index.html` | Facials |
 | 8 | `/skin/facial-hair-removal/` | `skin/facial-hair-removal/index.html` | Facial hair removal |
 | 9 | `/skin/body-hair-removal/` | `skin/body-hair-removal/index.html` | Body hair removal |
-| 10 | `/skin/body-piercing/` | `skin/body-piercing/index.html` | Body piercing (Yonge only) |
+| 10 | `/skin/body-piercing/` | `skin/body-piercing/index.html` | Service discontinued notice (URL kept; links to other treatments) |
 | 11 | `/eyelash-extensions/` | `eyelash-extensions/index.html` | Eyelash extensions |
 | 12 | `/locations/` | `locations/index.html` | Both salons, once each |
 | 13 | `/locations/yonge/` | `locations/yonge/index.html` | Yonge & York Mills + full menu |
@@ -70,3 +70,6 @@ Trailing slashes: pages are folders with `index.html`, so `/nails` redirects to 
 
 **Photography still needed (placeholders on the page)**
 Bridlewood interior (locations index, Bridlewood page); acrylic; finished pedicure; skin & lashes overview; lashes; facial; brows; body hair removal; piercing. Temporary stock still in use: finished manicure (Manicure & Pedicure), natural finish (Bio Gel), hands at rest (homepage window), mauve set, lashes/facial service images on the homepage. Shop product photos are the existing 500 px files.
+
+## Change log
+- 23 Sep 2026 — Owner confirmed piercing and tattoo services are no longer offered. Piercing removed from the Skin & Lashes page, the Yonge menu and "what you can book here", and the 404 page. `/skin/body-piercing/` kept at the same URL as a short "no longer offered" page linking to other treatments (for production, a 301 redirect to `/skin/` is the alternative — owner's call). No tattoo content existed on the site.

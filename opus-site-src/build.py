@@ -92,7 +92,8 @@ def parse_menu(md_text):
         pending = TYPO_FIXES.get(line, line)
     return cats
 
-MENUS = {k: parse_menu((SRC / f'{k}.md').read_text()) for k in LOC}
+DISCONTINUED = ('Piercing',)   # owner, 23 Sep 2026: piercing and tattoo services no longer offered
+MENUS = {k: [c for c in parse_menu((SRC / f'{k}.md').read_text()) if not any(d in c['title'] for d in DISCONTINUED)] for k in LOC}
 
 def all_items(loc):
     for c in MENUS[loc]:
@@ -458,8 +459,8 @@ add('/nails/acrylic/', page('/nails/acrylic/', 'Acrylic Nails | Beautique Bar', 
 ''', active='/nails/'))
 
 # ---- /skin/ ----------------------------------------------------------------------------------
-add('/skin/', page('/skin/', 'Skin & Lashes | Beautique Bar', 'Eyelash extensions, facials, waxing, threading and piercing at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
-{hero([('Home','/'),('Skin & Lashes',None)], 'Skin<br>&amp; Lashes', 'Lash extensions, facials, waxing and threading, and piercing — alongside your nails, at the salon nearest you.',
+add('/skin/', page('/skin/', 'Skin & Lashes | Beautique Bar', 'Eyelash extensions, facials, waxing and threading at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Skin & Lashes',None)], 'Skin<br>&amp; Lashes', 'Lash extensions, facials, waxing and threading — alongside your nails, at the salon nearest you.',
       ph('Skin & lashes', 'A calm treatment moment: eyes closed, warm towel, soft light. Real Beautique Bar treatment room; no tools in focus.', 'frame'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="t-h">
   {sec_head('Treatments', 'Choose your treatment', 't-h')}
@@ -468,7 +469,6 @@ add('/skin/', page('/skin/', 'Skin & Lashes | Beautique Bar', 'Eyelash extension
     ('Facials', '/skin/facials/', 'From a deep-pore cleanse to an anti-wrinkle, hydrating facial.', BOTH),
     ('Facial Hair Removal', '/skin/facial-hair-removal/', 'Waxing and tinting for brows, lip, chin and full face; threading at Yonge.', BOTH),
     ('Body Hair Removal', '/skin/body-hair-removal/', 'Waxing for arms, legs, underarms, back, chest and bikini.', BOTH),
-    ('Body Piercing', '/skin/body-piercing/', 'Ear, facial, mouth and body piercing.', 'Yonge &amp; York Mills only'),
   ])}
 </section>
 {close_band()}
@@ -549,20 +549,18 @@ add('/skin/body-hair-removal/', page('/skin/body-hair-removal/', 'Body Hair Remo
 {close_band()}
 ''', active='/skin/'))
 
-# ---- /skin/body-piercing/ --------------------------------------------------------------------
-pierce_min = {}
-for c in MENUS['yonge']:
-    if 'Piercing' in c['title']:
-        pierce_min[c['title']] = min(int(re.sub(r'\D', '', i['price'])) for i in c['items'])
-add('/skin/body-piercing/', page('/skin/body-piercing/', 'Body Piercing | Beautique Bar', 'Ear, facial, mouth and body piercing at Beautique Bar on Yonge.', f'''
-{hero([('Home','/'),('Skin & Lashes','/skin/'),('Body Piercing',None)], 'Body<br>Piercing', 'Ear, facial, mouth and body piercing, offered at our Yonge &amp; York Mills salon.',
-      ph('Piercing', 'A healed ear piercing with a fine gold stud, close crop, soft natural light. No needles or gloves in frame.', 'frame'))}
-<section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
-  {sec_head('On the Yonge menu', 'Where to pierce', 'opt-h')}
-  {options([(t.replace(' Services', ''), f'From ${m} on the Yonge &amp; York Mills menu.') for t, m in pierce_min.items()])}
+# ---- /skin/body-piercing/ (service discontinued; URL kept so existing links still work) --------
+add('/skin/body-piercing/', page('/skin/body-piercing/', 'Body Piercing | Beautique Bar', 'Beautique Bar no longer offers piercing. See our nail, lash, facial and hair removal services at Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Skin & Lashes','/skin/'),('Body Piercing',None)], 'Body<br>Piercing', 'Beautique Bar no longer offers piercing services at either salon. Thank you to everyone who trusted us with theirs.')}
+<section class="pg-sec" data-tone="light" aria-labelledby="t-h">
+  {sec_head('Still at both salons', 'Explore our other treatments', 't-h')}
+  {svc_list([
+    ('Eyelash Extensions', '/eyelash-extensions/', 'Classic, hybrid and volume sets, plus refills.', BOTH),
+    ('Facials', '/skin/facials/', 'From a deep-pore cleanse to an anti-wrinkle, hydrating facial.', BOTH),
+    ('Facial Hair Removal', '/skin/facial-hair-removal/', 'Waxing and tinting for brows, lip, chin and full face; threading at Yonge.', BOTH),
+    ('Nails', '/nails/', 'Manicures, pedicures, Shellac, Bio Gel and acrylic.', BOTH),
+  ])}
 </section>
-{book_pair({'yonge': ['Ear Lobe (Each)', 'Helix', 'Tragus', 'Nostril', 'Septum', 'Navel'],
-            'warden': 'Piercing isn’t offered at Bridlewood Mall. Book it at Yonge &amp; York Mills.'}, 'Book at Yonge & York Mills')}
 {close_band()}
 ''', active='/skin/'))
 
@@ -588,7 +586,7 @@ add('/locations/', page('/locations/', 'Locations | Beautique Bar', 'Beautique B
 
 # ---- /locations/yonge/ & /locations/warden/ --------------------------------------------------
 HERE = {
-  'yonge': ['Manicures, pedicures and Shellac', 'Crystal Gel, Bio Gel and Gel-X', 'Waxing, brow tinting and threading', 'Facials', 'Eyelash extensions', 'Ear, facial, mouth and body piercing'],
+  'yonge': ['Manicures, pedicures and Shellac', 'Crystal Gel, Bio Gel and Gel-X', 'Waxing, brow tinting and threading', 'Facials', 'Eyelash extensions'],
   'warden': ['Manicures, pedicures and Shellac, including Russian manicure and BIAB', 'Gel-X, Bio Gel, Crystal Gel / acrylic and dipping powder', 'Waxing and brow tinting', 'Facials', 'Eyelash extensions'],
 }
 def menu_html(k):
@@ -698,7 +696,7 @@ add('/thank-you/', page('/thank-you/', 'Thank You | Beautique Bar', 'Thanks for 
 # ---- 404 -------------------------------------------------------------------------------------
 PAGES['/404.html'] = page('/404/', 'Page Not Found | Beautique Bar', 'This page could not be found.', f'''
 {hero([('Home','/'),('Not found',None)], 'Page not<br>found.', 'The page you’re looking for has moved or doesn’t exist. Try one of these instead.')}
-<section class="pg-sec" data-tone="light">{svc_list([('Nails', '/nails/', 'Manicures, pedicures, Shellac, Bio Gel and acrylic.', BOTH), ('Skin & Lashes', '/skin/', 'Lashes, facials, waxing, threading and piercing.', BOTH), ('Locations', '/locations/', 'Book, call or get directions.', BOTH)])}</section>''')
+<section class="pg-sec" data-tone="light">{svc_list([('Nails', '/nails/', 'Manicures, pedicures, Shellac, Bio Gel and acrylic.', BOTH), ('Skin & Lashes', '/skin/', 'Lashes, facials, waxing and threading.', BOTH), ('Locations', '/locations/', 'Book, call or get directions.', BOTH)])}</section>''')
 
 # ---- /blog/ & posts --------------------------------------------------------------------------
 def fmt_date(d):
