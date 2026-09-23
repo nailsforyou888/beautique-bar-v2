@@ -252,6 +252,9 @@ def page(path, title, desc, body, tone='light', active=None, noindex_extra=False
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 <link rel="canonical" href="{canonical}">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Italiana&display=swap">
@@ -759,6 +762,8 @@ def refresh_home():
     s = re.sub(r'src="img/', 'src="/img/', s)
     s = re.sub(r'href="opus\.css[^"]*"', f'href="/opus.css?v={VERSION}"', s)
     s = re.sub(r'src="opus\.js[^"]*"', f'src="/opus.js?v={VERSION}"', s)
+    if 'favicon.svg' not in s:
+        s = s.replace('<link rel="preconnect" href="https://fonts.googleapis.com">', '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="icon" href="/favicon.ico" sizes="32x32">\n<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' + '<link rel="preconnect" href="https://fonts.googleapis.com">', 1)
     if '/site.js' not in s:
         s = s.replace('<script src="/opus.js', f'<script src="/site.js?v={VERSION}" defer></script>\n<script src="/opus.js', 1)
     s = re.sub(r'site\.js\?v=\d+', f'site.js?v={VERSION}', s)
