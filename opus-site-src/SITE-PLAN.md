@@ -1,0 +1,72 @@
+# Beautique Bar — Opus site (branch `opus-site-v1`)
+
+Full-site staging build in the approved Opus V5 design. Every public URL of beautiquebar.com is kept at the identical path. Nothing here touches the live site, DNS, the production Cloudflare project, Ads, GA4, tracking, Google Business Profile or Fresha.
+
+- **Output:** `opus-design-v1/` (static; deployed as is). **Generator:** `opus-site-src/build.py` (run `python3 opus-site-src/build.py`).
+- **Sources:** `opus-site-src/yonge.md`, `warden.md` (live location menus) and `blog/*.md` (live articles), copied from the live site's source (`beautique-bar-main`). Every price on a service page is looked up by exact name in those menus; the build fails if a name doesn't exist.
+- **Preview:** a branch deployment of the Opus Cloudflare Pages project (`opus-site-v1.beautique-bar-opus-design-v1.pages.dev`). The approved V5 link is left unchanged.
+- noindex, nofollow on every page (meta tag + `_headers` + `robots.txt`). No analytics or tag manager.
+
+## URL checklist — live path → preview page (paths identical)
+
+| # | Live URL (sitemap) | Preview file | Page |
+|---|---|---|---|
+| 1 | `/` | `index.html` | Homepage (Opus V5; header, footer and links updated only) |
+| 2 | `/nails/` | `nails/index.html` | Nails overview |
+| 3 | `/nails/acrylic/` | `nails/acrylic/index.html` | Acrylic |
+| 4 | `/nails/bio-gel/` | `nails/bio-gel/index.html` | Bio Gel & Gel-X |
+| 5 | `/nails/manicure-pedicure/` | `nails/manicure-pedicure/index.html` | Manicure & Pedicure, incl. `#shellac` |
+| 6 | `/skin/` | `skin/index.html` | Skin & Lashes overview |
+| 7 | `/skin/facials/` | `skin/facials/index.html` | Facials |
+| 8 | `/skin/facial-hair-removal/` | `skin/facial-hair-removal/index.html` | Facial hair removal |
+| 9 | `/skin/body-hair-removal/` | `skin/body-hair-removal/index.html` | Body hair removal |
+| 10 | `/skin/body-piercing/` | `skin/body-piercing/index.html` | Body piercing (Yonge only) |
+| 11 | `/eyelash-extensions/` | `eyelash-extensions/index.html` | Eyelash extensions |
+| 12 | `/locations/` | `locations/index.html` | Both salons, once each |
+| 13 | `/locations/yonge/` | `locations/yonge/index.html` | Yonge & York Mills + full menu |
+| 14 | `/locations/warden/` | `locations/warden/index.html` | Bridlewood Mall + full menu |
+| 15 | `/shop/` | `shop/index.html` | Shop (3 products, in-store) |
+| 16 | `/contact/` | `contact/index.html` | Contact (call, text, book, email — no form) |
+| 17 | `/privacy/` | `privacy/index.html` | Privacy policy (live text) |
+| 18 | `/terms/` | `terms/index.html` | Terms (live text) |
+| 19 | `/blog/` | `blog/index.html` | Blog index |
+| 20–36 | `/blog/<slug>/` × 17 | `blog/<slug>/index.html` | Articles (see audit) |
+| — | `/thank-you/` (not in sitemap) | `thank-you/index.html` | Thank-you (noindex) |
+| — | `/rss.xml` | `rss.xml` | RSS, 17 items |
+| — | unknown paths | `404.html` | 404 page (live site currently returns a 500 error) |
+
+Blog slugs (17): acrylic-nails-costs, acrylic-nails, bio-gel-nails, cost-of-shellac-manicures, costs-of-manicures-and-pedicures, extend-longevity-nail-art, facial-frequency, facial-hair-growth, full-body-laser-hair-removal-costs, maintaining-eyelash-extensions, removing-acrylic-nails, removing-bio-gel-nails, removing-shellac-manicures, top-nail-trends-for-2025-whats-hot-in-the-world-of-nails, toronto-trending-nail-art-design, what-are-manicures-and-pedicures, what-are-nail-enhancements.
+
+Trailing slashes: pages are folders with `index.html`, so `/nails` redirects to `/nails/` and `/nails/index.html` to `/nails/`, as on the live site.
+
+## Content decisions (per owner review)
+
+- Header: **Nails · Skin & Lashes · Locations · Book Appointment**. Shop, Blog, Contact, Eyelash Extensions and legal links sit in the footer (and the phone menu).
+- Service pages: what the treatment includes, options, which salon offers it, a few real menu prices per salon with a link to the full menu, and booking. Generic promo paragraphs ("Why choose", "Glow like a celebrity", etc.) and empty "Pricing" headings were not carried over.
+- Reviews: one relevant verbatim Google review where one exists (nails pages only) plus a link to Google. Skin pages have none (no skin-specific review on file).
+- Locations page: each salon appears once. Salon pages keep their own address, numbers and full menu.
+- Contact: no form in staging; call, text, book, email and social instead.
+- Blog: URLs and text preserved; generic industry price ranges removed and replaced with a note pointing to the two salon menus; notes added where an article covers services not on either menu.
+
+## Needs owner review
+
+**Facts**
+1. Acrylic at Yonge: the Yonge menu lists "Crystal Gel" sets but never the word acrylic (Bridlewood lists "Crystal Gel / Acrylic"). The acrylic page shows Yonge's Crystal Gel prices with "call to confirm acrylic".
+2. Menu typo fixed in preview: "Bio Bel Full Set w/ Tips" → "Bio Gel Full Set w/ Tips" (Yonge).
+3. Menu items with no price were left out ("Monthly Special Pedicure" labels, Bridlewood "Tropical Pedicure"); a line says "ask in salon for this month's version". "New Service" / "Exclusive New Service!" promo labels dropped.
+4. Bridlewood address now reads "2nd floor by the library" everywhere, as on the live site (the earlier Concept C avoided the floor detail pending confirmation).
+5. Removed unverified claims from location copy: Yonge "trusted name for over a decade" (the logo says Est. 2017; site config says founded 2013) and Bridlewood "hundreds of five-star Google reviews".
+6. Removed service claims not verifiable from the menus: "hypoallergenic, medical-grade adhesives" (lashes), "aftercare services" (piercing), "natural or organic products" (facials), "up to three weeks" and "less damaging" (Bio Gel). Kept: Shellac cured under a lamp, no drying time.
+7. Pedicure descriptions (Spa, Deluxe, Monthly Special) are condensed from the live page; manicure options have no descriptions on the live site, so none were written.
+8. Live Bridlewood page source also contains a second Fresha link (`nails-for-you-beautique-bar-toronto-2900-warden-avenue-bkuolnwc`) that isn't displayed; the preview uses only the displayed one.
+9. Privacy policy still describes the website contact form and email delivery; the live form also stores leads in a database. Update the policy if the form is kept or removed in production.
+10. Shop prices ($29.99, $9.99 / 3 for $24.99, $29.99) copied from the live page — confirm current.
+
+**Blog** (see `BLOG-AUDIT.md`)
+- `full-body-laser-hair-removal-costs`: laser isn't on either menu. Decide: keep with the added note, rewrite, or retire.
+- Price ranges removed from 7 articles (`costs-of-manicures-and-pedicures` lost 18 items and is now thin on its own topic — rewrite with real menu prices or keep as a general guide).
+- `facial-hair-growth` and `what-are-nail-enhancements` discuss methods not on the menus.
+- 16 of 17 articles date from Dec 2023–Apr 2024; `top-nail-trends-for-2025` is dated by title.
+
+**Photography still needed (placeholders on the page)**
+Bridlewood interior (locations index, Bridlewood page); acrylic; finished pedicure; skin & lashes overview; lashes; facial; brows; body hair removal; piercing. Temporary stock still in use: finished manicure (Manicure & Pedicure), natural finish (Bio Gel), hands at rest (homepage window), mauve set, lashes/facial service images on the homepage. Shop product photos are the existing 500 px files.
