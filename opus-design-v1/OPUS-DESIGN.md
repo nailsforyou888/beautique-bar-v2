@@ -100,3 +100,16 @@ Same design, polished for review at 1440 × 900 (also checked at 1280 × 720). F
 - Final CTA rows now carry an explicit **Book** button each.
 
 **Deliberately not changed:** Nails section layout and type size, the two-location layout, lookbook grid, final CTA copy, palette, fonts.
+
+---
+
+## V5 targeted refinement (23 Sep 2026)
+
+V4 is the base design; changes are targeted only.
+- **Opening:** same 460vh. The salon now settles fully into the frame (61–76 %), the ritual line arrives around the framed salon (72–82 %), then inside the same frame the salon dissolves slowly into the manicure (80–95 %) while both images drift together. Before, the swap happened while the frame was still shrinking.
+- **Nails:** only finished-result imagery. Manicure, Shellac and Bio Gel use strong existing finished-nail placeholders; Pedicure and Acrylic are FINAL PHOTOGRAPHY REQUIRED panels. Promo procedure frames (drill, gloves) are removed from Nails.
+- **Services:** the hair-removal wax-stick image is replaced by a FINAL PHOTOGRAPHY REQUIRED panel; the selector itself is unchanged. Keyboard focus now reliably wins over scroll selection.
+- **Salon experience:** rebuilt as one large real interior (new crop of the Yonge pedicure lounge) with the heading, a single "Clean · Calm · Close to home" line and generous space. The extra quote, the soft walkthrough frame, the overlapping detail and its parallax are removed.
+- **Reviews:** one featured review, then a single quiet line of three short verbatim quotes and the Google link. The earlier three-column review row and the salon-section quote are gone.
+- **Lookbook:** the pedicure tool tray is replaced by the own-label gel bottles; the grid is unchanged.
+- **Bridlewood:** still a photography-required panel. The Drive folder contained only the Yonge photos.

@@ -1,63 +1,53 @@
-# Beautique Bar — photography replacement register (opus-design-v1)
+# Beautique Bar — photography register (Opus V5)
 
-Shot list only. Nothing here should be generated with AI; the salons must be photographed as they are. Owner-supplied Yonge photos, walkthrough frames and stills from the 4K Yonge promo video (23 Sep 2026) are self-hosted in `img/`, colour-corrected to remove the blue LED cast; everything else is still hot-linked from beautiquebar.com as a placeholder. Open the preview with `?notes` (or press **Photography notes** in the footer) to see each slot's brief on the page.
+Shot list only. Nothing here is generated with AI; the salons are photographed as they are.
+Real assets are self-hosted in `img/` and colour-corrected (blue LED cast neutralised). Remaining placeholders are hot-linked from beautiquebar.com.
+Open the preview with `?notes` (or press **Photography notes** in the footer) to see each slot's brief on the page.
 
-**Priority:** P1 = blocks sign-off of the design, P2 = needed before launch, P3 = nice to have.
+**Sources available so far (all Yonge):** owner photos IMG_3220 (pedicure row, 4032 px) and IMG_3229 (colour wall + chandelier, 1170 px), walkthrough video IMG_3215 (720p), 4K promo video "Beautique Bar on Yonge". **No Bridlewood imagery has been supplied yet**: the Drive folder's photos are the same two Yonge files.
 
-## Shared direction for every shot
+**Priority:** P1 = blocks sign-off · P2 = needed before launch · P3 = nice to have.
 
-- Warm, soft, directional daylight (or warm-white tungsten indoors). No blue LED cast, no ring-light catchlights.
-- Neutral, muted shades on nails (ivory, milk, nude, mauve, a single deep tone). Nothing neon.
-- Surfaces from the palette: linen, ivory satin, warm stone, pale wood, towel.
-- Real Beautique Bar clients and work, with written permission. No faces unless consented.
-- Shoot RAW; deliver ≥ 2800 px on the long edge; leave headroom around the subject for crops.
+**Shared direction:** finished results rather than procedures; no drills, gloves, wax sticks or tool close-ups as heroes. Warm soft light (2700 K), no blue LED cast. Neutral, muted shades. Linen, satin, warm stone and towel surfaces. No faces without written consent. Deliver ≥ 2800 px long edge, RAW.
 
 ## Register
 
-| # | Section | Current image | Problem | Ideal replacement | Orientation | Composition | Priority |
-|---|---|---|---|---|---|---|---|
-| 1 | Opening — doors | **Now: Yonge promo frame (4K)** — gloved hand-care at a station | Real and sharp; subject slightly left of the split line | Hand-care moment at a real station: technician's hands holding a client's hand, polish bottle in frame | Landscape 3:2, extra-wide (shoot 16:9 and wider) | Subject centred on the vertical midline so each half reads alone; dark-to-mid tones in the upper-left third where the headline sits | P2 |
-| 2 | Opening — salon reveal | **Now: owner photo, Yonge pedicure row** (colour-corrected, blue LED neutralised) | Good composition; phone photo, slight wide-angle lean; was previously the site's `interior-why`, which appears to be this same Yonge room | Same Yonge view on a tripod at full resolution, lights warmed, no people | Landscape 16:9 (plus a portrait crop for the window) | Symmetrical one-point perspective, horizon at ~55 % height, empty floor foreground | P1 |
-| 3 | Opening — window | salon-3 | Stock styling image, grey knit reads cold | Client's hands at rest on linen after a manicure, neutral shade | Portrait 3:4 | Hands filling the middle two-thirds, fingertips in the upper half; plain ground | P1 |
-| 4 | Nails — Manicure | **Now: Yonge promo frame (4K)** — manicure being shaped, gold watches | Real, in progress rather than a finished result | Finished manicure macro, soft neutral shade, real client | Landscape 3:2 | Hand diagonal from lower-left, nails sharp, background falling off | P2 |
-| 5 | Nails — Pedicure | **Now: Yonge promo frame (4K)** — pedicure foot massage | Real; gloved and procedural, not the finished result | Pedicure at a Beautique chair: feet resting on a towel, finished polish | Portrait 4:5 | Top-down or 30° angle, towel texture visible, no equipment | P2 |
-| 6 | Nails — Shellac | **Now: Yonge promo frame (4K)** — Beautique Bar colour chart | Real and branded; shows choice, not a Shellac result | Real Shellac result, glossy muted shade | Landscape 3:2 | Hand in draped fabric, one nail catching light | P3 |
-| 7 | Nails — Bio Gel | **Now: Yonge promo frame (4K)** — Beautique Bar own-label gel bottles | Real and branded; not a Bio Gel result | Finished Bio Gel set, natural length, sheer finish | Portrait 4:5 | Macro on warm stone, fingertips toward camera | P2 |
-| 8 | Nails — Acrylic | *(empty — placeholder panel)* | No image | Sculpted almond acrylic set | Landscape 3:2 | Side-profile macro showing length and curve; linen ground | P1 |
-| 9 | Beyond nails — Lashes | svc-lashes (500 px) | Stock model; heavy makeup; low resolution | Finished lash set, eyes closed, calm | Portrait 4:5 | Tight profile crop from brow to cheekbone, skin texture visible | P2 |
-| 10 | Beyond nails — Hair removal | svc-facialhair (500 px) | Procedural: gloved hands, wax stick, clinical | Brow shaping result or calm aftercare moment, no tools in focus | Portrait 4:5 | Close crop, soft light, towel or linen edge in frame | P2 |
-| 11 | Beyond nails — Skin | svc-facials (500 px) | Stock; brush-and-mask cliché | Facial in progress: towel wrap, product texture, eyes closed | Portrait 4:5 | Overhead, calm symmetry, warm towel | P2 |
-| 12 | The salons — place | **Now: Yonge walkthrough frame** (manicure stations, 720 px) | Real and on-brand, but video-frame resolution is soft on large screens | Colour wall and stations in warm evening light, one client mid-appointment for scale (no faces) | Portrait 3:4 | Colour wall on the left third, station leading into depth | P1 |
-| 13 | The salons — comfort detail | **Now: Yonge promo frame (4K)** — pedicure chair with products | Real and sharp | Real comfort detail: warm towel, client's hands resting at a station | Landscape 3:2 | Close, shallow depth, warm | P3 |
-| 14 | Locations — Yonge & York Mills | **Now: owner photo, colour wall + chandelier** (colour-corrected) | Good; 1170 px wide — reshoot at full resolution for sharpness | Yonge interior from the entrance: counter to stations | Portrait 3:4 | Counter in foreground, perspective toward the stations, lights warmed | P1 |
-| 15 | Locations — Bridlewood Mall | **Placeholder panel** | No real Bridlewood photo yet — the site's `interior-why` (labelled Warden) appears to show the Yonge room. **Highest priority.** | A second, different Bridlewood view (entrance or colour wall) | Portrait 3:4 | Distinct from shot 2 so the two salons don't repeat | P1 |
-| 16 | Lookbook — lead | **Now: Yonge promo frame (4K)** — pink pampas vase at the station | Real, on-palette | Real client set, macro on fabric | Landscape 3:2 | Large, textural, one hand | — |
-| 17 | Lookbook — small | **Now: Yonge promo frame (4K)** — lit BB logo on the slat wall | Real, on-brand | Hands with a natural detail (flower stem, linen fold) | Portrait 4:5 | Negative space above the hand | — |
-| 18 | Lookbook — material | **Now: Yonge promo frame (4K)** — crystal spheres from the ceiling | Real, fills the material-study slot | Extreme macro of polish or chrome powder, one brush stroke | Portrait 4:5 | Abstract, gloss catching light, warm neutral shade only | — |
-| 19 | Lookbook — deeper shade | **Now: Yonge promo frame (4K)** — pedicure tray set-up | Real; bright tool colours (green/purple) are slightly off-palette | One deep-tone finished set (burgundy or espresso) | Portrait 4:5 | Dark ground, glossy highlight | P3 |
-| 20 | Lookbook — wide | **Now: Yonge promo frame (4K)** — earlier white polish wall | Real, but shows an earlier white wall layout | Wide application moment at the station, technician's hands, shallow depth | Landscape 16:9 | Hands at the right third, room soft behind | P3 |
+| # | Slot | Current asset | Can stay for now? | Real asset available now? | Final photo still required? | Orientation | Crop | Subject / composition | Priority |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | Opening — doors | Yonge promo 4K frame: gloved hand-care at a station | Yes | In use | Yes | Landscape 16:9+ | Subject on the vertical midline so each half reads alone; darker upper-left for the headline | Finished-nail hand-care moment, no gloves dominant, polish bottle in frame | P1 |
+| 2 | Opening — salon reveal | Owner photo IMG_3220, Yonge pedicure row (full) | Yes, strong | In use | Tripod re-shoot only | Landscape 4:3 / 16:9 | Full room, horizon ~55 %, empty floor foreground | Yonge pedicure row, lights warmed, no people | P1 |
+| 3 | Opening — framed manicure (dissolve target) | Stock `salon-3`: finished manicure with dried flowers | Yes, strong placeholder | No finished-nail photo yet | Yes | Portrait 3:4 | Hands in the middle two-thirds, fingertips in the upper half | Client's hands at rest on linen, finished neutral manicure | P1 |
+| 4 | Nails — Manicure | Stock `salon-hero`: finished white manicure on satin | Yes, strong placeholder | Promo only shows procedures (drill), so not used | Yes | Landscape 3:2 | Hand on a diagonal from lower-left, nails sharp | Finished manicure macro, soft neutral shade, real client | P1 |
+| 5 | Nails — Pedicure | **FINAL PHOTOGRAPHY REQUIRED** panel | n/a | Promo pedicure frames are gloved and procedural, so not used | Yes | Portrait 4:5 | Top-down or 30° | Finished pedicure, feet on a warm towel at a Beautique chair | P1 |
+| 6 | Nails — Shellac | Stock `salon-mauve`: glossy mauve result | Yes, strong placeholder | No | Yes | Landscape 3:2 | One nail catching the light | Real glossy Shellac result, muted shade, draped fabric | P2 |
+| 7 | Nails — Bio Gel | Stock `blog`: natural finish, hands on a towel | Yes, temporary | No (promo gel bottles moved to the lookbook) | Yes | Portrait 4:5 | Fingertips toward camera | Finished natural-length Bio Gel set on warm stone | P1 |
+| 8 | Nails — Acrylic | **FINAL PHOTOGRAPHY REQUIRED** panel | n/a | No | Yes | Landscape 3:2 | Side profile | Sculpted almond acrylic set, length and curve visible | P1 |
+| 9 | Services — Lashes | Stock `svc-lashes` (500 px) | Temporary | No | Yes | Portrait 4:5 | Brow to cheekbone | Finished lash set, eyes closed, calm | P2 |
+| 10 | Services — Hair removal | **FINAL PHOTOGRAPHY REQUIRED** panel (stock wax-stick image removed) | n/a | No | Yes | Portrait 4:5 | Close, soft | Finished brow or smooth-skin aftercare, towel edge in frame | P2 |
+| 11 | Services — Skin | Stock `svc-facials` (500 px; brush in frame) | Temporary | No | Yes | Portrait 4:5 | Overhead | Relaxed facial, towel wrap, product texture, eyes closed | P2 |
+| 12 | Salon experience | Owner photo IMG_3220, **new crop**: pedicure lounge (chairs, slat wall, crystals) | Yes, strong | In use | Tripod re-shoot only | Landscape 4:3 | Chairs lower two-thirds, crystal line across the top | Yonge pedicure lounge, lights warmed | P2 |
+| 13 | Locations — Yonge & York Mills | Owner photo IMG_3229: colour wall + chandelier | Yes | In use (1170 px) | Higher-res re-shoot | Portrait 3:4 | Chandelier top third, stations into depth | Same view at full resolution | P1 |
+| 14 | Locations — Bridlewood Mall | **FINAL PHOTOGRAPHY REQUIRED** panel | n/a | **None supplied** | Yes | Portrait 3:4 | Match the Yonge card's framing | Bridlewood interior from the entrance, lights warmed, no people; must look distinct from Yonge | **P1, top priority** |
+| 15 | Lookbook — lead | Yonge promo 4K: pink pampas at the station | Yes | In use | Ideally a finished-nail result | Landscape 3:2 | Large, textural | Finished client set on fabric (with permission) | P2 |
+| 16 | Lookbook — branded detail | Yonge promo 4K: lit BB logo, slat wall | Yes, keep | In use | No | Portrait 2:3 | Logo centred | — | — |
+| 17 | Lookbook — architectural detail | Yonge promo 4K: crystal spheres | Yes, keep | In use | No | Portrait 2:3 | — | — | — |
+| 18 | Lookbook — product texture | Yonge promo 4K: own-label gel bottles (replaces the pedicure tool tray) | Yes, keep | In use | No | Landscape | — | — | — |
+| 19 | Lookbook — wide polish wall | Yonge promo 4K: white polish wall | Yes | In use | Check the wall still looks like this | Landscape 16:9 | — | Current polish wall, wide | P3 |
+| — | Final CTA / reviews | No imagery | — | — | — | — | — | — | — |
 
-## Shoot plan (one day, both salons)
+## Deliberately not used from the promo video
 
-1. **Bridlewood, morning, before opening:** shot 15 (top priority), plus 20.
-2. **Yonge, before opening:** tripod versions of 2, 12, 14 (interiors first, lights warmed or bulbs swapped for 2700 K).
-3. **Yonge, afternoon:** the hands/nails set-ups on a portable linen/stone table: 3, 4, 6, 7, 8, 16, 17, 19.
-4. **Service sessions with consenting clients:** 5, 9, 10, 11, 13, 1.
-5. **Macro table:** 18 (and alternates for the lookbook).
+Grand Opening banners, balloons, storefront signage, "Special offer" posters; any shot with a face (staff or clients); drill, glove and foot-massage procedure close-ups; the colour chart (catalogue-like); the reception kiosk.
 
-## Cinematic assets (decide after the stills — not in this pass)
+## Shoot plan (one session per salon)
 
-- **Door plate:** one extra-wide still of shot 1, made for the split. Most likely candidate if a special asset is needed.
-- **Interior loop:** 15–20 s silent, locked-off push down the Bridlewood stations as the lights warm. Would sit behind the doors; copy stays HTML.
-- No AI version of the physical salon, in stills or video.
+1. **Bridlewood, before opening:** slot 14 (top priority), plus a second wide angle for future use.
+2. **Yonge, before opening:** tripod versions of 2, 12, 13 with warm bulbs.
+3. **Finished-result table (either salon):** 3, 4, 6, 7, 8, 15 on linen, satin and stone, soft window light.
+4. **Consenting client sessions:** 5, 9, 10, 11, 1.
 
+## Cinematic assets (decide later — no Higgsfield yet)
 
-## Still to shoot (after the promo stills)
-
-1. **Bridlewood Mall interior** (slot 15) — no real photo exists yet.
-2. **Acrylic result** (slot 8) — placeholder.
-3. **Opening window: hands at rest** (slot 3) — still stock.
-4. **Lashes / hair removal / skin** (slots 9–11) — still stock.
-5. **Finished results** for manicure, pedicure, Shellac and Bio Gel — the promo shows services in progress, not finished nails.
-
-No faces from the promo were used. If staff or clients appear in future shots, get written consent first.
+- Door plate: one extra-wide finished-nail still made for the split.
+- Promo footage worth reusing as silent loops later: slow drift across the crystal spheres; pan across the gel bottles.
+- No AI version of either salon.

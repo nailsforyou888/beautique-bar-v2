@@ -26,17 +26,19 @@
 
   let openingBgDark = true;
 
-  /* Opening timeline (p = 0…1 across the pinned scene)
+  /* Opening timeline (p = 0…1 across the pinned scene, same 460vh as V4)
      0.00–0.08  read: headline alone, nothing moves
-     0.08–0.36  doors part; headline clears early (gone by .26)
-     0.26–0.40  the salon, clean — no copy
-     0.40–0.60  "Come in. Switch off." surfaces and leaves
-     0.60–0.64  the salon again, a beat to register "we're inside"
-     0.64–0.82  the room contracts into a window; hands dissolve in
-     0.80–0.90  "Your everyday / beauty ritual.", then holds to 1.00          */
+     0.08–0.34  doors part; headline clears early (gone by .24)
+     0.24–0.38  the salon, clean — no copy
+     0.38–0.56  "Come in. Switch off." surfaces and leaves
+     0.56–0.61  the salon again, a beat to register "we're inside"
+     0.61–0.76  the room settles into the frame (no swap yet)
+     0.72–0.82  "Your everyday / beauty ritual." arrives around the framed salon
+     0.80–0.95  inside the same frame, salon dissolves slowly into the manicure
+     0.95–1.00  hold                                                          */
   function drawOpening(p) {
     const vw = innerWidth / 100;
-    const seamIn = range(p, .03, .09), split = range(p, .08, .36);
+    const seamIn = range(p, .03, .09), split = range(p, .08, .34);
     o.seam.style.transform = `scaleY(${seamIn})`;
     o.seam.style.opacity = 1 - range(p, .12, .18);
     const push = 1 + .05 * split;
@@ -48,42 +50,36 @@
 
     // "Outside, the city." belongs to the outside — it leaves with the left door, and fades early.
     o.tOut.style.transform = `translate3d(${-52 * vw * split}px,0,0)`;
-    o.tOut.style.opacity = 1 - range(p, .10, .19);
+    o.tOut.style.opacity = 1 - range(p, .10, .18);
     // "Inside, your time." stays a moment longer, then clears so the room is seen on its own.
-    const inOut = range(p, .15, .26);
+    const inOut = range(p, .14, .24);
     o.tIn.style.opacity = 1 - inOut;
     o.tIn.style.transform = `translate3d(0,${-24 * inOut}px,0)`;
 
-    o.salon.style.transform = `scale(${lerp(1.2, 1, range(p, .08, .6))})`;
-    const come = range(p, .40, .47) * (1 - range(p, .54, .60));
+    const come = range(p, .38, .45) * (1 - range(p, .50, .56));
     o.come.style.opacity = come;
-    o.come.style.transform = `translate3d(0,${lerp(22, 0, range(p, .40, .49))}px,0)`;
+    o.come.style.transform = `translate3d(0,${lerp(22, 0, range(p, .38, .47))}px,0)`;
 
-    const w = range(p, .64, .82);
+    // the frame: one continuous window; the salon settles into it before anything changes
+    const w = range(p, .61, .76);
     const ins = `inset(${w * 12}vh ${w * 35.5}vw ${w * 12}vh ${w * 35.5}vw)`;
     o.win.style.clipPath = ins; o.win.style.webkitClipPath = ins;
-    // brighter once open; a touch darker only while copy sits on the photo
-    o.veil.style.opacity = (lerp(.5, .12, split) + .2 * come + .22 * (1 - inOut) * split) * (1 - range(p, .64, .78));
-    const h = range(p, .72, .86);
-    o.hands.style.opacity = h;
-    o.hands.style.transform = `scale(${lerp(1.12, 1, range(p, .72, 1))})`;
+    o.veil.style.opacity = (lerp(.5, .12, split) + .2 * come + .22 * (1 - inOut) * split) * (1 - range(p, .61, .74));
 
-    const r = range(p, .80, .90);
+    // slow dissolve inside the same frame: both images drift together so it reads as one scene changing
+    const d = range(p, .80, .95);
+    o.salon.style.transform = `scale(${lerp(1.2, 1, range(p, .08, .6)) * lerp(1, 1.06, range(p, .76, 1))})`;
+    o.salon.style.opacity = 1 - d * .999;
+    o.hands.style.opacity = d;
+    o.hands.style.transform = `scale(${lerp(1.08, 1, range(p, .78, 1))})`;
+
+    const r = range(p, .72, .82);
     o.rl.style.opacity = r; o.rr.style.opacity = r;
     o.rl.style.transform = `translateY(-50%) translate3d(${lerp(-24, 0, r)}px,0,0)`;
     o.rr.style.transform = `translateY(-50%) translate3d(${lerp(24, 0, r)}px,0,0)`;
 
-    stage.style.setProperty('--scrim', (1 - range(p, .64, .74)).toFixed(3));
+    stage.style.setProperty('--scrim', (1 - range(p, .61, .71)).toFixed(3));
     openingBgDark = w < .45;
-  }
-
-  // The salons: one quiet parallax on the comfort detail — the only scroll-linked motion after the opening.
-  const room = $('.room'), roomDetail = $('.room-detail');
-  function drawRoom() {
-    const r = room.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > innerHeight) return;
-    const t = clamp((innerHeight - r.top) / (innerHeight + r.height)); // 0 → 1 while on screen
-    roomDetail.style.transform = `translate3d(0,${lerp(50, -50, t)}px,0)`;
   }
 
   // Section-aware header: tone follows whatever sits beneath it.
@@ -109,7 +105,6 @@
     queued = false;
     if (!reduced.matches) {
       drawOpening(progress(opening));
-      drawRoom();
     }
     drawHeader();
   }
@@ -121,7 +116,7 @@
 
   function applyMotionPreference() {
     if (reduced.matches) {
-      [...Object.values(o), roomDetail, stage].forEach(el => el && el.removeAttribute('style'));
+      [...Object.values(o), stage].forEach(el => el && el.removeAttribute('style'));
     }
     schedule();
   }
@@ -141,8 +136,8 @@
   stories.forEach(s => storyIO.observe(s));
 
   // Beyond nails: list drives one masked photograph (scroll, hover or focus)
-  const rows = $$('.service'), photos = $$('.service-photo img'), count = $('.sp-count');
-  let current = 0;
+  const rows = $$('.service'), photos = $$('.service-photo .sp'), count = $('.sp-count');
+  let current = 0, pinned = -1e9;
   function selectService(i) {
     if (i === current) return;
     photos.forEach((im, k) => { im.classList.toggle('was-active', k === current); im.classList.toggle('is-active', k === i); });
@@ -151,12 +146,13 @@
     current = i;
   }
   const rowIO = new IntersectionObserver(es => {
+    if (performance.now() - pinned < 900) return; // keyboard/hover choice wins briefly over scroll
     es.forEach(e => { if (e.isIntersecting) selectService(+e.target.dataset.i); });
   }, { rootMargin: '-40% 0px -50% 0px' });
   rows.forEach((r, i) => {
     rowIO.observe(r);
     r.addEventListener('mouseenter', () => selectService(i));
-    r.addEventListener('focusin', () => selectService(i));
+    r.addEventListener('focusin', () => { pinned = performance.now(); selectService(i); });
   });
 
   // Booking dialog

@@ -138,25 +138,23 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .service p{margin:18px 0 0 48px;font-size:14px;max-width:320px;opacity:.9}
 .service p a{border-bottom:1px solid var(--hair)}
 .service-photo{position:sticky;top:14vh;height:70vh;overflow:hidden;background:var(--stone)}
-.service-photo img{position:absolute;inset:0;clip-path:inset(100% 0 0 0);transform:scale(1.06);transition:clip-path .85s var(--ease),transform 1.3s var(--ease)}
-.service-photo img.is-active{clip-path:inset(0 0 0 0);transform:scale(1);z-index:2}
-.service-photo img.was-active{clip-path:inset(0 0 0 0);transform:scale(1);transition:none;z-index:1}
+.service-photo .sp{position:absolute;inset:0;width:100%;height:100%;clip-path:inset(100% 0 0 0);transform:scale(1.06);transition:clip-path .85s var(--ease),transform 1.3s var(--ease)}
+.service-photo .sp.is-active{clip-path:inset(0 0 0 0);transform:scale(1);z-index:2}
+.service-photo .sp.was-active{clip-path:inset(0 0 0 0);transform:scale(1);transition:none;z-index:1}
 .service-photo figcaption{position:absolute;right:20px;bottom:18px;z-index:3;color:var(--paper);text-shadow:0 1px 8px rgba(0,0,0,.35)}
 
-/* ---------- 04 The room — atmosphere: place + comfort + a real client line ---------- */
-.room{background:var(--espresso);color:var(--paper);padding:160px var(--gutter) 170px;overflow:hidden}
-.room-grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:2vw;align-items:start}
-.room-text{grid-column:1/8;grid-row:1;position:sticky;top:130px;display:flex;flex-direction:column;min-height:calc(100vh - 220px)}
-.room-text h2{font-size:clamp(50px,5.2vw,92px);line-height:.98;margin-top:30px}
-.room-quote{margin-top:auto;max-width:360px;padding-top:48px}
-.room-quote p{font:400 23px/1.4 var(--serif);color:rgba(238,233,223,.92)}
-.room-quote figcaption{margin-top:18px;opacity:.8}
-.room-words{display:flex;gap:28px;margin-top:40px;padding-top:22px;border-top:1px solid var(--hair-light);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
-.room-main{grid-column:8/13;grid-row:1;height:86vh;overflow:hidden}
-.room-main img{object-position:50% 50%;transform:scale(1.06);transition:transform 2.4s var(--ease)}
+/* ---------- 04 The room — one large interior, one detail, space ---------- */
+.room{background:var(--espresso);color:var(--paper);padding:170px var(--gutter) 190px;overflow:hidden}
+.room-head{display:grid;grid-template-columns:7fr 5fr;column-gap:5vw;align-items:end;margin-bottom:10vh}
+.room-head .eyebrow{grid-column:1/-1;margin-bottom:28px}
+.room-head h2{font-size:clamp(52px,5.4vw,96px);line-height:.98}
+.room-words{justify-self:end;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.82;padding-bottom:12px}
+.room-frame{position:relative;padding-left:12vw}
+.room-main{height:78vh;overflow:hidden}
+.room-main img{object-position:50% 55%;transform:scale(1.05);transition:transform 2.4s var(--ease)}
 .room-main.in-view img{transform:scale(1)}
-.room-detail{grid-column:5/9;grid-row:2;height:40vh;margin-top:-18vh;position:relative;z-index:2;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.6);will-change:transform}
-.room-detail img{object-position:62% 55%}
+.room-detail{position:absolute;left:0;bottom:-9vh;width:26vw;height:34vh;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.65);will-change:transform}
+.room-detail img{object-position:55% 60%}
 /* ---------- 05 Salons ---------- */
 .salons{background:var(--linen);padding:150px var(--gutter) 150px}
 .salons-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:9vh}
@@ -181,11 +179,10 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .quote-lead{max-width:1060px;margin:70px auto 110px}
 .quote-lead blockquote p{font:400 clamp(40px,4.3vw,72px)/1.12 var(--serif);letter-spacing:-.02em}
 figcaption{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;margin-top:30px}
-.quote-row{display:grid;grid-template-columns:repeat(3,1fr);text-align:left;border-top:1px solid var(--hair);margin-bottom:70px}
-.quote-row figure{padding:40px 3vw 0 0}
-.quote-row figure+figure{padding-left:3vw;border-left:1px solid var(--hair)}
-.quote-row p{font:400 24px/1.35 var(--serif)}
-.quote-row figcaption{margin-top:22px}
+.quote-line{max-width:1060px;margin:0 auto;padding-top:34px;border-top:1px solid var(--hair);display:grid;gap:22px;justify-items:center}
+.quote-line ul{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 36px;font:400 18px/1.4 var(--serif)}
+.quote-line li span{font:400 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-left:10px}
+.quote-lead{margin-bottom:90px}
 
 /* ---------- 07 Lookbook ---------- */
 .lookbook{background:var(--paper);padding:160px var(--gutter) 170px}
@@ -257,13 +254,12 @@ body.show-notes .window::after{bottom:auto;top:100px}
   .salon-pair{grid-template-columns:1fr}
   .salon-info,.salon:nth-child(n) .salon-info{padding:28px 0 50px}
   .salon-actions{flex-wrap:wrap;gap:20px}
-  .quote-row{grid-template-columns:1fr}.quote-row figure+figure{border-left:0;padding-left:0}
   .look-grid{grid-template-columns:1fr 1fr}.lk{grid-column:auto!important;margin-top:0!important;height:40vh!important}.lk5{grid-column:1/-1!important}
   .salons-head{display:block}.salons-head h2{text-align:left;margin-top:20px}
   .close-list a{grid-template-columns:1fr auto}.cl-meta{grid-column:1;grid-row:2}
   .site-footer{flex-direction:column;gap:18px}
-  .room-text,.room-main,.room-detail{grid-column:1/-1;grid-row:auto;position:relative;top:auto;min-height:0}
-  .room-main{height:60vh;margin-top:40px}.room-detail{height:30vh;margin-top:-10vh;margin-left:20%}
+  .room-head{grid-template-columns:1fr}.room-words{justify-self:start}
+  .room-frame{padding-left:0}.room-main{height:55vh}.room-detail{position:relative;bottom:auto;width:60%;height:28vh;margin:-8vh 0 0 auto}
 }
 
 /* ---------- Reduced motion: the story still reads, nothing moves ---------- */
@@ -280,6 +276,7 @@ body.show-notes .window::after{bottom:auto;top:100px}
   .room-detail{transform:none!important}
   .room-main img{transform:none!important;transition:none}
   .js .reveal{opacity:1;transform:none;transition:none}
-  .frame img,.service-photo img,.salon-photo img{transition:none!important;transform:none!important}
+  .frame img,.service-photo .sp,.salon-photo img{transition:none!important;transform:none!important}
   .cue span{animation:none}
 }
+.service-photo .placeholder{border:0}
