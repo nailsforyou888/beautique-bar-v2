@@ -205,3 +205,4 @@ body.inner{background:var(--paper)}
   .js .pg-sec .reveal-in{opacity:1;transform:none;transition:none}
   .svc .arr,.ol-link>span:last-child{transition:none}
 }
+.pg-hero .lead a{border-bottom:1px solid currentColor}

@@ -18,7 +18,7 @@ import markdown
 
 SRC = Path(__file__).resolve().parent
 OUT = SRC.parent / 'opus-design-v1'
-VERSION = '6'
+VERSION = '7'
 e = html.escape
 CUR = ' aria-current="page"'
 LAZY = ' loading="lazy"'
@@ -48,11 +48,14 @@ LOC = {
     maps='https://www.google.com/maps/search/?api=1&query=Beautique%20Bar%2C%20Bridlewood%20Mall%2C%202900%20Warden%20Ave%2C%20Scarborough%2C%20ON',
     where='On the 2nd floor of Bridlewood Mall, by the library.',
     serves='Scarborough, Bridlewood, L’Amoreaux and surrounding communities',
-    photo=None,
+    photo=('img/work-bridlewood-storefront.webp', 1440, 1080, 'The Beautique Bar storefront at Bridlewood Mall, with the team out front'),
   ),
 }
+PHOTO_BRIEF = {'yonge': 'REAL — owner photo, colour-corrected.',
+               'warden': 'REAL — Beautique Bar Instagram (@beautiquebar88), Dec 2024 team photo at the Bridlewood storefront; seasonal decor. Final: interior from the entrance, no people.'}
 EMAIL = 'info@beautiquebar.com'
 IG = 'https://www.instagram.com/beautiquebar88'
+IG_YONGE = 'https://www.instagram.com/beautiquebar_onyonge'
 FB = 'https://www.facebook.com/Beautiquebaryonge'
 REVIEWS_URL = 'https://www.google.com/search?q=Beautique+Bar+Toronto+reviews'
 
@@ -209,7 +212,7 @@ def header(active, tone='light'):
 <div class="menu-panel" id="menu-panel" hidden>
   <nav aria-label="Mobile">
     <ul class="mp-main">{''.join(f'<li><a href="{h}">{e(t)}</a></li>' for t, h in NAV)}</ul>
-    <ul class="mp-sub"><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/shop/">Shop</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li></ul>
+    <ul class="mp-sub"><li><a href="/gallery/">Gallery</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/shop/">Shop</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li></ul>
     <div class="mp-book"><p class="eyebrow">Book online</p>{''.join(f'<a href="{e(l["book"])}" target="_blank" rel="noopener">{e(l["name"])} <span aria-hidden="true">↗</span></a>' for l in LOC.values())}</div>
   </nav>
 </div>'''
@@ -223,8 +226,8 @@ def footer():
     <div class="ft-locs">{locs}</div>
     <nav class="ft-nav" aria-label="Footer">
       <ul><li><a href="/nails/">Nails</a></li><li><a href="/skin/">Skin &amp; Lashes</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/locations/">Locations</a></li></ul>
-      <ul><li><a href="/shop/">Shop</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul>
-      <ul><li><a href="{IG}" target="_blank" rel="noopener">Instagram ↗</a></li><li><a href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></li></ul>
+      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/shop/">Shop</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul>
+      <ul><li><a href="{IG}" target="_blank" rel="noopener">Instagram · Bridlewood ↗</a></li><li><a href="{IG_YONGE}" target="_blank" rel="noopener">Instagram · Yonge ↗</a></li><li><a href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></li></ul>
     </nav>
   </div>
   <div class="ft-base">
@@ -356,6 +359,48 @@ def svc_list(rows):
 
 BOTH = 'Yonge &amp; York Mills · Bridlewood Mall'
 
+# Our work — finished sets from the salons' own Instagram accounts (see opus-site-src/INSTAGRAM.md).
+WORK = [  # (file stem, width, height, caption)
+  ('plum-chrome-gems', 1320, 1320, 'Plum chrome with 3D gems'),
+  ('white-french-gold', 1269, 1600, 'White French, gold accent'),
+  ('burgundy-gloss', 1440, 1440, 'Burgundy gloss'),
+  ('painted-florals-green', 900, 1600, 'Hand-painted florals'),
+  ('milky-almond', 1356, 1600, 'Milky almond'),
+  ('silver-chrome-almond', 1290, 1290, 'Silver chrome'),
+  ('pink-french-flower', 1320, 1320, 'Pink French with a 3D flower'),
+  ('leopard-tips', 1280, 1600, 'Leopard tips'),
+  ('sheer-nude-detail', 1600, 1600, 'Sheer nude, fine detail'),
+  ('jewelled-red-stiletto', 1440, 1440, 'Jewelled red stiletto'),
+  ('coral-flowers', 1290, 1290, 'Coral flowers'),
+  ('oxblood-almond', 1326, 1600, 'Oxblood almond'),
+  ('gold-chrome-lines', 1440, 1440, 'Gold chrome lines'),
+  ('sheer-pink-hearts', 1235, 1600, 'Sheer pink, tiny hearts'),
+  ('brown-french', 1440, 1440, 'Brown French'),
+  ('almond-painted-flowers', 1600, 1600, 'Painted flowers'),
+  ('petal-art', 1440, 1485, 'Petal art'),
+  ('caramel-coffin', 1440, 1456, 'Caramel with detail'),
+  ('icy-blue-accents', 1440, 1440, 'Icy blue accents'),
+  ('short-sparkle', 1200, 1600, 'Short and sparkling'),
+  ('chocolate-cream', 1290, 1290, 'Chocolate and cream'),
+  ('nude-sunny-florals', 1261, 1261, 'Nude with sunny florals'),
+  ('red-maple', 1280, 1600, 'Red with maple leaves'),
+  ('pink-3d-details', 1280, 1600, 'Pink with 3D details'),
+]
+WORK_BY = {w[0]: w for w in WORK}
+WORK_BRIEF = 'REAL — Beautique Bar Instagram.'
+
+def work_fig(stem, cls='wk', lazy=True):
+    n, w, h, cap = WORK_BY[stem]
+    th = round(h * 720 / w) if w > 720 else h
+    tw = min(w, 720)
+    return (f'<figure class="{cls}" data-brief="{WORK_BRIEF}"><a href="/img/work-{n}.webp" data-lightbox="{e(cap)}" aria-label="{e(cap)} — view larger">'
+            f'<img src="/img/work-{n}-sm.webp" alt="Nails by Beautique Bar: {e(cap.lower())}" width="{tw}" height="{th}"{LAZY if lazy else ""} decoding="async"></a>'
+            f'<figcaption>{e(cap)}</figcaption></figure>')
+
+def work_strip(stems):
+    return f'<div class="work-strip">{"".join(work_fig(x) for x in stems)}</div>'
+
+
 # ----------------------------------------------------------------------------------------------
 PAGES = {}   # path -> html
 
@@ -376,6 +421,10 @@ add('/nails/', page('/nails/', 'Nails | Beautique Bar', 'Manicures, pedicures, S
   ])}
 </section>
 {quote('sangeetha')}
+<section class="pg-sec" data-tone="light" aria-labelledby="work-h">
+  {sec_head('Our work', 'Recent sets', 'work-h', '<a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>')}
+  {work_strip(['white-french-gold', 'burgundy-gloss', 'pink-french-flower', 'silver-chrome-almond'])}
+</section>
 {book_pair({'yonge': ['Spa Manicure', 'Spa Pedicure', 'Shellac Spa Manicure', 'Bio Gel Full Set', 'Gel-X Full Set'],
             'warden': ['Spa Manicure', 'Spa Pedicure', 'Spa Manicure w/ Shellac', 'Bio Gel Overlay', 'Gel-X Full Set']}, 'A few prices from each menu', 'Prices by salon')}
 {reading(['what-are-manicures-and-pedicures', 'what-are-nail-enhancements', 'extend-longevity-nail-art'])}
@@ -385,7 +434,7 @@ add('/nails/', page('/nails/', 'Nails | Beautique Bar', 'Manicures, pedicures, S
 # ---- /nails/manicure-pedicure/ ---------------------------------------------------------------
 add('/nails/manicure-pedicure/', page('/nails/manicure-pedicure/', 'Manicure & Pedicure | Beautique Bar', 'Spa manicures, spa and deluxe pedicures, and Shellac at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Nails','/nails/'),('Manicure & Pedicure',None)], 'Manicure<br>&amp; Pedicure', 'Spa treatments for hands and feet, finished with regular polish or Shellac. Booked on their own or together.',
-      img('img/stock-manicure-white.webp', 1920, 1280, 'A finished white manicure resting on satin', 'frame', '50% 50%', False, 'TEMPORARY — existing website image. Final: real Beautique Bar finished manicure.'))}
+      img('img/work-white-french-gold.webp', 1269, 1600, 'A white French manicure with a fine gold accent, resting on satin', 'frame', '50% 45%', False, WORK_BRIEF))}
 <section class="pg-sec" data-tone="light" aria-labelledby="ped-h">
   {sec_head('Pedicures', 'Three ways to sit back', 'ped-h')}
   {options([
@@ -401,7 +450,7 @@ add('/nails/manicure-pedicure/', page('/nails/manicure-pedicure/', 'Manicure & P
     ('Deluxe Spa Manicure & Russian Manicure', 'On the Bridlewood Mall menu, each also available with Shellac.'),
     ('Gentleman’s Manicure & Pedicure', 'On the menu at both salons.'),
   ])}
-  <figure class="inline-ph">{ph('Finished pedicure', 'Feet resting on a warm towel at a Beautique Bar chair, finished polish in a soft neutral. Top-down or low angle; no tools or gloves.', 'frame')}</figure>
+  <div class="inline-ph">{img('img/work-pedicure-spa-tray.webp', 640, 1136, 'A pedicure tray of sliced citrus, dried flowers and scrubs', 'frame', '50% 50%', True, 'REAL — Beautique Bar Instagram (640 px reel cover, low resolution). Final: finished pedicure on a warm towel.')}</div>
 </section>
 <section class="pg-sec pg-sec--tight" data-tone="light" aria-labelledby="shellac">
   {sec_head('Shellac', 'Gloss that keeps up', 'shellac')}
@@ -420,7 +469,7 @@ add('/nails/manicure-pedicure/', page('/nails/manicure-pedicure/', 'Manicure & P
 # ---- /nails/bio-gel/ -------------------------------------------------------------------------
 add('/nails/bio-gel/', page('/nails/bio-gel/', 'Bio Gel Nails | Beautique Bar', 'Bio Gel overlays, full sets with tips and refills, plus Gel-X, at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Nails','/nails/'),('Bio Gel',None)], 'Bio Gel', 'A gel that looks and feels close to your natural nail — as an overlay on your own nails or as a full set with tips.',
-      img('img/stock-hands-towel.webp', 1920, 1280, 'Hands with a natural, sheer nail finish resting on a soft towel', 'frame', '72% 50%', False, 'TEMPORARY — existing website image. Final: real finished Bio Gel set.'))}
+      img('img/work-milky-almond.webp', 1356, 1600, 'Milky almond nails with a sheer, natural finish', 'frame', '50% 45%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Options', 'How to book it', 'opt-h')}
   {options([
@@ -440,7 +489,7 @@ add('/nails/bio-gel/', page('/nails/bio-gel/', 'Bio Gel Nails | Beautique Bar', 
 # ---- /nails/acrylic/ -------------------------------------------------------------------------
 add('/nails/acrylic/', page('/nails/acrylic/', 'Acrylic Nails | Beautique Bar', 'Acrylic and Crystal Gel sets, overlays and refills at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Nails','/nails/'),('Acrylic',None)], 'Acrylic', 'Sculpted sets for length and shape, finished in the colour or design you choose — from a clean French to full nail art.',
-      ph('Acrylic — sculpted almond set', 'Side-profile macro showing length and curve. Neutral shade, hand on linen or warm stone, soft daylight.', 'frame'))}
+      img('img/work-silver-chrome-almond.webp', 1290, 1290, 'Long sculpted almond nails in silver chrome', 'frame', '50% 50%', False, WORK_BRIEF + ' Confirm this set is acrylic.'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Options', 'Full sets, overlays, refills', 'opt-h')}
   {options([
@@ -568,7 +617,7 @@ add('/skin/body-piercing/', page('/skin/body-piercing/', 'Body Piercing | Beauti
 def salon_card(l, head='h2'):
     if l['photo']:
         s, w, h, alt = l['photo']
-        fig = f'<figure class="salon-photo" data-brief="REAL — owner photo, colour-corrected."><img src="/{s}" alt="{e(alt)}" width="{w}" height="{h}" loading="lazy" decoding="async" style="object-position:50% 60%"></figure>'
+        fig = f'<figure class="salon-photo" data-brief="{e(PHOTO_BRIEF[l["id"]])}"><img src="/{s}" alt="{e(alt)}" width="{w}" height="{h}" loading="lazy" decoding="async" style="object-position:{"50% 60%" if l["id"] == "yonge" else "56% 50%"}"></figure>'
     else:
         fig = ph('Bridlewood Mall salon', 'Wide interior from the entrance, lights warmed, no people. Same framing as the Yonge photo so the two salons read as a pair.', 'salon-photo')
     return f'''<article class="salon">{fig}
@@ -602,13 +651,16 @@ for k, l in LOC.items():
     other = LOC['warden' if k == 'yonge' else 'yonge']
     if l['photo']:
         s, w, h, alt = l['photo']
-        media = img(s, w, h, alt, 'frame', '50% 60%', False, 'REAL — owner photo, colour-corrected.')
+        media = img(s, w, h, alt, 'frame', '50% 60%' if k == 'yonge' else '50% 50%', False, PHOTO_BRIEF[k])
+    if k == 'yonge':
         gallery = f'''<section class="pg-sec gallery" data-tone="light" aria-label="Inside the salon">
   <div class="gal">{img('img/yonge-pedicure-row.webp', 2400, 1800, 'The pedicure row at Beautique Bar on Yonge', 'g1', '50% 58%', True, 'REAL — owner photo.')}
   {img('img/promo-logo-wall.webp', 1100, 1650, 'The Beautique Bar logo lit on the wood-slat wall', 'g2', None, True, 'REAL — Yonge promo still.')}</div></section>'''
     else:
-        media = ph('Bridlewood Mall salon', 'Wide interior from the entrance, lights warmed, no people. Must look distinct from Yonge.', 'frame')
-        gallery = ''
+        gallery = f'''<section class="pg-sec" data-tone="light" aria-labelledby="bw-work">
+  {sec_head('From our Instagram', 'Recent sets', 'bw-work', '<a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>')}
+  {work_strip(['plum-chrome-gems', 'burgundy-gloss', 'brown-french', 'leopard-tips'])}
+</section>'''
     monthly = '<p class="mn-note">Monthly special pedicure: ask in salon for this month’s version.</p>'
     add(l['href'], page(l['href'], f'{l["name"]} Nail Salon | Beautique Bar', f'{l["long"]} — {l["addr"]}. Call {l["phone"]}. Book online.', f'''
 {hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(l['name']), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media)}
@@ -659,6 +711,15 @@ def contact_col(l):
     return f'''<div class="ct-col"><p class="eyebrow">{e(l["area"])}</p><h2>{e(l["name"])}</h2><p class="addr">{e(l["addr"])}</p>
     <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li>
     <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li></ul></div>'''
+# ---- /gallery/ (new page) -------------------------------------------------------------------
+add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets by Beautique Bar technicians at Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Gallery',None)], 'Our work.', f'Recent sets by our technicians, first shared on Instagram. See more at <a href="{IG}" target="_blank" rel="noopener">@beautiquebar88</a> and <a href="{IG_YONGE}" target="_blank" rel="noopener">@beautiquebar_onyonge</a>.')}
+<section class="pg-sec pg-sec--flush" data-tone="light" aria-label="Nail sets">
+  <div class="work-grid">{''.join(work_fig(w[0], 'wk', i > 5) for i, w in enumerate(WORK))}</div>
+</section>
+{close_band('Seen something<br>you love?')}
+''', active=None))
+
 add('/contact/', page('/contact/', 'Contact | Beautique Bar', 'Call, text or book online with Beautique Bar on Yonge or at Bridlewood Mall. Email info@beautiquebar.com.', f'''
 {hero([('Home','/'),('Contact',None)], 'Get in touch.', 'Have a question or want to book? Call, text or book online with the salon nearest you.')}
 <section class="pg-sec contact" data-tone="light" aria-label="Contact details">
@@ -766,6 +827,17 @@ def refresh_home():
         s = s.replace('<script src="/opus.js', f'<script src="/site.js?v={VERSION}" defer></script>\n<script src="/opus.js', 1)
     s = re.sub(r'site\.js\?v=\d+', f'site.js?v={VERSION}', s)
     s = s.replace('<a class="skip" href="#nails">', '<a class="skip" href="#nails">')
+    home_work = f'''<!--WORK-->
+<!-- 08 · OUR WORK — finished sets from the salons' own Instagram. -->
+<section class="home-work" id="work" data-tone="light" aria-labelledby="work-title">
+  <div class="look-head">
+    <div><p class="eyebrow">08 — Our work</p><h2 id="work-title">Fresh from<br>the table.</h2></div>
+    <a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>
+  </div>
+  {work_strip(['plum-chrome-gems', 'white-french-gold', 'painted-florals-green', 'leopard-tips'])}
+</section>
+<!--/WORK-->'''
+    s = re.sub(r'<!--WORK-->.*?<!--/WORK-->', lambda m: home_work, s, count=1, flags=re.S)
     p.write_text(s)
 
 def main():

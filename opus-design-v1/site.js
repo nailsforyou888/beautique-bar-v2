@@ -1,5 +1,5 @@
 /* Beautique Bar — shared page script.
-   Everywhere: mobile menu. Inner pages only (the homepage's opus.js already does these):
+   Everywhere: mobile menu and photo lightbox. Inner pages only (the homepage's opus.js already does these):
    section-aware header, booking dialog, photography-notes toggle. Native scroll only. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
@@ -26,6 +26,37 @@
     });
     panel.addEventListener('click', ev => { if (ev.target.closest('a')) setOpen(false); });
     matchMedia('(min-width: 901px)').addEventListener('change', m => { if (m.matches) setOpen(false); });
+  }
+
+  // ---- Lightbox for [data-lightbox] links (gallery + work strips, all pages) --------------------
+  const lbLinks = $$('a[data-lightbox]');
+  if (lbLinks.length) {
+    const d = document.createElement('dialog');
+    d.className = 'lightbox';
+    d.setAttribute('aria-label', 'Photo viewer');
+    d.innerHTML = '<p aria-live="polite"></p><button type="button" class="lb-btn lb-close" aria-label="Close">×</button>' +
+      '<button type="button" class="lb-btn lb-prev" aria-label="Previous photo">←</button><button type="button" class="lb-btn lb-next" aria-label="Next photo">→</button>';
+    document.body.appendChild(d);
+    const im = new Image(), cap = d.querySelector('p');
+    im.decoding = 'async';
+    let idx = 0, from = null;
+    const show = i => {
+      idx = (i + lbLinks.length) % lbLinks.length;
+      const a = lbLinks[idx];
+      im.src = a.getAttribute('href'); im.alt = a.querySelector('img').alt;
+      if (!im.isConnected) d.prepend(im);
+      cap.textContent = `${a.dataset.lightbox} · ${idx + 1} / ${lbLinks.length}`;
+    };
+    lbLinks.forEach((a, i) => a.addEventListener('click', ev => {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey) return;
+      ev.preventDefault(); from = a; show(i); d.showModal(); d.querySelector('.lb-close').focus();
+    }));
+    d.querySelector('.lb-close').addEventListener('click', () => d.close());
+    d.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1));
+    d.querySelector('.lb-next').addEventListener('click', () => show(idx + 1));
+    d.addEventListener('keydown', ev => { if (ev.key === 'ArrowLeft') show(idx - 1); if (ev.key === 'ArrowRight') show(idx + 1); });
+    d.addEventListener('click', ev => { if (ev.target === d) d.close(); });
+    d.addEventListener('close', () => { from && from.focus(); });
   }
 
   if (isHome) return;
