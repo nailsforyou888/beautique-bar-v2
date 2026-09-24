@@ -202,7 +202,7 @@ NAV = [('Nails', '/nails/'), ('Skin & Lashes', '/skin/'), ('Locations', '/locati
 def header(active, tone='light'):
     links = ''.join(f'<a href="{h}"{CUR if active == h else ""}>{e(t)}</a>' for t, h in NAV)
     return f'''<header class="site-header" data-bg="{tone}">
-  <a class="wordmark" href="/" aria-label="Beautique Bar — home">Beautique Bar</a>
+  <a class="wordmark" href="/" aria-label="Beautique Bar — home"><span class="seal" aria-hidden="true"></span><span class="wm-text">Beautique Bar</span></a>
   <nav class="nav" aria-label="Main">{links}</nav>
   <div class="hdr-actions">
     <button class="book-btn" type="button" data-book aria-label="Book Appointment"><span class="bk-full">Book Appointment</span><span class="bk-short" aria-hidden="true">Book</span></button>
@@ -222,7 +222,7 @@ def footer():
       <p>{e(l["addr"])}</p><p><a href="{l["tel"]}">Call {e(l["phone"])}</a>{f' · Text {e(l["text"])}' if l["text"] != l["phone"] else ' · Call or text'}</p></div>''' for l in LOC.values())
     return f'''<footer class="site-footer">
   <div class="ft-grid">
-    <div class="ft-brand"><a class="wordmark" href="/">Beautique Bar</a><p>Nails, lashes and skin at Yonge &amp; York Mills and Bridlewood Mall.</p></div>
+    <div class="ft-brand"><img class="ft-seal" src="/img/brand-seal-paper.png" alt="" width="330" height="330" loading="lazy" decoding="async"><a class="wordmark" href="/">Beautique Bar</a><p>Nails, lashes and skin at Yonge &amp; York Mills and Bridlewood Mall.</p></div>
     <div class="ft-locs">{locs}</div>
     <nav class="ft-nav" aria-label="Footer">
       <ul><li><a href="/nails/">Nails</a></li><li><a href="/skin/">Skin &amp; Lashes</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/locations/">Locations</a></li></ul>

@@ -351,3 +351,11 @@ body.show-notes .window::after{bottom:auto;top:100px}
 }
 @media (max-width:520px){.work-grid{columns:2;column-gap:12px}.work-grid .wk{margin-bottom:20px}.wk figcaption{font-size:10px;letter-spacing:.12em}}
 @media (prefers-reduced-motion:reduce){.wk img{transition:none}.wk a:hover img{transform:none}}
+
+/* ---- Logo: the BB seal from the brand book (seal-ink.png used as a mask so it takes the header's ink or paper tone) ---- */
+.site-header .wordmark{display:inline-flex;align-items:center;gap:12px}
+.seal{flex:none;width:38px;height:38px;background:currentColor;-webkit-mask:url(/img/brand-seal-ink.png) center/contain no-repeat;mask:url(/img/brand-seal-ink.png) center/contain no-repeat}
+.site-header.is-solid .seal{width:34px;height:34px}
+.ft-seal{display:block;width:88px;height:88px;margin-bottom:22px}
+@media (max-width:420px){.seal,.site-header.is-solid .seal{width:30px;height:30px}.site-header .wordmark{gap:9px}}
+@media (max-width:350px){.wm-text{display:none}}
