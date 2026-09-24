@@ -359,3 +359,12 @@ body.show-notes .window::after{bottom:auto;top:100px}
 .ft-seal{display:block;width:88px;height:88px;margin-bottom:22px}
 @media (max-width:420px){.seal,.site-header.is-solid .seal{width:30px;height:30px}.site-header .wordmark{gap:9px}}
 @media (max-width:350px){.wm-text{display:none}}
+/* Footer: the horizontal lockup (owner-supplied transparent file), in the paper tone */
+.ft-lockup{display:block;width:min(300px,100%);aspect-ratio:1200/200;background:var(--paper);-webkit-mask:url(/img/brand-lockup.png) left center/contain no-repeat;mask:url(/img/brand-lockup.png) left center/contain no-repeat;margin-bottom:24px}
+.ft-lockup:focus-visible{outline:1px solid var(--paper);outline-offset:6px}
+/* Header: the full lockup replaces the typed name; takes the header's ink/paper tone */
+.lockup{display:block;width:200px;aspect-ratio:1200/200;background:currentColor;-webkit-mask:url(/img/brand-lockup.png) left center/contain no-repeat;mask:url(/img/brand-lockup.png) left center/contain no-repeat;transition:width .5s var(--ease)}
+.site-header.is-solid .lockup{width:180px}
+@media (max-width:420px){.lockup,.site-header.is-solid .lockup{width:156px}}
+@media (max-width:350px){.lockup,.site-header.is-solid .lockup{width:118px}.menu-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
+@media (max-width:360px){.cl-name{font-size:30px}.cl-book{padding:12px 14px;letter-spacing:.12em}.close-list a{gap:10px}}
