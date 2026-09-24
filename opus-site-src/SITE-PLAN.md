@@ -25,7 +25,7 @@ Full-site staging build in the approved Opus V5 design. Every public URL of beau
 | 12 | `/locations/` | `locations/index.html` | Both salons, once each |
 | 13 | `/locations/yonge/` | `locations/yonge/index.html` | Yonge & York Mills + full menu |
 | 14 | `/locations/warden/` | `locations/warden/index.html` | Bridlewood Mall + full menu |
-| 15 | `/shop/` | `shop/index.html` | Shop (3 products, in-store) |
+| 15 | `/shop/` | — (`_redirects` 301 → `/`) | Retired 24 Sep 2026 |
 | 16 | `/contact/` | `contact/index.html` | Contact (call, text, book, email — no form) |
 | 17 | `/privacy/` | `privacy/index.html` | Privacy policy (live text) |
 | 18 | `/terms/` | `terms/index.html` | Terms (live text) |
@@ -60,7 +60,7 @@ Trailing slashes: pages are folders with `index.html`, so `/nails` redirects to 
 7. Pedicure descriptions (Spa, Deluxe, Monthly Special) are condensed from the live page; manicure options have no descriptions on the live site, so none were written.
 8. Live Bridlewood page source also contains a second Fresha link (`nails-for-you-beautique-bar-toronto-2900-warden-avenue-bkuolnwc`) that isn't displayed; the preview uses only the displayed one.
 9. Privacy policy still describes the website contact form and email delivery; the live form also stores leads in a database. Update the policy if the form is kept or removed in production.
-10. Shop prices ($29.99, $9.99 / 3 for $24.99, $29.99) copied from the live page — confirm current.
+10. ~~Shop prices~~ — shop retired.
 
 **Blog** (see `BLOG-AUDIT.md`)
 - `full-body-laser-hair-removal-costs`: laser isn't on either menu. Decide: keep with the added note, rewrite, or retire.
@@ -69,7 +69,7 @@ Trailing slashes: pages are folders with `index.html`, so `/nails` redirects to 
 - 16 of 17 articles date from Dec 2023–Apr 2024; `top-nail-trends-for-2025` is dated by title.
 
 **Photography still needed (placeholders on the page)**
-Skin & lashes overview; lashes; facial; brows; body hair removal. Temporary stock still in use: lash and facial images on the homepage. Stand-ins to replace when better photos exist: Bridlewood interior (currently a Dec 2024 storefront team photo), finished pedicure (currently a low-res pedicure-tray reel cover). Shop product photos are the existing 500 px files. Nail imagery is now all from the salons' Instagram (see `INSTAGRAM.md`).
+Skin & lashes overview; lashes; facial; brows; body hair removal. Temporary stock still in use: lash and facial images on the homepage. Stand-ins to replace when better photos exist: Bridlewood interior (currently a Dec 2024 storefront team photo), finished pedicure (currently a low-res pedicure-tray reel cover). Nail imagery is now all from the salons' Instagram (see `INSTAGRAM.md`).
 
 ## Change log
 - 23 Sep 2026 — Owner confirmed piercing and tattoo services are no longer offered. Piercing removed from the Skin & Lashes page, the Yonge menu and "what you can book here", and the 404 page. `/skin/body-piercing/` kept at the same URL as a short "no longer offered" page linking to other treatments (for production, a 301 redirect to `/skin/` is the alternative — owner's call). No tattoo content existed on the site.
@@ -77,3 +77,4 @@ Skin & lashes overview; lashes; facial; brows; body hair removal. Temporary stoc
 - 24 Sep 2026 — Logo added from the Beautique Bar design system (brand book): the round BB seal sits beside the Italiana name in the header on every page (drawn from `seal-ink.png` as a mask, so it follows the header's ink/paper tone) and larger above the name in the footer (`seal-paper.png`). The horizontal lockup isn't used on the site: its files have solid white/black grounds, and the brand book says to place them only on matching white or black areas. Vector versions of the seal and lockup are still needed for print.
 - 24 Sep 2026 — Owner supplied a transparent horizontal lockup (2172×724 PNG, no bevel). It now leads the footer in the paper tone (`img/brand-lockup.png`, cropped and resized to 1200 px, used as a mask), replacing the footer seal + typed name. Header keeps the seal + Italiana name. A vector (SVG/PDF) of both marks is still the ideal for print. Owner then asked for the logo wherever the typed name stood in for it: the header now shows the full lockup too (ink or paper to match each section, smaller once scrolled), replacing the seal + Italiana name on every page. Narrow-phone fixes: header fits down to 320 px; the closing booking list no longer overflows at 320–360 px.
 - 24 Sep 2026 — Owner supplied three licensed stock photos for the homepage "Beyond nails" block (lashes, hair removal, facial) — the salon doesn't photograph those treatments. They replace the two 500 px stock images and the hair-removal placeholder (`img/skin-*.webp`). The brand book now records this as the one stock exception and lists the transparent lockup as the master logo file.
+- 24 Sep 2026 — Owner retired the shop (the products were for a grant). `/shop/` page, its three product images and every Shop link (footer, phone menu) removed; `/shop` and `/shop/` now 301 to the homepage via `_redirects`, so old links and search results land somewhere useful. Do the same 301 on production when the site goes live.

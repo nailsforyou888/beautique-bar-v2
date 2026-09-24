@@ -212,7 +212,7 @@ def header(active, tone='light'):
 <div class="menu-panel" id="menu-panel" hidden>
   <nav aria-label="Mobile">
     <ul class="mp-main">{''.join(f'<li><a href="{h}">{e(t)}</a></li>' for t, h in NAV)}</ul>
-    <ul class="mp-sub"><li><a href="/gallery/">Gallery</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/shop/">Shop</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li></ul>
+    <ul class="mp-sub"><li><a href="/gallery/">Gallery</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li></ul>
     <div class="mp-book"><p class="eyebrow">Book online</p>{''.join(f'<a href="{e(l["book"])}" target="_blank" rel="noopener">{e(l["name"])} <span aria-hidden="true">↗</span></a>' for l in LOC.values())}</div>
   </nav>
 </div>'''
@@ -226,7 +226,7 @@ def footer():
     <div class="ft-locs">{locs}</div>
     <nav class="ft-nav" aria-label="Footer">
       <ul><li><a href="/nails/">Nails</a></li><li><a href="/skin/">Skin &amp; Lashes</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/locations/">Locations</a></li></ul>
-      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/shop/">Shop</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul>
+      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul>
       <ul><li><a href="{IG}" target="_blank" rel="noopener">Instagram · Bridlewood ↗</a></li><li><a href="{IG_YONGE}" target="_blank" rel="noopener">Instagram · Yonge ↗</a></li><li><a href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></li></ul>
     </nav>
   </div>
@@ -691,20 +691,7 @@ for k, l in LOC.items():
 {close_band('Book at<br>' + e(l['name']) + '.', 'Whenever you’re ready')}
 ''', active='/locations/'))
 
-# ---- /shop/ ----------------------------------------------------------------------------------
-PRODUCTS = [
-  ('shop-tshirt.webp', 'Beautique Bar Branded T-Shirt', 'Colour: white or black · Size: S, M, L', 'Soft pima cotton tee with the Beautique Bar logo on the front.', '$29.99'),
-  ('shop-cuticle-oil.webp', 'Cuticle Oil Pens', 'For hands and feet', 'A pen for applying nourishing cuticle oil on the go; push back the cuticle with the cap and apply with the tip.', '$9.99 · 3 for $24.99'),
-  ('shop-topcoat.webp', 'BB Gel Polish Top & Base Coat Combo', '10 ml · compatible with all gel polish colours', 'The base coat cures in 10 seconds under a UV lamp; the top coat finishes the look with a durable, mirror-like shine.', '$29.99'),
-]
-add('/shop/', page('/shop/', 'Shop | Beautique Bar', 'Beautique Bar products — branded T-shirt, cuticle oil pens and gel top & base coat — available in-store at both Toronto salons.', f'''
-{hero([('Home','/'),('Shop',None)], 'Shop.', 'A few Beautique Bar favourites to take home. Available in-store at both salons — ask at the front desk.')}
-<section class="pg-sec shop" data-tone="light" aria-label="Products">
-  <ul class="products">{''.join(f"""<li class="product">{img('img/' + p[0], 500, 500, p[1], 'pr-img', None, True, 'Existing product photo (500 px). Final: styled product still on linen.')}
-    <h2>{e(p[1])}</h2><p class="pr-meta">{e(p[2])}</p><p>{e(p[3])}</p><p class="pr-price">{e(p[4])}</p><p class="pr-avail eyebrow">Available in-store</p></li>""" for p in PRODUCTS)}</ul>
-</section>
-{close_band('Pick one up<br>at your next visit.', 'In-store at both salons')}
-''', active=None))
+# ---- /shop/ — retired 24 Sep 2026 (products were for a grant); /shop/ 301s to / via _redirects.
 
 # ---- /contact/ -------------------------------------------------------------------------------
 def contact_col(l):
