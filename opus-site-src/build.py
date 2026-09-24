@@ -18,7 +18,7 @@ import markdown
 
 SRC = Path(__file__).resolve().parent
 OUT = SRC.parent / 'opus-design-v1'
-VERSION = '7'
+VERSION = '8'
 e = html.escape
 CUR = ' aria-current="page"'
 LAZY = ' loading="lazy"'
@@ -31,7 +31,7 @@ LOC = {
   'yonge': dict(
     id='yonge', name='Yonge & York Mills', long='Beautique Bar on Yonge', href='/locations/yonge/',
     area='Toronto', street='3430 Yonge Street', city='Toronto, ON',
-    addr='3430 Yonge Street, Toronto, ON',
+    addr='3430 Yonge Street, Toronto, ON', postal='M4N 2M9', locality='Toronto', short='Yonge', ig='https://www.instagram.com/beautiquebar_onyonge',
     phone='416-484-7788', tel='tel:+14164847788', text='437-434-4884', text_tel='sms:+14374344884',
     book='https://www.fresha.com/a/beautique-bar-on-yonge-toronto-3430-yonge-street-e0fzhnga/booking?menu=true',
     maps='https://www.google.com/maps/search/?api=1&query=3430%20Yonge%20St%2C%20Toronto%2C%20ON',
@@ -42,7 +42,7 @@ LOC = {
   'warden': dict(
     id='warden', name='Bridlewood Mall', long='Beautique Bar on Warden', href='/locations/warden/',
     area='Scarborough', street='2900 Warden Avenue', city='Scarborough, ON',
-    addr='Bridlewood Mall, 2900 Warden Avenue, 2nd floor by the library, Scarborough, ON',
+    addr='Bridlewood Mall, 2900 Warden Avenue, 2nd floor by the library, Scarborough, ON', postal='M1W 2S8', locality='Scarborough', short='Bridlewood', ig='https://www.instagram.com/beautiquebar88',
     phone='647-770-5232', tel='tel:+16477705232', text='647-770-5232', text_tel='sms:+16477705232',
     book='https://www.fresha.com/book-now/nails-for-you-m7weksrj/all-offer?share&pId=32159',
     maps='https://www.google.com/maps/search/?api=1&query=Beautique%20Bar%2C%20Bridlewood%20Mall%2C%202900%20Warden%20Ave%2C%20Scarborough%2C%20ON',
@@ -245,10 +245,134 @@ def dialog():
   {rows}
 </dialog>'''
 
+SITE_URL = 'https://beautiquebar.com'
+OG_IMAGE = '/img/og-default.jpg'
+# Search titles/descriptions: local keywords + both neighbourhoods; titles <= ~60 chars, descriptions <= 160.
+SEO = {
+  '/nails/': ('Nails: Manicures, Shellac, Bio Gel & Acrylic | Beautique Bar',
+              'Manicures, pedicures, Shellac, Bio Gel, Gel-X and acrylic at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
+  '/nails/manicure-pedicure/': ('Manicure & Pedicure in Toronto & Scarborough | Beautique Bar',
+              'Spa manicures, spa and deluxe pedicures and Shellac at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
+  '/nails/bio-gel/': ('Bio Gel Nails in Toronto & Scarborough | Beautique Bar',
+              'Bio Gel overlays, full sets with tips, refills and Gel-X at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
+  '/nails/acrylic/': ('Acrylic Nails in Toronto & Scarborough | Beautique Bar',
+              'Acrylic and Crystal Gel full sets, overlays and refills at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
+  '/skin/': ('Lashes, Facials & Waxing in Toronto | Beautique Bar',
+              'Eyelash extensions, facials, waxing and threading at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/eyelash-extensions/': ('Eyelash Extensions in Toronto & Scarborough | Beautique Bar',
+              'Classic, hybrid and volume eyelash extensions and refills at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
+  '/skin/facials/': ('Facials in Toronto & Scarborough | Beautique Bar',
+              'Deep-pore cleansing, relaxing, anti-wrinkle and firming facials at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/skin/facial-hair-removal/': ('Eyebrow Waxing & Threading in Toronto | Beautique Bar',
+              'Eyebrow, lip, chin and full-face waxing, brow tinting and threading at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/skin/body-hair-removal/': ('Body Waxing in Toronto & Scarborough | Beautique Bar',
+              'Waxing for arms, legs, underarms, back, chest and bikini at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/locations/': ('Nail Salons in Toronto & Scarborough | Beautique Bar',
+              'Beautique Bar at 3430 Yonge St, Toronto (Yonge & York Mills) and Bridlewood Mall, 2900 Warden Ave, Scarborough. Book online, call or text.'),
+  '/locations/yonge/': ('Nail Salon at Yonge & York Mills, Toronto | Beautique Bar',
+              'Beautique Bar on Yonge, 3430 Yonge St, Toronto — manicures, pedicures, Shellac, gel nails, lashes, waxing and facials. Call 416-484-7788 or book online.'),
+  '/locations/warden/': ('Nail Salon at Bridlewood Mall, Scarborough | Beautique Bar',
+              'Beautique Bar at Bridlewood Mall, 2900 Warden Ave, Scarborough — manicures, pedicures, gel and acrylic nails, lashes and waxing. Call 647-770-5232.'),
+  '/gallery/': ('Nail Art Gallery | Beautique Bar',
+              'Recent nail sets by Beautique Bar technicians at Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/contact/': ('Contact Beautique Bar | Yonge & Bridlewood Mall',
+              'Call, text or book online with Beautique Bar on Yonge (Toronto) or at Bridlewood Mall (Scarborough). Email info@beautiquebar.com.'),
+}
+NOINDEX_PROD = {'/thank-you/', '/skin/body-piercing/', '/404.html'}
+SERVICE_NAMES = {'/nails/manicure-pedicure/': 'Manicure and pedicure', '/nails/bio-gel/': 'Bio Gel nails', '/nails/acrylic/': 'Acrylic nails',
+                 '/eyelash-extensions/': 'Eyelash extensions', '/skin/facials/': 'Facials', '/skin/facial-hair-removal/': 'Facial hair removal',
+                 '/skin/body-hair-removal/': 'Body waxing'}
+
+def _price_amount(raw):
+    m = re.match(r'^\$(\d+(?:\.\d{1,2})?)\+?$', (raw or '').strip())
+    return m.group(1) if m else None
+
+def business_ld(k):
+    l = LOC[k]
+    cats = []
+    for c in MENUS[k]:
+        items = c['items'] + [i for sub in c.get('subs', []) for i in sub['items']]
+        offers = []
+        for i in items:
+            a = _price_amount(i['price'])
+            offers.append({'@type': 'Offer', 'name': i['name'], **({'price': a, 'priceCurrency': 'CAD'} if a else {})})
+        cats.append({'@type': 'OfferCatalog', 'name': c['title'], 'itemListElement': offers})
+    street = '2900 Warden Avenue, 2nd floor' if k == 'warden' else l['street']
+    d = {'@context': 'https://schema.org', '@type': 'NailSalon', '@id': f'{SITE_URL}{l["href"]}#business',
+         'name': f'Beautique Bar — {l["name"]}', 'url': f'{SITE_URL}{l["href"]}',
+         'image': [f'{SITE_URL}/{l["photo"][0]}'] if l['photo'] else [f'{SITE_URL}{OG_IMAGE}'],
+         'telephone': '+1-' + l['phone'], 'email': EMAIL, 'priceRange': '$$',
+         'address': {'@type': 'PostalAddress', 'streetAddress': street, 'addressLocality': l['locality'], 'addressRegion': 'ON',
+                     'postalCode': l['postal'], 'addressCountry': 'CA'},
+         'hasMap': l['maps'], 'sameAs': [l['ig']], 'parentOrganization': {'@id': f'{SITE_URL}/#organization'},
+         'potentialAction': {'@type': 'ReserveAction', 'target': l['book'], 'name': 'Book online'},
+         'hasOfferCatalog': {'@type': 'OfferCatalog', 'name': 'Services & prices', 'itemListElement': cats}}
+    if k == 'warden':
+        d['containedInPlace'] = {'@type': 'ShoppingCenter', 'name': 'Bridlewood Mall'}
+    return d
+
+def org_ld():
+    return {'@context': 'https://schema.org', '@type': 'HealthAndBeautyBusiness', '@id': f'{SITE_URL}/#organization',
+            'name': 'Beautique Bar', 'url': SITE_URL + '/', 'logo': f'{SITE_URL}/img/brand-lockup.png', 'image': f'{SITE_URL}{OG_IMAGE}',
+            'email': EMAIL, 'sameAs': [IG, IG_YONGE, FB],
+            'subOrganization': [{'@id': f'{SITE_URL}{l["href"]}#business'} for l in LOC.values()]}
+
+def crumbs_ld(body):
+    m = re.search(r'<nav class="crumbs[^>]*>(.*?)</nav>', body, re.S)
+    if not m:
+        return None
+    items = re.findall(r'<a href="([^"]+)">(.*?)</a>|<span aria-current="page">(.*?)</span>', m.group(1))
+    out = []
+    for i, (h, t, cur) in enumerate(items, 1):
+        name = html.unescape(t or cur)
+        out.append({'@type': 'ListItem', 'position': i, 'name': name, **({'item': SITE_URL + h} if h else {})})
+    return {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': out}
+
+def page_ld(path, title, desc, body):
+    lds = []
+    c = crumbs_ld(body)
+    if c:
+        lds.append(c)
+    for k, l in LOC.items():
+        if path == l['href']:
+            lds.append(business_ld(k))
+    if path in SERVICE_NAMES:
+        lds.append({'@context': 'https://schema.org', '@type': 'Service', 'name': SERVICE_NAMES[path], 'serviceType': SERVICE_NAMES[path],
+                    'description': desc, 'url': SITE_URL + path, 'provider': [{'@id': f'{SITE_URL}{l["href"]}#business'} for l in LOC.values()],
+                    'areaServed': [{'@type': 'City', 'name': n} for n in ('Toronto', 'North York', 'Scarborough')]})
+    m = re.match(r'^/blog/([^/]+)/$', path)
+    if m and m.group(1) in PBY:
+        p = PBY[m.group(1)]
+        lds.append({'@context': 'https://schema.org', '@type': 'BlogPosting', 'headline': p['title'], 'description': p['desc'],
+                    'datePublished': p['date'].isoformat(), 'url': SITE_URL + path, 'mainEntityOfPage': SITE_URL + path,
+                    'image': f'{SITE_URL}{OG_IMAGE}', 'author': {'@id': f'{SITE_URL}/#organization'}, 'publisher': {'@id': f'{SITE_URL}/#organization'}})
+    lds.append(org_ld())
+    return ''.join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False, separators=(",", ":"))}</script>\n' for d in lds)
+
+def head_common(path, title, desc, og_type='website'):
+    """Shared <head> tags: fonts (self-hosted), social cards. Title/description/canonical are set by the caller."""
+    url = SITE_URL + path
+    return f'''<link rel="preload" href="/fonts/italiana-latin.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:type" content="{og_type}">
+<meta property="og:site_name" content="Beautique Bar">
+<meta property="og:locale" content="en_CA">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{SITE_URL}{OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Beautique Bar — nails at Yonge &amp; York Mills and Bridlewood Mall">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#211e1a">'''
+
 def page(path, title, desc, body, tone='light', active=None, noindex_extra=False, bodyclass=''):
+    if path in SEO:
+        title, desc = SEO[path]
     canonical = f'https://beautiquebar.com{path}'
+    og_type = 'article' if path.startswith('/blog/') and path != '/blog/' else 'website'
     return f'''<!doctype html>
-<html lang="en">
+<html lang="en-CA">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -259,15 +383,13 @@ def page(path, title, desc, body, tone='light', active=None, noindex_extra=False
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Italiana&display=swap">
+{head_common(path, title, desc, og_type)}
 <link rel="stylesheet" href="/opus.css?v={VERSION}">
 <link rel="stylesheet" href="/site.css?v={VERSION}">
 <link rel="alternate" type="application/rss+xml" title="Beautique Bar — Beauty Blog" href="/rss.xml">
 <script>document.documentElement.classList.add('js')</script>
 <script src="/site.js?v={VERSION}" defer></script>
-</head>
+{page_ld(path, title, desc, body)}</head>
 <body class="inner {bodyclass}">
 <a class="skip" href="#main">Skip to content</a>
 {header(active, tone)}
@@ -296,10 +418,10 @@ def crumbs(items):
     parts = [f'<a href="{h}">{e(t)}</a>' if h else f'<span aria-current="page">{e(t)}</span>' for t, h in items]
     return f'<nav class="crumbs eyebrow" aria-label="Breadcrumb">{" <i>/</i> ".join(parts)}</nav>'
 
-def hero(crumb, h1, lead, media=None, h1_class=''):
+def hero(crumb, h1, lead, media=None, h1_class='', actions=''):
     side = f'<div class="pg-hero-media">{media}</div>' if media else ''
     return f'''<section class="pg-hero{' has-media' if media else ''}" data-tone="light">
-  <div class="pg-hero-text">{crumbs(crumb)}<h1 class="{h1_class}">{h1}</h1><p class="lead">{lead}</p></div>
+  <div class="pg-hero-text">{crumbs(crumb)}<h1 class="{h1_class}">{h1}</h1><p class="lead">{lead}</p>{actions}</div>
   {side}
 </section>'''
 
@@ -663,7 +785,8 @@ for k, l in LOC.items():
 </section>'''
     monthly = '<p class="mn-note">Monthly special pedicure: ask in salon for this month’s version.</p>'
     add(l['href'], page(l['href'], f'{l["name"]} Nail Salon | Beautique Bar', f'{l["long"]} — {l["addr"]}. Call {l["phone"]}. Book online.', f'''
-{hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(l['name']), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media)}
+{hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(l['name']), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media,
+      actions=f'<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
 <section class="pg-sec facts-sec" data-tone="light" aria-label="Visit">
   <dl class="facts">
     <div><dt>Address</dt><dd>{e(l["addr"])}</dd></div>
@@ -796,9 +919,28 @@ RSS = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title
 HOME_IMG = {'salon-3': 'stock-hands-rest.webp', 'salon-hero': 'stock-manicure-white.webp', 'salon-mauve': 'stock-manicure-mauve.webp',
             'svc-lashes': 'stock-lashes.webp', 'svc-facials': 'stock-facial.webp', 'blog': 'stock-hands-towel.webp'}
 
+HOME_TITLE = 'Beautique Bar | Nail Salon in Toronto & Scarborough'
+HOME_DESC = 'Nail salon at Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Manicures, pedicures, Shellac, gel and acrylic nails, lashes and facials.'
+
+def home_head():
+    ld = [org_ld()] + [business_ld(k) for k in LOC]
+    lds = ''.join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False, separators=(",", ":"))}</script>\n' for d in ld)
+    return f'''<meta name="robots" content="noindex,nofollow">
+<title>{e(HOME_TITLE)}</title>
+<meta name="description" content="{e(HOME_DESC)}">
+<link rel="canonical" href="https://beautiquebar.com/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+{head_common('/', HOME_TITLE, HOME_DESC)}
+<link rel="preload" as="image" href="/img/yonge-pedicure-row-1600.webp" imagesrcset="/img/yonge-pedicure-row-800.webp 800w, /img/yonge-pedicure-row-1200.webp 1200w, /img/yonge-pedicure-row-1600.webp 1600w, /img/yonge-pedicure-row.webp 2400w" imagesizes="100vw" fetchpriority="high">
+<link rel="stylesheet" href="/opus.css?v={VERSION}">
+{lds}<!--/HEAD-->'''
+
 def refresh_home():
     p = OUT / 'index.html'
     s = p.read_text()
+    s = s.replace('<html lang="en">', '<html lang="en-CA">')
     s = re.sub(r'<header class="site-header".*?</header>(\s*<div class="menu-panel".*?</div>\s*</nav>\s*</div>)?', header(None, 'dark'), s, count=1, flags=re.S)
     s = re.sub(r'<footer class="site-footer">.*?</footer>', footer(), s, count=1, flags=re.S)
     s = re.sub(r'<dialog class="book-dialog".*?</dialog>', dialog(), s, count=1, flags=re.S)
@@ -806,8 +948,8 @@ def refresh_home():
         s = re.sub(r'https://beautiquebar\.com/_astro/' + a + r'\.[A-Za-z0-9_-]+\.webp', '/img/' + b, s)
     s = s.replace('https://beautiquebar.com/', '/')
     s = re.sub(r'src="img/', 'src="/img/', s)
-    s = re.sub(r'href="opus\.css[^"]*"', f'href="/opus.css?v={VERSION}"', s)
-    s = re.sub(r'src="opus\.js[^"]*"', f'src="/opus.js?v={VERSION}"', s)
+    s = re.sub(r'href="/?opus\.css[^"]*"', f'href="/opus.css?v={VERSION}"', s)
+    s = re.sub(r'src="/?opus\.js[^"]*"', f'src="/opus.js?v={VERSION}"', s)
     if 'favicon.svg' not in s:
         s = s.replace('<link rel="preconnect" href="https://fonts.googleapis.com">', '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="icon" href="/favicon.ico" sizes="32x32">\n<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' + '<link rel="preconnect" href="https://fonts.googleapis.com">', 1)
     if '/site.js' not in s:
@@ -825,6 +967,12 @@ def refresh_home():
 </section>
 <!--/WORK-->'''
     s = re.sub(r'<!--WORK-->.*?<!--/WORK-->', lambda m: home_work, s, count=1, flags=re.S)
+    # the generated <head> block sits between the robots meta and <!--/HEAD--> (or <!--HEADSLOT--> once cleared)
+    if '<!--HEADSLOT-->' in s:
+        s = s.replace('<!--HEADSLOT-->', home_head(), 1)
+    else:
+        i, j = s.index('<meta name="robots"'), s.rindex('<!--/HEAD-->') + len('<!--/HEAD-->')
+        s = s[:i] + home_head() + s[j:]
     p.write_text(s)
 
 def main():
