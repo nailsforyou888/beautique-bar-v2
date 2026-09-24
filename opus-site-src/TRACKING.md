@@ -57,5 +57,5 @@ Still unknown (need someone signed in): which Ads campaigns point where (final U
 
 ## Still needed from you for search
 
-- **Opening hours** for each salon (not on the site today). They help Google and ads; add them and I'll put them in the salon details.
+- ~~Opening hours~~ — added 24 Sep 2026 (site pages + salon details for Google). Make sure both Google Business Profiles show the same hours.
 - Bridlewood interior and finished-pedicure photos.

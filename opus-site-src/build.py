@@ -51,6 +51,19 @@ LOC = {
     photo=('img/work-bridlewood-storefront.webp', 1440, 1080, 'The Beautique Bar storefront at Bridlewood Mall, with the team out front'),
   ),
 }
+HOURS = {  # owner-supplied, 24 Sep 2026
+  'yonge':  [('Mon–Fri', ['Monday','Tuesday','Wednesday','Thursday','Friday'], '10:00', '20:00'), ('Sat', ['Saturday'], '10:00', '19:00'), ('Sun', ['Sunday'], '10:00', '18:00')],
+  'warden': [('Mon–Fri', ['Monday','Tuesday','Wednesday','Thursday','Friday'], '10:00', '20:00'), ('Sat', ['Saturday'], '09:00', '19:00'), ('Sun', ['Sunday'], '11:00', '18:00')],
+}
+def _t(hm):
+    h = int(hm[:2]); return f'{h % 12 or 12} {"am" if h < 12 else "pm"}'
+def hours_rows(k):
+    return [(d, f'{_t(o)} – {_t(c)}') for d, _, o, c in HOURS[k]]
+def hours_inline(k):
+    return ' · '.join(f'{d} {t}' for d, t in hours_rows(k))
+def hours_dl(k):
+    return '<ul class="hours">' + ''.join(f'<li><span>{d}</span><span>{t}</span></li>' for d, t in hours_rows(k)) + '</ul>'
+
 PHOTO_BRIEF = {'yonge': 'REAL — owner photo, colour-corrected.',
                'warden': 'REAL — Beautique Bar Instagram (@beautiquebar88), Dec 2024 team photo at the Bridlewood storefront; seasonal decor. Final: interior from the entrance, no people.'}
 EMAIL = 'info@beautiquebar.com'
@@ -304,6 +317,7 @@ def business_ld(k):
          'telephone': '+1-' + l['phone'], 'email': EMAIL, 'priceRange': '$$',
          'address': {'@type': 'PostalAddress', 'streetAddress': street, 'addressLocality': l['locality'], 'addressRegion': 'ON',
                      'postalCode': l['postal'], 'addressCountry': 'CA'},
+         'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': days, 'opens': o, 'closes': c} for _, days, o, c in HOURS[k]],
          'hasMap': l['maps'], 'sameAs': [l['ig']], 'parentOrganization': {'@id': f'{SITE_URL}/#organization'},
          'potentialAction': {'@type': 'ReserveAction', 'target': l['book'], 'name': 'Book online'},
          'hasOfferCatalog': {'@type': 'OfferCatalog', 'name': 'Services & prices', 'itemListElement': cats}}
@@ -745,6 +759,7 @@ def salon_card(l, head='h2'):
     return f'''<article class="salon">{fig}
   <div class="salon-info"><p class="eyebrow">{e(l["area"])}</p><{head}><a href="{l["href"]}">{e(l["name"])}</a></{head}>
   <p class="addr">{e(l["addr"])}<br><a href="{l["tel"]}">Call {e(l["phone"])}</a>{f' · Text {e(l["text"])}' if l["text"] != l["phone"] else ' · Call or text'}</p>
+  <p class="hours-line">{e(hours_inline(l["id"]))}</p>
   <div class="salon-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["name"])} <span aria-hidden="true">↗</span></a>
   <a class="line-link" href="{l["href"]}">Menu &amp; details</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div></div></article>'''
 
@@ -792,6 +807,7 @@ for k, l in LOC.items():
     <div><dt>Address</dt><dd>{e(l["addr"])}</dd></div>
     <div><dt>Call</dt><dd><a href="{l["tel"]}">{e(l["phone"])}</a></dd></div>
     <div><dt>Text</dt><dd><a href="{l["text_tel"]}">{e(l["text"])}</a></dd></div>
+    <div><dt>Hours</dt><dd>{hours_dl(k)}</dd></div>
     <div><dt>Walk-ins</dt><dd>Welcome — booking ahead secures your time and technician.</dd></div>
   </dl>
   <div class="facts-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["name"])} <span aria-hidden="true">↗</span></a>
@@ -820,7 +836,7 @@ for k, l in LOC.items():
 def contact_col(l):
     return f'''<div class="ct-col"><p class="eyebrow">{e(l["area"])}</p><h2>{e(l["name"])}</h2><p class="addr">{e(l["addr"])}</p>
     <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li>
-    <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li></ul></div>'''
+    <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li><li><span>Hours</span><em class="ct-val">{e(hours_inline(l["id"]))}</em></li></ul></div>'''
 # ---- /gallery/ (new page) -------------------------------------------------------------------
 add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets by Beautique Bar technicians at Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Gallery',None)], 'Our work.', f'Recent sets by our technicians, first shared on Instagram. See more at <a href="{IG}" target="_blank" rel="noopener">@beautiquebar88</a> and <a href="{IG_YONGE}" target="_blank" rel="noopener">@beautiquebar_onyonge</a>.')}
