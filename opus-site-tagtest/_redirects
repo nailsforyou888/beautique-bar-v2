@@ -1,0 +1,28 @@
+# Same forwards as the live site (astro.config.mjs + public/_redirects), plus the retired shop.
+# Printed QR-code paths -> location pages
+/warden  /locations/warden/  301
+/warden/  /locations/warden/  301
+/yonge  /locations/yonge/  301
+/yonge/  /locations/yonge/  301
+# Legacy WordPress front page and blog posts (were published at the site root)
+/home/  /  301
+/acrylic-nails/  /blog/acrylic-nails/  301
+/acrylic-nails-costs/  /blog/acrylic-nails-costs/  301
+/removing-acrylic-nails/  /blog/removing-acrylic-nails/  301
+/bio-gel-nails/  /blog/bio-gel-nails/  301
+/removing-shellac-manicures/  /blog/removing-shellac-manicures/  301
+/costs-of-manicures-and-pedicures/  /blog/costs-of-manicures-and-pedicures/  301
+/facial-frequency/  /blog/facial-frequency/  301
+/maintaining-eyelash-extensions/  /blog/maintaining-eyelash-extensions/  301
+/full-body-laser-hair-removal-costs/  /blog/full-body-laser-hair-removal-costs/  301
+/facial-hair-growth/  /blog/facial-hair-growth/  301
+/removing-bio-gel-nails/  /blog/removing-bio-gel-nails/  301
+/what-are-manicures-and-pedicures/  /blog/what-are-manicures-and-pedicures/  301
+/cost-of-shellac-manicures/  /blog/cost-of-shellac-manicures/  301
+/what-are-nail-enhancements/  /blog/what-are-nail-enhancements/  301
+/toronto-trending-nail-art-design/  /blog/toronto-trending-nail-art-design/  301
+/extend-longevity-nail-art/  /blog/extend-longevity-nail-art/  301
+/top-nail-trends-for-2025-whats-hot-in-the-world-of-nails/  /blog/top-nail-trends-for-2025-whats-hot-in-the-world-of-nails/  301
+# Shop retired 24 Sep 2026
+/shop  /  301
+/shop/  /  301

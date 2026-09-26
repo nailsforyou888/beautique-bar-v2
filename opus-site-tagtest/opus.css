@@ -1,0 +1,373 @@
+/* Self-hosted fonts (SIL Open Font License): Italiana; DM Sans variable, weights 300–500, latin subset */
+@font-face{font-family:'Italiana';src:url(/fonts/italiana-latin.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url(/fonts/dmsans-latin.woff2) format('woff2');font-weight:300 500;font-style:normal;font-display:swap}
+/* Beautique Bar — opus-design-v1
+   Palette kept inside the Concept C family; one extra paper tint (--linen) for rhythm. */
+:root{
+  --espresso:#211e1a;
+  --ink:#27231f;
+  --stone:#b8ab99;
+  --stone-soft:#d6cdbf;
+  --paper:#eee9df;
+  --linen:#f4f0e8;
+  --hair:rgba(39,35,31,.18);
+  --hair-light:rgba(238,233,223,.22);
+  --serif:'Italiana',Georgia,serif;
+  --sans:'DM Sans',system-ui,Arial,sans-serif;
+  --ease:cubic-bezier(.22,.61,.24,1);
+  --gutter:6vw;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:90px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:300 15px/1.65 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,p,figure,blockquote,ol,ul{margin:0;padding:0}
+ol,ul{list-style:none}
+h1,h2,h3,.display{font-family:var(--serif);font-weight:400;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+img{display:block;width:100%;height:100%;object-fit:cover}
+:focus-visible{outline:1px solid currentColor;outline-offset:6px}
+.eyebrow{font:400 11.5px/1.45 var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.eyebrow i{font-style:normal;opacity:.45;margin:0 .6em}
+.skip{position:fixed;left:16px;top:-80px;z-index:100;background:var(--paper);color:var(--ink);padding:12px 16px}
+.skip:focus{top:12px}
+.grade-interior{filter:saturate(.5) sepia(.22) contrast(.94) brightness(.96)}
+
+.line-link{display:inline-flex;gap:.5em;align-items:baseline;font-size:13.5px;letter-spacing:.02em;padding:8px 0 7px;margin-block:-8px 0;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size .5s var(--ease)}
+.line-link:hover{background-size:0 1px;background-position:100% 100%}
+
+/* ---------- Header (section-aware) ---------- */
+.site-header{position:fixed;inset:0 0 auto;z-index:40;height:84px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 var(--gutter);color:var(--paper);transition:color .6s var(--ease),background-color .6s var(--ease),border-color .6s var(--ease),height .5s var(--ease);border-bottom:1px solid transparent}
+.site-header[data-bg="light"]{color:var(--ink)}
+.site-header.is-solid[data-bg="light"]{background:rgba(244,240,232,.62);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border-bottom-color:rgba(39,35,31,.08);height:68px}
+.site-header.is-solid[data-bg="dark"]{height:68px}
+.wordmark{font:400 24px/1 var(--serif);letter-spacing:.01em;justify-self:start}
+.nav{display:flex;gap:36px;font-size:13px;letter-spacing:.06em}
+.nav a{opacity:.92;padding:10px 2px;transition:opacity .3s}
+.nav a:hover{opacity:1}
+.book-btn{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;padding:13px 24px;border:1px solid currentColor;transition:background-color .35s,color .35s}
+.site-header[data-bg="dark"] .book-btn:hover{background:var(--paper);color:var(--espresso)}
+.site-header[data-bg="light"] .book-btn{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.site-header[data-bg="light"] .book-btn:hover{background:transparent;color:var(--ink)}
+
+/* ---------- 01 Opening ---------- */
+.opening{position:relative;background:var(--espresso)}
+.js .opening{height:460vh}
+.stage{position:relative;height:100vh;height:100svh;overflow:hidden;color:var(--paper)}
+.js .stage{position:sticky;top:0}
+.stone-ground{position:absolute;inset:0;background:#c9bead}
+.window{position:absolute;inset:0;overflow:hidden;background:var(--espresso);will-change:clip-path}
+.window img{position:absolute;inset:0;will-change:transform,opacity}
+.win-salon{object-position:50% 58%;transform:scale(1.18)}
+.win-hands{opacity:0;object-position:46% 50%}
+.veil{position:absolute;inset:0;background:var(--espresso);opacity:.5}
+.door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;will-change:transform}
+.door-l{left:0}.door-r{right:0}
+.door img{position:absolute;top:0;width:200%;max-width:none;height:100%;filter:brightness(.62) saturate(.85)}
+.door-l img{left:0}.door-r img{right:0}
+.door::after{content:"";position:absolute;top:0;bottom:0;width:120px;opacity:0;pointer-events:none;transition:none}
+.door-l::after{right:0;background:linear-gradient(90deg,transparent,rgba(0,0,0,.35))}
+.door-r::after{left:0;background:linear-gradient(-90deg,transparent,rgba(0,0,0,.35))}
+.seam{position:absolute;left:50%;top:0;width:1px;height:100%;background:rgba(238,233,223,.55);transform:scaleY(0);transform-origin:50% 50%;z-index:3}
+.kicker{position:absolute;left:var(--gutter);top:21vh;z-index:5}
+.title{position:absolute;left:var(--gutter);top:31vh;z-index:5;font-size:clamp(64px,9vw,160px);line-height:.92;letter-spacing:-.035em}
+.title span{display:block;will-change:transform,opacity}
+.t-in{margin-left:15vw}
+.come-in{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:5;font-size:clamp(52px,6.2vw,108px);line-height:.98;opacity:0}
+.js .come-in{opacity:0}
+.ritual{position:absolute;inset:0;z-index:5;color:#1f1b17;pointer-events:none}
+.ritual .eyebrow{color:#3b332b}
+.r-left,.r-right{position:absolute;top:50%;transform:translateY(-50%);width:27vw}
+.r-left{right:68vw;text-align:right}
+.r-right{left:68vw}
+.ritual .display{font-size:clamp(46px,6.1vw,104px);line-height:.95}
+.r-left .eyebrow{margin-bottom:32px}
+.r-right .eyebrow{margin-top:36px}
+.js .ritual .r-left,.js .ritual .r-right{opacity:0}
+.stage::before{content:"";position:absolute;inset:0 0 auto;height:190px;z-index:4;pointer-events:none;background:linear-gradient(180deg,rgba(24,21,18,.42),rgba(24,21,18,0));opacity:var(--scrim,1)}
+.cue{position:absolute;left:var(--gutter);bottom:34px;z-index:6;display:flex;align-items:center;gap:14px;opacity:.85}
+.cue span{display:block;width:1px;height:34px;background:currentColor;transform-origin:top;animation:cue 2.4s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0)}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- 02 Nails ---------- */
+.nails{position:relative;display:grid;grid-template-columns:5fr 7fr;gap:5vw;padding:150px var(--gutter) 160px;background:var(--paper)}
+.nails-rail{position:sticky;top:120px;align-self:start;height:calc(100vh - 170px);display:flex;flex-direction:column}
+.nails-word{font-size:clamp(120px,15.5vw,270px);line-height:.8;letter-spacing:-.05em;margin:34px 0 0 -.06em}
+.nail-index{margin-top:auto;border-top:1px solid var(--hair)}
+.nail-index li{border-bottom:1px solid var(--hair)}
+.nail-index a{display:flex;gap:26px;align-items:baseline;padding:11px 0;font-size:14px;letter-spacing:.03em;opacity:.74;transition:opacity .5s var(--ease),padding .5s var(--ease)}
+.nail-index span{font-size:11px;letter-spacing:.12em}
+.nail-index li.is-active a{opacity:1;padding-left:14px}
+.nail-index a:hover{opacity:1}
+.nails-rail>.line-link{margin-top:28px;align-self:flex-start}
+.nail-stories{padding-top:18vh}
+.story{margin-bottom:22vh}
+.story:last-child{margin-bottom:6vh}
+.frame{overflow:hidden;background:var(--stone-soft);position:relative}
+.frame img{transform:scale(1.06);transition:transform 1.8s var(--ease)}
+.story.in-view .frame img{transform:scale(1)}
+.s1 .frame{height:78vh}
+.s2{width:56%;margin-left:auto}.s2 .frame{height:62vh}
+.s3{width:84%}.s3 .frame{height:58vh}
+.s3 .frame img{object-position:30% 50%}
+.s4{width:52%;margin-left:30%}.s4 .frame{height:52vh}
+.s5{width:78%;margin-left:auto}.s5 .frame{height:62vh}
+.story-text{display:grid;grid-template-columns:auto 1fr;gap:6px 40px;align-items:end;margin-top:26px}
+.story-text .num{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;grid-row:span 2;align-self:start;padding-top:10px;min-width:110px}
+.story h3{font-size:clamp(32px,2.8vw,48px);line-height:1.02}
+.story .line-link{justify-self:start;margin-top:14px}
+
+/* Placeholder frames */
+.placeholder{display:grid;place-items:center;background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(39,35,31,.035) 22px 23px),var(--stone-soft);border:1px solid var(--hair);text-align:center}
+.placeholder>div{max-width:340px;padding:30px}
+.placeholder .eyebrow{color:#6a5d4e}
+.ph-title{font:400 30px/1.1 var(--serif);margin:18px 0 14px}
+.placeholder p:last-child{font-size:13.5px;line-height:1.6;opacity:.85}
+
+/* ---------- 03 Beyond nails ---------- */
+.services{background:var(--stone-soft);padding:150px var(--gutter) 120px}
+.services-head{display:grid;grid-template-columns:5fr 7fr;gap:5vw;align-items:end;margin-bottom:7vh}
+.services-head h2{font-size:clamp(48px,5vw,86px);line-height:1}
+.services-body{display:grid;grid-template-columns:5fr 7fr;gap:5vw;align-items:start}
+.service-list{border-top:1px solid var(--hair)}
+.service{min-height:36vh;padding:34px 0;border-bottom:1px solid var(--hair);display:flex;flex-direction:column}
+.service:last-child{min-height:46vh}
+.service>a{display:grid;grid-template-columns:48px 1fr auto;align-items:baseline}
+.service .n{font-size:11.5px;letter-spacing:.14em}
+.service .name{font:400 clamp(44px,4.6vw,76px)/1 var(--serif);letter-spacing:-.03em;opacity:.66;transition:opacity .6s var(--ease)}
+.service .arr{opacity:0;transition:opacity .4s}
+.service.is-active .name,.service>a:hover .name{opacity:1}
+.service.is-active .arr{opacity:.7}
+.service p{margin:18px 0 0 48px;font-size:14px;max-width:320px;opacity:.9}
+.service p a{border-bottom:1px solid var(--hair)}
+.service-photo{position:sticky;top:14vh;height:70vh;overflow:hidden;background:var(--stone)}
+.service-photo .sp{position:absolute;inset:0;width:100%;height:100%;clip-path:inset(100% 0 0 0);transform:scale(1.06);transition:clip-path .85s var(--ease),transform 1.3s var(--ease)}
+.service-photo .sp.is-active{clip-path:inset(0 0 0 0);transform:scale(1);z-index:2}
+.service-photo .sp.was-active{clip-path:inset(0 0 0 0);transform:scale(1);transition:none;z-index:1}
+.service-photo figcaption{position:absolute;right:20px;bottom:18px;z-index:3;color:var(--paper);text-shadow:0 1px 8px rgba(0,0,0,.35)}
+
+/* ---------- 04 The room — one large interior, one detail, space ---------- */
+.room{background:var(--espresso);color:var(--paper);padding:170px var(--gutter) 190px;overflow:hidden}
+.room-head{display:grid;grid-template-columns:7fr 5fr;column-gap:5vw;align-items:end;margin-bottom:10vh}
+.room-head .eyebrow{grid-column:1/-1;margin-bottom:28px}
+.room-head h2{font-size:clamp(52px,5.4vw,96px);line-height:.98}
+.room-words{justify-self:end;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.82;padding-bottom:12px}
+.room-frame{position:relative;padding-left:12vw}
+.room-main{height:78vh;overflow:hidden}
+.room-main img{object-position:50% 55%;transform:scale(1.05);transition:transform 2.4s var(--ease)}
+.room-main.in-view img{transform:scale(1)}
+.room-detail{position:absolute;left:0;bottom:-9vh;width:26vw;height:34vh;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.65);will-change:transform}
+.room-detail img{object-position:55% 60%}
+/* ---------- 05 Salons ---------- */
+.salons{background:var(--linen);padding:150px var(--gutter) 150px}
+.salons-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:9vh}
+.salons-head h2{font-size:clamp(48px,5vw,86px);line-height:1;text-align:right}
+.salon-pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--hair)}
+.salon{background:var(--linen)}
+.salon-photo{height:60vh;overflow:hidden}
+.salon-photo img{transition:transform 2.2s var(--ease)}
+.salon:hover .salon-photo img{transform:scale(1.03)}
+.salon-info{padding:36px 3vw 10px 0}
+.salon:nth-child(2) .salon-info{padding-left:3vw}
+.salon:nth-child(1) .salon-info{padding-right:3vw}
+.salon h3{font-size:clamp(40px,3.6vw,62px);line-height:1;margin:18px 0 18px}
+.addr{font-size:14.5px;line-height:1.7;opacity:.9}
+.addr a{border-bottom:1px solid var(--hair)}
+.salon-actions{display:flex;align-items:center;gap:30px;margin-top:32px}
+.btn-solid{display:inline-flex;gap:.7em;align-items:center;background:var(--ink);color:var(--paper);padding:17px 30px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;transition:background-color .35s}
+.btn-solid:hover{background:#4a4239}
+
+/* ---------- 06 Words ---------- */
+.words{background:var(--stone);padding:160px var(--gutter) 140px;text-align:center}
+.quote-lead{max-width:1060px;margin:70px auto 110px}
+.quote-lead blockquote p{font:400 clamp(40px,4.3vw,72px)/1.12 var(--serif);letter-spacing:-.02em}
+figcaption{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;margin-top:30px}
+.quote-line{max-width:1060px;margin:0 auto;padding-top:34px;border-top:1px solid var(--hair);display:grid;gap:22px;justify-items:center}
+.quote-line ul{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 36px;font:400 18px/1.4 var(--serif)}
+.quote-line li span{font:400 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.9;margin-left:10px}
+.quote-lead{margin-bottom:90px}
+
+/* ---------- 07 Lookbook ---------- */
+.lookbook{background:var(--paper);padding:160px var(--gutter) 170px}
+.look-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px 40px;margin-bottom:10vh}
+.look-head .eyebrow{grid-column:1/-1}
+.look-head h2{font-size:clamp(48px,5vw,86px);line-height:1}
+.look-grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:2vw;row-gap:9vh;align-items:start}
+.lk{position:relative}
+.lk img{height:100%}
+.lk figcaption{margin-top:16px}
+.lk1{grid-column:1/8;height:76vh}
+.lk2{grid-column:9/13;height:50vh;margin-top:22vh}
+.lk3{grid-column:2/6;height:52vh}
+.lk4{grid-column:7/11;height:60vh;margin-top:-8vh}
+.lk4 img{filter:saturate(.75)}
+.lk5{grid-column:1/13;height:64vh}
+.lk img{height:calc(100% - 36px)}
+
+/* ---------- 08 Close ---------- */
+.close{background:var(--espresso);color:var(--paper);padding:170px var(--gutter) 120px}
+.close h2{font-size:clamp(70px,9vw,160px);line-height:.9;letter-spacing:-.04em;margin:34px 0 90px}
+.close-list{border-top:1px solid var(--hair-light)}
+.close-list li{border-bottom:1px solid var(--hair-light)}
+.close-list a{display:grid;grid-template-columns:1fr auto auto;align-items:baseline;padding:34px 0;gap:48px}
+.cl-name{font:400 clamp(36px,3.4vw,58px)/1 var(--serif);transition:transform .6s var(--ease)}
+.cl-meta{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.78}
+.cl-book{justify-self:end;font-size:12px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(238,233,223,.55);padding:14px 26px;transition:background-color .35s,color .35s}
+.close-list a:hover .cl-book{background:var(--paper);color:var(--espresso)}
+.close-list a:hover .cl-name{transform:translateX(18px)}
+.notes-toggle{letter-spacing:inherit;text-transform:inherit;border-bottom:1px solid currentColor}
+
+/* ---------- Dialog ---------- */
+.book-dialog{border:0;padding:56px;width:min(640px,calc(100% - 32px));background:var(--linen);color:var(--ink)}
+.book-dialog::backdrop{background:rgba(23,20,17,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.book-dialog[open]{animation:dlg .5s var(--ease)}
+@keyframes dlg{from{opacity:0;transform:translateY(14px)}}
+.book-dialog h2{font-size:48px;line-height:1;margin:22px 0 34px}
+.book-dialog a{display:block;padding:22px 0;border-top:1px solid var(--hair)}
+.book-dialog a:last-of-type{border-bottom:1px solid var(--hair)}
+.book-dialog a span{font:400 32px/1.1 var(--serif)}
+.book-dialog small{display:block;font-size:13px;opacity:.8;margin-top:8px}
+.dlg-close{position:absolute;right:18px;top:14px;width:44px;height:44px;font-size:28px;line-height:1}
+
+/* ---------- Reveals (post-opening motion is quiet) ---------- */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.js .reveal.in-view{opacity:1;transform:none}
+
+/* ---------- Photography notes (review mode) ---------- */
+:where([data-brief]){position:relative}
+body.show-notes [data-brief]::after{content:"TEMPORARY PHOTO — " attr(data-brief);position:absolute;left:12px;right:12px;bottom:12px;z-index:9;background:rgba(33,30,26,.86);color:var(--paper);font:400 11px/1.5 var(--sans);letter-spacing:.02em;padding:10px 12px;text-transform:none;pointer-events:none}
+body.show-notes .service-photo::after{content:"STOCK BY CHOICE — owner-supplied licensed stock for lashes, hair removal and facials.";position:absolute;left:12px;right:12px;top:12px;z-index:9;background:rgba(33,30,26,.86);color:var(--paper);font:400 11px/1.5 var(--sans);padding:10px 12px}
+body.show-notes .window::after{bottom:auto;top:100px}
+
+/* ---------- Smaller screens: a working fallback, not a mobile design ---------- */
+@media (max-width:900px){
+  :root{--gutter:22px}
+  .nav{display:none}
+  .site-header{grid-template-columns:1fr auto}
+  .title{font-size:15vw;top:30vh}.t-in{margin-left:6vw}
+  .r-left,.r-right{width:40vw}.r-left{right:auto;left:22px;top:18vh;transform:none;text-align:left}.r-right{left:auto;right:22px;top:auto;bottom:12vh;transform:none;text-align:right}
+  .nails,.services-head,.services-body{grid-template-columns:1fr}
+  .nails-rail{position:relative;top:auto;height:auto}
+  .nail-index{margin-top:40px}
+  .s2,.s3,.s4,.s5{width:100%;margin-left:0}
+  .service-photo{position:relative;top:auto;height:60vh;order:-1}
+  .service{min-height:0}
+  .salon-pair{grid-template-columns:1fr}
+  .salon-info,.salon:nth-child(n) .salon-info{padding:28px 0 50px}
+  .salon-actions{flex-wrap:wrap;gap:20px}
+  .look-grid{grid-template-columns:1fr 1fr}.lk{grid-column:auto!important;margin-top:0!important;height:40vh!important}.lk5{grid-column:1/-1!important}
+  .salons-head{display:block}.salons-head h2{text-align:left;margin-top:20px}
+  .close-list a{grid-template-columns:1fr auto}.cl-meta{grid-column:1;grid-row:2}
+  .site-footer{flex-direction:column;gap:18px}
+  .room-head{grid-template-columns:1fr}.room-words{justify-self:start}
+  .room-frame{padding-left:0}.room-main{height:55vh}.room-detail{position:relative;bottom:auto;width:60%;height:28vh;margin:-8vh 0 0 auto}
+}
+
+/* ---------- Reduced motion: the story still reads, nothing moves ---------- */
+@media (prefers-reduced-motion:reduce){
+  .js .opening{height:auto}
+  .js .stage{position:relative;height:auto;min-height:100vh;padding-bottom:0}
+  .door,.seam,.cue,.come-in,.win-hands{display:none}
+  .window{position:relative;height:100vh}
+  .win-salon{transform:none}
+  .kicker{top:21vh}.title{top:31vh}
+  .stone-ground{display:none}
+  .ritual{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4vw;padding:120px var(--gutter);background:var(--stone)}
+  .js .ritual .r-left,.js .ritual .r-right{opacity:1;position:static;transform:none;width:auto}
+  .room-detail{transform:none!important}
+  .room-main img{transform:none!important;transition:none}
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .frame img,.service-photo .sp,.salon-photo img{transition:none!important;transform:none!important}
+  .cue span{animation:none}
+}
+.service-photo .placeholder{border:0}
+
+/* ---------- Shared chrome (all pages) ---------- */
+.hdr-actions{justify-self:end;display:flex;align-items:center;gap:14px}
+.nav a[aria-current="page"]{opacity:1;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:7px}
+.menu-btn{display:none;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;padding:12px 2px;min-height:44px}
+.menu-lines{position:relative;width:20px;height:1px;background:currentColor}
+.menu-lines::before,.menu-lines::after{content:"";position:absolute;left:0;width:20px;height:1px;background:currentColor;transition:transform .35s var(--ease)}
+.menu-lines::before{top:-6px}.menu-lines::after{top:6px}
+.menu-open .menu-lines{background:transparent}.menu-open .menu-lines::before{transform:translateY(6px) rotate(45deg)}.menu-open .menu-lines::after{transform:translateY(-6px) rotate(-45deg)}
+.menu-panel{position:fixed;inset:0;z-index:39;background:var(--espresso);color:var(--paper);padding:110px 22px 40px;overflow:auto}
+.menu-panel[hidden]{display:none}
+.mp-main a{display:block;font:400 44px/1.25 var(--serif);padding:6px 0}
+.mp-sub{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 26px;font-size:14px;letter-spacing:.04em}
+.mp-sub a{display:inline-block;padding:8px 0}
+.mp-book{margin-top:44px;padding-top:24px;border-top:1px solid var(--hair-light);display:grid;gap:4px}
+.mp-book a{font:400 26px/1.4 var(--serif);padding:6px 0}
+.menu-open .site-header{color:var(--paper)!important;background:transparent!important;border-color:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.menu-open .site-header .book-btn{display:none}
+.site-footer{background:var(--espresso);color:rgba(238,233,223,.84);padding:90px var(--gutter) 34px;font-size:14px;line-height:1.7;border-top:1px solid var(--hair-light)}
+.ft-grid{display:grid;grid-template-columns:1.1fr 1.6fr 1.6fr;gap:5vw;padding-bottom:70px}
+.ft-brand .wordmark{font-size:30px;color:var(--paper)}
+.ft-brand p{margin-top:18px;max-width:260px}
+.ft-locs{display:grid;grid-template-columns:1fr 1fr;gap:3vw}
+.ft-h{font:400 22px/1.2 var(--serif);color:var(--paper);margin-bottom:10px}
+.ft-loc p+p{margin-top:6px}
+.ft-loc a,.ft-nav a{transition:color .3s}
+.ft-loc a:hover,.ft-nav a:hover{color:var(--paper)}
+.ft-nav{display:grid;grid-template-columns:repeat(3,auto);gap:3vw;justify-content:start}
+.ft-nav li{padding:3px 0}
+.ft-base{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:26px;border-top:1px solid var(--hair-light);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap}
+@media (max-width:900px){
+  .menu-btn{display:inline-flex}
+  .book-btn{padding:11px 14px;letter-spacing:.12em}
+  .ft-grid,.ft-locs{grid-template-columns:1fr}
+  .ft-nav{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){.book-btn{font-size:10.5px;padding:10px 11px}.wordmark{font-size:20px}}
+.wordmark{white-space:nowrap}
+.bk-short{display:none}
+@media (max-width:520px){.bk-full{display:none}.bk-short{display:inline}.book-btn{padding:10px 14px}}
+
+/* ---- Our work (Instagram sets): strip, gallery grid, lightbox — shared by home and inner pages ---- */
+.work-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.wk{margin:0}
+.wk a{display:block;overflow:hidden;background:var(--stone-soft);outline-offset:4px}
+.wk img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;transition:transform 1.2s var(--ease)}
+.wk a:hover img,.wk a:focus-visible img{transform:scale(1.03)}
+.wk figcaption{font:400 11.5px/1.45 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-top:12px;color:#5b5045}
+.work-grid{columns:3 320px;column-gap:22px}
+.work-grid .wk{break-inside:avoid;margin:0 0 30px}
+.work-grid .wk img{aspect-ratio:auto}
+.pg-sec--flush{padding-top:20px}
+.home-work{background:var(--paper);padding:0 var(--gutter) 150px}
+.home-work .look-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:44px}
+.home-work h2{font-size:clamp(44px,5vw,84px);line-height:.95;margin-top:18px}
+.lightbox{border:0;padding:0;max-width:none;max-height:none;width:100%;height:100%;background:transparent;color:var(--paper)}
+.lightbox::backdrop{background:rgba(23,20,17,.94)}
+.lightbox[open]{display:grid;grid-template-rows:1fr auto;place-items:center;padding:56px 72px 28px}
+.lightbox img{max-width:100%;max-height:calc(100vh - 140px);width:auto;height:auto;object-fit:contain}
+.lightbox p{font:400 11.5px/1.45 var(--sans);letter-spacing:.2em;text-transform:uppercase;margin-top:18px}
+.lb-btn{position:fixed;background:none;border:0;color:var(--paper);font:300 34px/1 var(--sans);cursor:pointer;padding:14px 18px}
+.lb-btn:focus-visible{outline:1px solid var(--paper)}
+.lb-close{top:14px;right:14px}.lb-prev{left:8px;top:50%;transform:translateY(-50%)}.lb-next{right:8px;top:50%;transform:translateY(-50%)}
+@media (max-width:900px){
+  .work-strip{grid-template-columns:repeat(2,1fr);gap:14px}
+  .home-work{padding-bottom:100px}
+  .home-work .look-head{flex-direction:column;align-items:start}
+  .lightbox[open]{padding:56px 12px 20px}
+  .lb-prev,.lb-next{top:auto;bottom:10px;transform:none}
+}
+@media (max-width:520px){.work-grid{columns:2;column-gap:12px}.work-grid .wk{margin-bottom:20px}.wk figcaption{font-size:10px;letter-spacing:.12em}}
+@media (prefers-reduced-motion:reduce){.wk img{transition:none}.wk a:hover img{transform:none}}
+
+/* ---- Logo: the BB seal from the brand book (seal-ink.png used as a mask so it takes the header's ink or paper tone) ---- */
+.site-header .wordmark{display:inline-flex;align-items:center;gap:12px}
+.seal{flex:none;width:38px;height:38px;background:currentColor;-webkit-mask:url(/img/brand-seal-ink.png) center/contain no-repeat;mask:url(/img/brand-seal-ink.png) center/contain no-repeat}
+.site-header.is-solid .seal{width:34px;height:34px}
+.ft-seal{display:block;width:88px;height:88px;margin-bottom:22px}
+@media (max-width:420px){.seal,.site-header.is-solid .seal{width:30px;height:30px}.site-header .wordmark{gap:9px}}
+@media (max-width:350px){.wm-text{display:none}}
+/* Footer: the horizontal lockup (owner-supplied transparent file), in the paper tone */
+.ft-lockup{display:block;width:min(300px,100%);aspect-ratio:1200/200;background:var(--paper);-webkit-mask:url(/img/brand-lockup.webp) left center/contain no-repeat;mask:url(/img/brand-lockup.webp) left center/contain no-repeat;margin-bottom:24px}
+.ft-lockup:focus-visible{outline:1px solid var(--paper);outline-offset:6px}
+/* Header: the full lockup replaces the typed name; takes the header's ink/paper tone */
+.lockup{display:block;width:200px;aspect-ratio:1200/200;background:currentColor;-webkit-mask:url(/img/brand-lockup.webp) left center/contain no-repeat;mask:url(/img/brand-lockup.webp) left center/contain no-repeat;transition:width .5s var(--ease)}
+.site-header.is-solid .lockup{width:180px}
+@media (max-width:420px){.lockup,.site-header.is-solid .lockup{width:156px}}
+@media (max-width:350px){.lockup,.site-header.is-solid .lockup{width:118px}.menu-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
+@media (max-width:360px){.cl-name{font-size:30px}.cl-book{padding:12px 14px;letter-spacing:.12em}.close-list a{gap:10px}}

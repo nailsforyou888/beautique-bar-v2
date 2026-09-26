@@ -60,13 +60,30 @@
   }
 
   // ---- Conversion events (all pages) ----------------------------------------------------------
-  // Pushes a dataLayer event for every booking, call, text, directions and email click, tagged
-  // with the salon. Google Tag Manager (added only on the production build) can turn these into
-  // GA4 events and Google Ads conversions per salon. Without GTM this is a harmless no-op.
+  // One dataLayer event per booking, call, text, directions or email click:
+  //   {event: 'bb_book'|'bb_call'|'bb_text'|'bb_directions'|'bb_email', bb_salon: 'yonge'|'bridlewood',
+  //    bb_link: <href>, bb_placement: <where on the page>}
+  // Google Tag Manager (GTM-M6WHQ2D5, production build only) turns these into GA4 events and Ads conversions.
   const SALON = [
     [/e0fzhnga|4164847788|4374344884|3430/i, 'yonge'],
     [/m7weksrj|pId=32159|6477705232|Bridlewood|2900/i, 'bridlewood'],
   ];
+  // Page context: on a salon page, a link without its own salon (the shared email) belongs to that salon.
+  const PAGE_SALON = /^\/(locations\/)?yonge\/?$/.test(location.pathname) ? 'yonge'
+    : /^\/(locations\/)?warden\/?$/.test(location.pathname) ? 'bridlewood' : null;
+  const PLACES = [
+    ['.book-dialog', 'booking-dialog'], ['.menu-panel', 'mobile-menu'], ['.site-header', 'header'],
+    ['.site-footer', 'footer'], ['.pg-hero', 'hero'], ['.opening', 'hero'], ['.facts', 'salon-details'],
+    ['.facts-sec', 'salon-details'], ['.book-pair', 'prices'], ['.menu', 'menu'], ['.salon', 'salon-card'], ['.close, .close--inner', 'closing'],
+    ['.ct-col', 'contact'], ['.contact', 'contact'], ['.post-body', 'article'],
+  ];
+  const placement = a => {
+    const tagged = a.closest('[data-placement]');
+    if (tagged) return tagged.dataset.placement;
+    for (const [sel, name] of PLACES) if (a.closest(sel)) return name;
+    const sec = a.closest('section[id]');
+    return sec ? sec.id : 'body';
+  };
   document.addEventListener('click', ev => {
     const a = ev.target.closest && ev.target.closest('a[href]');
     if (!a) return;
@@ -76,8 +93,7 @@
     if (!kind) return;
     const hit = SALON.find(([re]) => re.test(href));
     (window.dataLayer = window.dataLayer || []).push({
-      event: 'bb_' + kind, bb_salon: hit ? hit[1] : 'unknown', bb_link: href,
-      bb_placement: (a.closest('[class]') || a).className.split(' ')[0] || 'link',
+      event: 'bb_' + kind, bb_salon: hit ? hit[1] : (PAGE_SALON || 'unknown'), bb_link: href, bb_placement: placement(a),
     });
   }, true);
 

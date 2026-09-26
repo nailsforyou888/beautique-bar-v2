@@ -59,3 +59,17 @@ Still unknown (need someone signed in): which Ads campaigns point where (final U
 
 - ~~Opening hours~~ — added 24 Sep 2026 (site pages + salon details for Google). Make sure both Google Business Profiles show the same hours.
 - Bridlewood interior and finished-pedicure photos.
+
+## Tag-test preview (26 Sep 2026)
+
+Built to the owner's tracking requirements (GTM-M6WHQ2D5 only; dataLayer schema; fixed salon URLs; sitemap; QR forwards).
+
+- **URL:** https://tag-test.beautique-bar-opus-design-v1.pages.dev — exactly the launch copy (GTM-M6WHQ2D5 on every page, first thing in `<head>`; `<noscript>` iframe straight after `<body>`), but hidden from search (noindex meta + header, robots Disallow). Made by `make_production.py --tagtest`, deployed by `publish-opus-tagtest.command`.
+- Testing on it sends real hits to whatever GTM fires (GA4 / Ads) — use GTM Preview / Tag Assistant, and filter or exclude test traffic if needed.
+- **No other Google code** in the site: no gtag.js, no G-/AW- IDs, no other containers (checked by search over every file).
+- **Events** (automated check: 393 tracked links on 37 pages, each fires exactly one event with the clicked href):
+  `bb_book` 236 · `bb_call` 102 · `bb_email` 41 · `bb_directions` 10 · `bb_text` 4
+  `bb_placement` values: `header` (none — the header Book button opens the salon chooser, whose links report `booking-dialog`), `booking-dialog`, `mobile-menu`, `hero`, `salon-details`, `salon-card`, `prices`, `closing`, `contact`, `footer`, `body`.
+  `bb_salon` is always `yonge` or `bridlewood` for book/call/text/directions. The one email address (info@) is shared: on the salon pages it reports that salon; elsewhere it reports `bb_salon: 'unknown'`.
+- **QR / short links:** `/yonge`, `/yonge/` → `/locations/yonge/`; `/warden`, `/warden/` → `/locations/warden/` (301). Old WordPress blog paths and `/home/` also forward.
+- **Security headers** allow Google Tag Manager, GA4, Google Ads (incl. google.ca endpoints) and GTM Preview / Tag Assistant.
