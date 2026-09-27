@@ -218,3 +218,5 @@ body.inner{background:var(--paper)}
 .hours li span:last-child{white-space:nowrap}
 @media (max-width:520px){.hours li{gap:8px;font-size:14px}.hours li span:first-child{min-width:52px}}
 @media (max-width:900px){.facts>div:nth-child(even){padding-left:4vw;border-left:1px solid var(--hair)}.facts>div:nth-child(odd){padding-left:0;border-left:0}}
+.gal--one{grid-template-columns:1fr}.gal--one .g1{height:72vh}
+@media (max-width:900px){.gal--one .g1{height:48vh}}

@@ -371,3 +371,5 @@ body.show-notes .window::after{bottom:auto;top:100px}
 @media (max-width:420px){.lockup,.site-header.is-solid .lockup{width:156px}}
 @media (max-width:350px){.lockup,.site-header.is-solid .lockup{width:118px}.menu-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 @media (max-width:360px){.cl-name{font-size:30px}.cl-book{padding:12px 14px;letter-spacing:.12em}.close-list a{gap:10px}}
+.work-strip--3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){.work-strip--3{grid-template-columns:repeat(2,1fr)}}

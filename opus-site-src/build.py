@@ -48,7 +48,7 @@ LOC = {
     maps='https://www.google.com/maps/search/?api=1&query=Beautique%20Bar%2C%20Bridlewood%20Mall%2C%202900%20Warden%20Ave%2C%20Scarborough%2C%20ON',
     where='On the 2nd floor of Bridlewood Mall, by the library.',
     serves='Scarborough, Bridlewood, L’Amoreaux and surrounding communities',
-    photo=('img/work-bridlewood-storefront.webp', 1440, 1080, 'The Beautique Bar storefront at Bridlewood Mall, with the team out front'),
+    photo=('img/bridlewood-interior.webp', 1448, 1086, 'Inside Beautique Bar at Bridlewood Mall: manicure stations, the colour wall and wood-slat walls'),
   ),
 }
 HOURS = {  # owner-supplied, 24 Sep 2026
@@ -65,7 +65,7 @@ def hours_dl(k):
     return '<ul class="hours">' + ''.join(f'<li><span>{d}</span><span>{t}</span></li>' for d, t in hours_rows(k)) + '</ul>'
 
 PHOTO_BRIEF = {'yonge': 'REAL — owner photo, colour-corrected.',
-               'warden': 'REAL — Beautique Bar Instagram (@beautiquebar88), Dec 2024 team photo at the Bridlewood storefront; seasonal decor. Final: interior from the entrance, no people.'}
+               'warden': 'REAL — owner photo, Bridlewood interior.'}
 EMAIL = 'info@beautiquebar.com'
 IG = 'https://www.instagram.com/beautiquebar88'
 IG_YONGE = 'https://www.instagram.com/beautiquebar_onyonge'
@@ -313,7 +313,7 @@ def business_ld(k):
     street = '2900 Warden Avenue, 2nd floor' if k == 'warden' else l['street']
     d = {'@context': 'https://schema.org', '@type': 'NailSalon', '@id': f'{SITE_URL}{l["href"]}#business',
          'name': f'Beautique Bar — {l["name"]}', 'url': f'{SITE_URL}{l["href"]}',
-         'image': [f'{SITE_URL}/{l["photo"][0]}'] if l['photo'] else [f'{SITE_URL}{OG_IMAGE}'],
+         'image': [f'{SITE_URL}/{l["photo"][0]}'] + ([f'{SITE_URL}/img/bridlewood-storefront.webp'] if k == 'warden' else []),
          'telephone': '+1-' + l['phone'], 'email': EMAIL, 'priceRange': '$$',
          'address': {'@type': 'PostalAddress', 'streetAddress': street, 'addressLocality': l['locality'], 'addressRegion': 'ON',
                      'postalCode': l['postal'], 'addressCountry': 'CA'},
@@ -533,6 +533,14 @@ def work_fig(stem, cls='wk', lazy=True):
             f'<img src="/img/work-{n}-sm.webp" alt="Nails by Beautique Bar: {e(cap.lower())}" width="{tw}" height="{th}"{LAZY if lazy else ""} decoding="async"></a>'
             f'<figcaption>{e(cap)}</figcaption></figure>')
 
+LASHES = [('lash-1', 1574, 1430, 'Full volume'), ('lash-2', 1334, 1199, 'Soft wispy set'), ('lash-3', 1600, 1450, 'Fluffy volume'),
+          ('lash-4', 1127, 1503, 'Natural hybrid'), ('lash-5', 1544, 1158, 'Classic volume'), ('lash-6', 1600, 1200, 'Wispy hybrid')]
+def lash_strip():
+    figs = ''.join(f'<figure class="wk"><a href="/img/{n}.webp" data-lightbox="{e(c)}" aria-label="{e(c)} — view larger">'
+                   f'<img src="/img/{n}-sm.webp" alt="Eyelash extensions by Beautique Bar: {e(c.lower())}" width="720" height="{round(h*720/w)}"{LAZY} decoding="async"></a>'
+                   f'<figcaption>{e(c)}</figcaption></figure>' for n, w, h, c in LASHES)
+    return f'<div class="work-strip work-strip--3">{figs}</div>'
+
 def work_strip(stems):
     return f'<div class="work-strip">{"".join(work_fig(x) for x in stems)}</div>'
 
@@ -586,7 +594,7 @@ add('/nails/manicure-pedicure/', page('/nails/manicure-pedicure/', 'Manicure & P
     ('Deluxe Spa Manicure & Russian Manicure', 'On the Bridlewood Mall menu, each also available with Shellac.'),
     ('Gentleman’s Manicure & Pedicure', 'On the menu at both salons.'),
   ])}
-  <div class="inline-ph">{img('img/work-pedicure-spa-tray.webp', 640, 1136, 'A pedicure tray of sliced citrus, dried flowers and scrubs', 'frame', '50% 50%', True, 'REAL — Beautique Bar Instagram (640 px reel cover, low resolution). Final: finished pedicure on a warm towel.')}</div>
+  <div class="inline-ph">{img('img/stock-pedicure.webp', 1448, 1086, 'A finished pedicure in soft pink, feet resting on a white towel', 'frame', '50% 50%', True, 'Licensed stock chosen by the owner.')}</div>
 </section>
 <section class="pg-sec pg-sec--tight" data-tone="light" aria-labelledby="shellac">
   {sec_head('Shellac', 'Gloss that keeps up', 'shellac')}
@@ -625,7 +633,7 @@ add('/nails/bio-gel/', page('/nails/bio-gel/', 'Bio Gel Nails | Beautique Bar', 
 # ---- /nails/acrylic/ -------------------------------------------------------------------------
 add('/nails/acrylic/', page('/nails/acrylic/', 'Acrylic Nails | Beautique Bar', 'Acrylic and Crystal Gel sets, overlays and refills at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Nails','/nails/'),('Acrylic',None)], 'Acrylic', 'Sculpted sets for length and shape, finished in the colour or design you choose — from a clean French to full nail art.',
-      img('img/work-silver-chrome-almond.webp', 1290, 1290, 'Long sculpted almond nails in silver chrome', 'frame', '50% 50%', False, WORK_BRIEF + ' Confirm this set is acrylic.'))}
+      img('img/work-silver-chrome-almond.webp', 1290, 1290, 'Long sculpted almond nails in silver chrome', 'frame', '50% 50%', False, WORK_BRIEF + ' Acrylic set (confirmed by owner).'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Options', 'Full sets, overlays, refills', 'opt-h')}
   {options([
@@ -646,7 +654,7 @@ add('/nails/acrylic/', page('/nails/acrylic/', 'Acrylic Nails | Beautique Bar', 
 # ---- /skin/ ----------------------------------------------------------------------------------
 add('/skin/', page('/skin/', 'Skin & Lashes | Beautique Bar', 'Eyelash extensions, facials, waxing and threading at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Skin & Lashes',None)], 'Skin<br>&amp; Lashes', 'Lash extensions, facials, waxing and threading — alongside your nails, at the salon nearest you.',
-      ph('Skin & lashes', 'A calm treatment moment: eyes closed, warm towel, soft light. Real Beautique Bar treatment room; no tools in focus.', 'frame'))}
+      img('img/lash-3.webp', 1600, 1450, 'A full, fluffy set of eyelash extensions with a groomed brow', 'frame', '50% 45%', False, 'REAL — Beautique Bar lash work (owner photo).'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="t-h">
   {sec_head('Treatments', 'Choose your treatment', 't-h')}
   {svc_list([
@@ -662,7 +670,7 @@ add('/skin/', page('/skin/', 'Skin & Lashes | Beautique Bar', 'Eyelash extension
 # ---- /eyelash-extensions/ --------------------------------------------------------------------
 add('/eyelash-extensions/', page('/eyelash-extensions/', 'Eyelash Extensions | Beautique Bar', 'Classic, hybrid and volume eyelash extensions and refills at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Skin & Lashes','/skin/'),('Eyelash Extensions',None)], 'Eyelash<br>Extensions', 'Individual extensions applied to suit your eye shape — from a soft, natural set to full volume — with refills to keep them full.',
-      ph('Lashes', 'Finished lash set, eyes closed, calm profile crop from brow to cheekbone. Soft light, skin texture visible.', 'frame'))}
+      img('img/lash-5.webp', 1544, 1158, 'A volume set of eyelash extensions on a brown eye', 'frame', '45% 50%', False, 'REAL — Beautique Bar lash work (owner photo).'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Options', 'Choose your set', 'opt-h')}
   {options([
@@ -671,6 +679,10 @@ add('/eyelash-extensions/', page('/eyelash-extensions/', 'Eyelash Extensions | B
     ('Volume', 'Fans of fine lashes on each natural lash for a fuller, softer look.'),
     ('Refills', 'Top up your set as your natural lashes shed and grow.'),
   ])}
+</section>
+<section class="pg-sec" data-tone="light" aria-labelledby="lash-work">
+  {sec_head('Our work', 'Recent lash sets', 'lash-work')}
+  {lash_strip()}
 </section>
 {book_pair({'yonge': ['Classic Set', 'Hybrid Set', 'Volume Set', 'Refill Classic', 'Refill Hybrid', 'Refill Volume'],
             'warden': ['Individual Classic Set', 'Indiv. Hybrid Set', 'Indiv. Volume Set', 'Bunch Light Volume Set', 'Bunch Wispy Set']})}
@@ -681,7 +693,7 @@ add('/eyelash-extensions/', page('/eyelash-extensions/', 'Eyelash Extensions | B
 # ---- /skin/facials/ --------------------------------------------------------------------------
 add('/skin/facials/', page('/skin/facials/', 'Facials | Beautique Bar', 'Deep-pore cleansing, relaxing, anti-wrinkle and firming facials at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Skin & Lashes','/skin/'),('Facials',None)], 'Facials', 'An hour for your skin — a deep-pore cleanse, a relaxing classic, or a hydrating or firming facial with a lifting mask.',
-      ph('Facial', 'A relaxed facial in progress: towel wrap, product texture, eyes closed. Overhead, calm symmetry, warm light.', 'frame'))}
+      img('img/skin-facial.webp', 1536, 1024, 'A relaxing facial with a cream mask, eyes closed', 'frame', '45% 50%', False, 'Licensed stock chosen by the owner.'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('On the menus', 'Choose your facial', 'opt-h')}
   {options([
@@ -701,7 +713,7 @@ add('/skin/facials/', page('/skin/facials/', 'Facials | Beautique Bar', 'Deep-po
 # ---- /skin/facial-hair-removal/ --------------------------------------------------------------
 add('/skin/facial-hair-removal/', page('/skin/facial-hair-removal/', 'Facial Hair Removal | Beautique Bar', 'Eyebrow, lip, chin and full-face waxing, brow tinting and threading at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Skin & Lashes','/skin/'),('Facial Hair Removal',None)], 'Facial Hair<br>Removal', 'Waxing and tinting for brows, lip, chin and full face at both salons, and threading at Yonge &amp; York Mills.',
-      ph('Brows', 'A calm finished brow, soft light, towel edge in frame. No wax sticks or gloves.', 'frame'))}
+      img('img/lash-2.webp', 1334, 1199, 'A shaped, tinted brow above a set of lash extensions', 'frame', '50% 40%', False, 'REAL — Beautique Bar lash work (owner photo).'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Methods', 'Waxing, tinting, threading', 'opt-h')}
   {options([
@@ -719,7 +731,7 @@ add('/skin/facial-hair-removal/', page('/skin/facial-hair-removal/', 'Facial Hai
 # ---- /skin/body-hair-removal/ ----------------------------------------------------------------
 add('/skin/body-hair-removal/', page('/skin/body-hair-removal/', 'Body Hair Removal | Beautique Bar', 'Waxing for arms, legs, underarms, back, chest and bikini at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
 {hero([('Home','/'),('Skin & Lashes','/skin/'),('Body Hair Removal',None)], 'Body Hair<br>Removal', 'Waxing for arms, legs, underarms, back, chest, stomach and bikini, at both salons.',
-      ph('Smooth skin', 'A calm aftercare moment: smooth skin against a warm towel, soft window light. No wax or tools in frame.', 'frame'))}
+      img('img/skin-hair-removal.webp', 1536, 1024, 'Smooth legs resting on a white towel', 'frame', '40% 50%', False, 'Licensed stock chosen by the owner.'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Waxing', 'Areas on the menu', 'opt-h')}
   {options([
@@ -788,13 +800,15 @@ for k, l in LOC.items():
     other = LOC['warden' if k == 'yonge' else 'yonge']
     if l['photo']:
         s, w, h, alt = l['photo']
-        media = img(s, w, h, alt, 'frame', '50% 60%' if k == 'yonge' else '50% 50%', False, PHOTO_BRIEF[k])
+        media = img(s, w, h, alt, 'frame', '50% 60%', False, PHOTO_BRIEF[k]) if k == 'yonge' else img('img/bridlewood-storefront.webp', 1448, 1086, 'The Beautique Bar storefront at Bridlewood Mall', 'frame', '40% 50%', False, 'REAL — owner photo, Bridlewood storefront.')
     if k == 'yonge':
         gallery = f'''<section class="pg-sec gallery" data-tone="light" aria-label="Inside the salon">
   <div class="gal">{img('img/yonge-pedicure-row.webp', 2400, 1800, 'The pedicure row at Beautique Bar on Yonge', 'g1', '50% 58%', True, 'REAL — owner photo.')}
   {img('img/promo-logo-wall.webp', 1100, 1650, 'The Beautique Bar logo lit on the wood-slat wall', 'g2', None, True, 'REAL — Yonge promo still.')}</div></section>'''
     else:
-        gallery = f'''<section class="pg-sec" data-tone="light" aria-labelledby="bw-work">
+        gallery = f'''<section class="pg-sec gallery" data-tone="light" aria-label="Inside the salon">
+  <div class="gal gal--one">{img(s, w, h, alt, 'g1', '50% 55%', True, PHOTO_BRIEF[k])}</div></section>
+<section class="pg-sec" data-tone="light" aria-labelledby="bw-work">
   {sec_head('From our Instagram', 'Recent sets', 'bw-work', '<a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>')}
   {work_strip(['plum-chrome-gems', 'burgundy-gloss', 'brown-french', 'leopard-tips'])}
 </section>'''
@@ -856,9 +870,9 @@ add('/contact/', page('/contact/', 'Contact | Beautique Bar', 'Call, text or boo
 
 # ---- /privacy/ & /terms/ (legal text as on the live site) ------------------------------------
 PRIVACY = f'''<p>This Privacy Policy explains how Beautique Bar (“we”, “us”) collects, uses and safeguards the personal information you provide when you visit our website or book an appointment.</p>
-<h2>Information we collect</h2><p>When you contact us through our website form, we collect the details you choose to provide — typically your name, email address, phone number, preferred location and message. We do not collect payment information through this website.</p>
+<h2>Information we collect</h2><p>We do not collect payment information through this website.</p>
 <h2>How we use your information</h2><ul><li>To respond to your enquiries and booking requests.</li><li>To provide and improve our services.</li><li>To contact you about your appointments when you ask us to.</li></ul>
-<h2>How we protect it</h2><p>Messages submitted through our website are transmitted securely over HTTPS and delivered directly to our team by email. We retain enquiry information only as long as needed to assist you.</p>
+<h2>How we protect it</h2><p>This website is served securely over HTTPS. We retain enquiry information only as long as needed to assist you.</p>
 <h2>Third-party services</h2><p>We may use privacy-respecting analytics and spam protection (such as Cloudflare Turnstile) to keep the site secure and understand how it is used. We do not sell your personal information.</p>
 <h2>Your choices</h2><p>You may request access to, correction of, or deletion of the personal information you have shared with us by contacting us at <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 <h2>Contact us</h2><p>Questions about this policy? Email <a href="mailto:{EMAIL}">{EMAIL}</a> or reach out via <a href="{IG}" target="_blank" rel="noopener">Instagram</a>.</p>
