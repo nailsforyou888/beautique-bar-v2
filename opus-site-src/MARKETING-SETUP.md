@@ -105,6 +105,7 @@ Detection is by link type, so any new booking/phone/map link added anywhere is t
 3. GA4 Event tag → event name `{{Event}}`, params salon/link/placement. Mark `bb_book` and `bb_call` as key events in GA4.
 4. Google Ads Conversion tags on `bb_book` and `bb_call` (optionally split by `bb_salon` into Yonge / Bridlewood conversions) + Conversion Linker on All Pages + Ads Remarketing if wanted.
 5. **Do not** also create "Click URL contains fresha / tel:" triggers — those would duplicate the `bb_*` events.
+   **Existing container check (28 Sep 2026):** GTM-M6WHQ2D5 already fires `gtm.linkClick` on this site, i.e. the container has a *Just Links* click trigger. Before publishing, open the container and make sure no GA4/Ads conversion tag uses that trigger (or a Click-URL trigger) for Fresha/phone clicks — move them to the `bb_*` Custom Event triggers so each click counts once.
 6. Test on the tag-test preview (https://tag-test.beautique-bar-opus-design-v1.pages.dev) with Tag Assistant before publishing the container.
 
 ### Fresha — what can and can't be measured from this site
