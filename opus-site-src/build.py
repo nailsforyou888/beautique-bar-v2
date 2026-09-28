@@ -22,39 +22,12 @@ VERSION = '8'
 e = html.escape
 CUR = ' aria-current="page"'
 LAZY = ' loading="lazy"'
+EAGER = ' fetchpriority="high"'
 def idattr(r):
     return f' id="{r[2]}"' if len(r) > 2 and r[2] else ''
 
-# ----------------------------------------------------------------------------------------------
-# Locations (from the live site config: src/lib/site.ts)
-LOC = {
-  'yonge': dict(
-    id='yonge', name='Yonge & York Mills', long='Beautique Bar on Yonge', href='/locations/yonge/',
-    area='Toronto', street='3430 Yonge Street', city='Toronto, ON',
-    addr='3430 Yonge Street, Toronto, ON', postal='M4N 2M9', locality='Toronto', short='Yonge', ig='https://www.instagram.com/beautiquebar_onyonge',
-    phone='416-484-7788', tel='tel:+14164847788', text='437-434-4884', text_tel='sms:+14374344884',
-    book='https://www.fresha.com/a/beautique-bar-on-yonge-toronto-3430-yonge-street-e0fzhnga/booking?menu=true',
-    maps='https://www.google.com/maps/search/?api=1&query=3430%20Yonge%20St%2C%20Toronto%2C%20ON',
-    where='Right on the Yonge line, north of Lawrence Avenue and south of York Mills.',
-    serves='Yonge & York Mills, Lawrence Park, Leaside and North Toronto',
-    photo=('img/yonge-colour-wall.webp', 1170, 1554, 'Inside Beautique Bar on Yonge: the colour wall, chandelier and stations'),
-  ),
-  'warden': dict(
-    id='warden', name='Bridlewood Mall', long='Beautique Bar on Warden', href='/locations/warden/',
-    area='Scarborough', street='2900 Warden Avenue', city='Scarborough, ON',
-    addr='Bridlewood Mall, 2900 Warden Avenue, 2nd floor by the library, Scarborough, ON', postal='M1W 2S8', locality='Scarborough', short='Bridlewood', ig='https://www.instagram.com/beautiquebar88',
-    phone='647-770-5232', tel='tel:+16477705232', text='647-770-5232', text_tel='sms:+16477705232',
-    book='https://www.fresha.com/book-now/nails-for-you-m7weksrj/all-offer?share&pId=32159',
-    maps='https://www.google.com/maps/search/?api=1&query=Beautique%20Bar%2C%20Bridlewood%20Mall%2C%202900%20Warden%20Ave%2C%20Scarborough%2C%20ON',
-    where='On the 2nd floor of Bridlewood Mall, by the library.',
-    serves='Scarborough, Bridlewood, L’Amoreaux and surrounding communities',
-    photo=('img/bridlewood-interior.webp', 1448, 1086, 'Inside Beautique Bar at Bridlewood Mall: manicure stations, the colour wall and wood-slat walls'),
-  ),
-}
-HOURS = {  # owner-supplied, 24 Sep 2026
-  'yonge':  [('Mon–Fri', ['Monday','Tuesday','Wednesday','Thursday','Friday'], '10:00', '20:00'), ('Sat', ['Saturday'], '10:00', '19:00'), ('Sun', ['Sunday'], '10:00', '18:00')],
-  'warden': [('Mon–Fri', ['Monday','Tuesday','Wednesday','Thursday','Friday'], '10:00', '20:00'), ('Sat', ['Saturday'], '09:00', '19:00'), ('Sun', ['Sunday'], '11:00', '18:00')],
-}
+from site_config import *   # LOC, HOURS, EMAILS, socials, SITE_URL, GTM_ID … (single source of truth)
+
 def _t(hm):
     h = int(hm[:2]); return f'{h % 12 or 12} {"am" if h < 12 else "pm"}'
 def hours_rows(k):
@@ -66,13 +39,6 @@ def hours_dl(k):
 
 PHOTO_BRIEF = {'yonge': 'REAL — owner photo, colour-corrected.',
                'warden': 'REAL — owner photo, Bridlewood interior.'}
-EMAIL_Y = 'beautiquebar.yonge@gmail.com'      # Yonge & York Mills
-EMAIL_W = 'beautiquebar88@gmail.com'          # Bridlewood Mall
-EMAIL = EMAIL_W                               # organisation-level fallback (structured data)
-EMAILS = {'yonge': EMAIL_Y, 'warden': EMAIL_W}
-IG = 'https://www.instagram.com/beautiquebar88'
-IG_YONGE = 'https://www.instagram.com/beautiquebar_onyonge'
-FB = 'https://www.facebook.com/Beautiquebaryonge'
 REVIEWS_URL = 'https://www.google.com/search?q=Beautique+Bar+Toronto+reviews'
 
 # ----------------------------------------------------------------------------------------------
@@ -151,7 +117,7 @@ def load_posts():
             if ':' in line:
                 k, v = line.split(':', 1)
                 meta[k.strip()] = v.strip().strip('"')
-        posts.append(dict(slug=f.stem, title=meta['title'], desc=meta.get('description', ''),
+        posts.append(dict(slug=f.stem, title=meta['title'], seo_title=meta.get('seoTitle', ''), desc=meta.get('description', ''),
                           date=datetime.date.fromisoformat(meta['pubDate']), cat=meta.get('category', ''), body=body))
     posts.sort(key=lambda p: p['date'], reverse=True)
     return posts
@@ -261,7 +227,6 @@ def dialog():
   {rows}
 </dialog>'''
 
-SITE_URL = 'https://beautiquebar.com'
 OG_IMAGE = '/img/og-default.jpg'
 # Search titles/descriptions: local keywords + both neighbourhoods; titles <= ~60 chars, descriptions <= 160.
 SEO = {
@@ -291,6 +256,8 @@ SEO = {
               'Beautique Bar at Bridlewood Mall, 2900 Warden Ave, Scarborough — manicures, pedicures, gel and acrylic nails, lashes and waxing. Call 647-770-5232.'),
   '/gallery/': ('Nail Art Gallery | Beautique Bar',
               'Recent nail sets by Beautique Bar technicians at Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/blog/': ('Nail, Lash & Skin Care Blog | Beautique Bar',
+              'Nail, lash and skin care guides from Beautique Bar — the nail salon at Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
   '/contact/': ('Contact Beautique Bar | Yonge & Bridlewood Mall',
               'Call, text or book online with Beautique Bar on Yonge (Toronto) or at Bridlewood Mall (Scarborough).'),
 }
@@ -331,7 +298,7 @@ def business_ld(k):
 def org_ld():
     return {'@context': 'https://schema.org', '@type': 'HealthAndBeautyBusiness', '@id': f'{SITE_URL}/#organization',
             'name': 'Beautique Bar', 'url': SITE_URL + '/', 'logo': f'{SITE_URL}/img/brand-lockup.png', 'image': f'{SITE_URL}{OG_IMAGE}',
-            'email': EMAIL, 'sameAs': [IG, IG_YONGE, FB],
+            'sameAs': [IG, IG_YONGE, FB],
             'subOrganization': [{'@id': f'{SITE_URL}{l["href"]}#business'} for l in LOC.values()]}
 
 def crumbs_ld(body):
@@ -386,7 +353,7 @@ def head_common(path, title, desc, og_type='website'):
 def page(path, title, desc, body, tone='light', active=None, noindex_extra=False, bodyclass=''):
     if path in SEO:
         title, desc = SEO[path]
-    canonical = f'https://beautiquebar.com{path}'
+    canonical = f'{SITE_URL}{path}'
     og_type = 'article' if path.startswith('/blog/') and path != '/blog/' else 'website'
     return f'''<!doctype html>
 <html lang="en-CA">
@@ -765,10 +732,10 @@ add('/skin/body-piercing/', page('/skin/body-piercing/', 'Body Piercing | Beauti
 ''', active='/skin/'))
 
 # ---- /locations/ -----------------------------------------------------------------------------
-def salon_card(l, head='h2'):
+def salon_card(l, head='h2', lazy=True):
     if l['photo']:
         s, w, h, alt = l['photo']
-        fig = f'<figure class="salon-photo" data-brief="{e(PHOTO_BRIEF[l["id"]])}"><img src="/{s}" alt="{e(alt)}" width="{w}" height="{h}" loading="lazy" decoding="async" style="object-position:{"50% 60%" if l["id"] == "yonge" else "56% 50%"}"></figure>'
+        fig = f'<figure class="salon-photo" data-brief="{e(PHOTO_BRIEF[l["id"]])}"><img src="/{s}" alt="{e(alt)}" width="{w}" height="{h}"{LAZY if lazy else EAGER} decoding="async" style="object-position:{"50% 60%" if l["id"] == "yonge" else "56% 50%"}"></figure>'
     else:
         fig = ph('Bridlewood Mall salon', 'Wide interior from the entrance, lights warmed, no people. Same framing as the Yonge photo so the two salons read as a pair.', 'salon-photo')
     return f'''<article class="salon">{fig}
@@ -781,7 +748,7 @@ def salon_card(l, head='h2'):
 add('/locations/', page('/locations/', 'Locations | Beautique Bar', 'Beautique Bar on Yonge (3430 Yonge St, Toronto) and at Bridlewood Mall (2900 Warden Ave, Scarborough). Book online, call or text.', f'''
 {hero([('Home','/'),('Locations',None)], 'Two salons.', 'Walk-ins are welcome, but booking ahead secures your preferred time and technician. Choose the salon nearest you.')}
 <section class="pg-sec salons salons--inner" data-tone="light" aria-label="Our salons">
-  <div class="salon-pair">{salon_card(LOC['yonge'])}{salon_card(LOC['warden'])}</div>
+  <div class="salon-pair">{salon_card(LOC['yonge'], lazy=False)}{salon_card(LOC['warden'])}</div>
 </section>
 ''', active='/locations/'))
 
@@ -918,6 +885,25 @@ PAGES['/404.html'] = page('/404/', 'Page Not Found | Beautique Bar', 'This page 
 <section class="pg-sec" data-tone="light">{svc_list([('Nails', '/nails/', 'Manicures, pedicures, Shellac, Bio Gel and acrylic.', BOTH), ('Skin & Lashes', '/skin/', 'Lashes, facials, waxing and threading.', BOTH), ('Locations', '/locations/', 'Book, call or get directions.', BOTH)])}</section>''')
 
 # ---- /blog/ & posts --------------------------------------------------------------------------
+def seo_title(p):
+    """Search title for a post: front-matter seoTitle if set, else the headline + brand when that fits (~65 chars)."""
+    t = p['seo_title'] or p['title']
+    return t if len(t) + 16 > 65 else f'{t} | {BUSINESS_NAME}'
+
+def fix_heading_levels(html_):
+    """Article bodies sit under the page H1: make their headings start at H2 and never skip a level."""
+    out, stack = [], []          # stack of (source level, output level)
+    def sub(m):
+        close, lv = m.group(1), int(m.group(2))
+        if close:
+            return f'</h{out.pop()}{m.group(3)}' if out else m.group(0)
+        while stack and stack[-1][0] >= lv:
+            stack.pop()
+        new = min((stack[-1][1] + 1) if stack else 2, 6)
+        stack.append((lv, new)); out.append(new)
+        return f'<h{new}{m.group(3)}'
+    return re.sub(r'<(/?)h([1-6])([ >])', sub, html_)
+
 def fmt_date(d):
     return d.strftime('%B %-d, %Y')
 
@@ -938,7 +924,7 @@ for p in POSTS:
     body, removed = strip_prices(p['slug'], p['body'])
     MD.reset()
     art = MD.convert(body)
-    art = re.sub(r'<h1>(.*?)</h1>', r'<h2>\1</h2>', art)
+    art = fix_heading_levels(art)
     note = POST_NOTES.get(p['slug'], '')
     if removed:
         note += PRICE_NOTE
@@ -947,7 +933,7 @@ for p in POSTS:
     if p['date'].year <= 2024:
         AUDIT.setdefault(p['slug'], []).append(f'Written {fmt_date(p["date"])} — check trends and claims are still current.')
     lbl, href = RELATED.get(p['cat'], ('Nails', '/nails/'))
-    add(f'/blog/{p["slug"]}/', page(f'/blog/{p["slug"]}/', f'{p["title"]} | Beautique Bar', p['desc'], f'''
+    add(f'/blog/{p["slug"]}/', page(f'/blog/{p["slug"]}/', seo_title(p), p['desc'], f'''
 <article class="post">
   <header class="pg-hero post-head" data-tone="light"><div class="pg-hero-text">{crumbs([('Home','/'),('Blog','/blog/'),(p['cat'] or 'Article',None)])}
     <h1>{e(p["title"])}</h1><p class="lead">{e(p["desc"])}</p><p class="post-meta eyebrow"><time datetime="{p["date"].isoformat()}">{fmt_date(p["date"])}</time> · {e(p["cat"])}</p></div></header>
@@ -960,8 +946,8 @@ for p in POSTS:
 {close_band()}''', active=None, bodyclass='is-post'))
 
 # ---- RSS -------------------------------------------------------------------------------------
-items = ''.join(f'''<item><title>{e(p["title"])}</title><link>https://beautiquebar.com/blog/{p["slug"]}/</link><guid>https://beautiquebar.com/blog/{p["slug"]}/</guid><description>{e(p["desc"])}</description><pubDate>{datetime.datetime.combine(p["date"], datetime.time()).strftime("%a, %d %b %Y 00:00:00 GMT")}</pubDate></item>''' for p in POSTS)
-RSS = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Beautique Bar — Beauty Blog</title><description>Nail, lash and skin care guides from Beautique Bar in Toronto.</description><link>https://beautiquebar.com/</link>{items}</channel></rss>'
+items = ''.join(f'''<item><title>{e(p["title"])}</title><link>{SITE_URL}/blog/{p["slug"]}/</link><guid>{SITE_URL}/blog/{p["slug"]}/</guid><description>{e(p["desc"])}</description><pubDate>{datetime.datetime.combine(p["date"], datetime.time()).strftime("%a, %d %b %Y 00:00:00 GMT")}</pubDate></item>''' for p in POSTS)
+RSS = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Beautique Bar — Beauty Blog</title><description>Nail, lash and skin care guides from Beautique Bar in Toronto.</description><link>{SITE_URL}/</link>{items}</channel></rss>'
 
 # ----------------------------------------------------------------------------------------------
 HOME_IMG = {'salon-3': 'stock-hands-rest.webp', 'salon-hero': 'stock-manicure-white.webp', 'salon-mauve': 'stock-manicure-mauve.webp',
@@ -971,12 +957,14 @@ HOME_TITLE = 'Beautique Bar | Nail Salon in Toronto & Scarborough'
 HOME_DESC = 'Nail salon at Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Manicures, pedicures, Shellac, gel and acrylic nails, lashes and facials.'
 
 def home_head():
-    ld = [org_ld()] + [business_ld(k) for k in LOC]
+    website = {'@context': 'https://schema.org', '@type': 'WebSite', '@id': f'{SITE_URL}/#website', 'name': BUSINESS_NAME,
+               'url': SITE_URL + '/', 'inLanguage': 'en-CA', 'publisher': {'@id': f'{SITE_URL}/#organization'}}
+    ld = [website, org_ld()] + [business_ld(k) for k in LOC]
     lds = ''.join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False, separators=(",", ":"))}</script>\n' for d in ld)
     return f'''<meta name="robots" content="noindex,nofollow">
 <title>{e(HOME_TITLE)}</title>
 <meta name="description" content="{e(HOME_DESC)}">
-<link rel="canonical" href="https://beautiquebar.com/">
+<link rel="canonical" href="{SITE_URL}/">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -1023,7 +1011,70 @@ def refresh_home():
         s = s[:i] + home_head() + s[j:]
     p.write_text(s)
 
+# ---- Responsive images ----------------------------------------------------------------------
+# Phones get smaller files; desktops keep the full-size image. Variants are generated from the originals in /img
+# (never edited by hand) and every <img> in the output gets a srcset automatically, so new pages need nothing extra.
+IMG = OUT / 'img'
+SIZES_PHOTO = '(max-width:720px) 100vw, 90vw'           # desktop always resolves to the original (no quality change)
+SIZES_THUMB = '(max-width:520px) 48vw, (max-width:1100px) 33vw, 25vw'
+
+def make_variants():
+    from PIL import Image
+    made = 0
+    for f in sorted(IMG.glob('*.webp')):
+        stem = f.stem
+        if re.search(r'-(xs|\d{3,4})$', stem):
+            continue
+        w, h = Image.open(f).size
+        targets = [(f'{stem[:-3]}-xs', 400)] if stem.endswith('-sm') else [(f'{stem}-{n}', n) for n in (800, 1200) if w >= n + 300]
+        for name, tw in targets:
+            out = IMG / f'{name}.webp'
+            if out.exists() and out.stat().st_mtime >= f.stat().st_mtime:
+                continue
+            im = Image.open(f); im = im.convert('RGBA' if im.mode in ('RGBA', 'LA', 'P') else 'RGB')
+            im.resize((tw, round(h * tw / w)), Image.LANCZOS).save(out, 'WEBP', quality=80, method=6)
+            made += 1
+    return made
+
+def add_srcset(doc):
+    def one(m):
+        tag = m.group(0)
+        if 'srcset=' in tag or ' data-nosrcset' in tag:
+            return tag
+        src = re.search(r'src="/img/([^"]+)\.webp"', tag)
+        wm = re.search(r'width="(\d+)"', tag)
+        if not src or not wm:
+            return tag
+        stem, w = src.group(1), int(wm.group(1))
+        if stem.endswith('-sm'):
+            cands = [(f'{stem[:-3]}-xs', 400)]
+            sizes = SIZES_THUMB
+        else:
+            cands = [(f'{stem}-{n}', n) for n in (800, 1200)]
+            sizes = SIZES_PHOTO
+        from PIL import Image
+        full = Image.open(IMG / f'{stem}.webp').size[0] if (IMG / f'{stem}.webp').exists() else w
+        parts = [f'/img/{n}.webp {nw}w' for n, nw in cands if (IMG / f'{n}.webp').exists()]
+        if not parts:
+            return tag
+        parts.append(f'/img/{stem}.webp {full}w')
+        return tag.replace(src.group(0), f'{src.group(0)} srcset="{", ".join(parts)}" sizes="{sizes}"', 1)
+    # leave <picture> fallbacks alone (their <source> already chooses the file)
+    chunks = re.split(r'(<picture>.*?</picture>)', doc, flags=re.S)
+    return ''.join(c if c.startswith('<picture>') else re.sub(r'<img\b[^>]*>', one, c) for c in chunks)
+
+def check_home_facts(s):
+    """The homepage body is hand-authored: fail the build if its contact links or hours drift from site_config."""
+    body = re.sub(r'<(header|footer|dialog)\b.*?</\1>', '', s[s.index('<body'):], flags=re.S)
+    ok = {v for l in LOC.values() for v in (l['tel'], l['text_tel'], html.escape(l['book']), html.escape(l['maps']))}
+    bad = [u for u in re.findall(r'href="((?:tel:|sms:|https://www\.fresha|https://www\.google\.[a-z.]+/maps)[^"]*)"', body) if u not in ok]
+    bad += [h for h in re.findall(r'<p class="hours-line">(.*?)</p>', body) if h not in {e(hours_inline(k)) for k in LOC}]
+    assert not bad, f'Homepage has contact details / hours that differ from site_config.py: {bad}'
+
 def main():
+    n = make_variants()
+    for path in list(PAGES):
+        PAGES[path] = add_srcset(PAGES[path])
     for path, doc in PAGES.items():
         if path.endswith('.html'):
             f = OUT / path.lstrip('/')
@@ -1033,6 +1084,10 @@ def main():
         f.write_text(doc)
     (OUT / 'rss.xml').write_text(RSS)
     refresh_home()
+    home = OUT / 'index.html'
+    check_home_facts(home.read_text())
+    home.write_text(add_srcset(home.read_text()))
+    print(f'{n} responsive image variants generated')
     # review file
     lines = ['# Blog audit (generated)', '']
     for p in POSTS:

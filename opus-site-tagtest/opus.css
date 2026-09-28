@@ -1,6 +1,9 @@
 /* Self-hosted fonts (SIL Open Font License): Italiana; DM Sans variable, weights 300–500, latin subset */
 @font-face{font-family:'Italiana';src:url(/fonts/italiana-latin.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'DM Sans';src:url(/fonts/dmsans-latin.woff2) format('woff2');font-weight:300 500;font-style:normal;font-display:swap}
+/* Metric-matched fallbacks: text keeps its size and line breaks while the web fonts load (prevents layout shift). */
+@font-face{font-family:'Italiana Fallback';src:local('Times New Roman'),local('TimesNewRomanPSMT'),local('Liberation Serif');size-adjust:104.46%;ascent-override:88.84%;descent-override:23.93%;line-gap-override:0%}
+@font-face{font-family:'DM Sans Fallback';src:local('Arial'),local('ArialMT'),local('Liberation Sans');size-adjust:104.13%;ascent-override:95.26%;descent-override:29.77%;line-gap-override:0%}
 /* Beautique Bar — opus-design-v1
    Palette kept inside the Concept C family; one extra paper tint (--linen) for rhythm. */
 :root{
@@ -12,8 +15,8 @@
   --linen:#f4f0e8;
   --hair:rgba(39,35,31,.18);
   --hair-light:rgba(238,233,223,.22);
-  --serif:'Italiana',Georgia,serif;
-  --sans:'DM Sans',system-ui,Arial,sans-serif;
+  --serif:'Italiana','Italiana Fallback',Georgia,serif;
+  --sans:'DM Sans','DM Sans Fallback',system-ui,Arial,sans-serif;
   --ease:cubic-bezier(.22,.61,.24,1);
   --gutter:6vw;
 }

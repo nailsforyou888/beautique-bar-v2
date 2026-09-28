@@ -92,3 +92,13 @@ Skin & lashes overview; lashes; facial; brows; body hair removal. Temporary stoc
 - Homepage frame with the red nails: on phones the frame is wider/taller and the photo is shifted so the nails sit centred; text moved clear of the frame.
 - "Beyond nails" (Lashes / Hair removal / Skin) on phones: photo now stays pinned under the header, cross-fades, and each row gets scroll room; switching happens below the photo.
 - Homepage red-nails frame on phones: uses a dedicated one-hand crop (work-oxblood-almond-crop.webp), so the second hand no longer appears.
+
+## 28 Sep — pre-launch SEO/tracking audit (see MARKETING-SETUP.md)
+- New `site_config.py` = single source for domain, GTM ID, verification codes and all salon facts; build.py / make_production.py import it. Homepage facts are checked against it on every build.
+- Redirects added: /about, /faqs, /salons, /gallary (old WordPress) and /category/*, /tag/*, /author/*, /feed (as on the live site).
+- Schema: WebSite entity on home; brand entity no longer shows the Bridlewood email as the company email.
+- Blog: long titles no longer get the brand suffix; article heading levels normalised (no skips).
+- Bridlewood Fresha link now opens straight on the service menu (old link redirected to a chooser page).
+- Performance: responsive image variants + srcset everywhere (home 651→392 KB, gallery 1009→519 KB); metric-matched font fallbacks (gallery CLS 0.13→0.00).
+- Production: pages.dev hosts sent X-Robots-Tag noindex; sitemap lastmod now changes only when content changes; optional Search Console/Bing verification via config.
+- Adopted the Mac's copies of promo-*/yonge-* photos as the originals (container copies differed).

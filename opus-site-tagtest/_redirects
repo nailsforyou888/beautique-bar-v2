@@ -23,6 +23,21 @@
 /toronto-trending-nail-art-design/  /blog/toronto-trending-nail-art-design/  301
 /extend-longevity-nail-art/  /blog/extend-longevity-nail-art/  301
 /top-nail-trends-for-2025-whats-hot-in-the-world-of-nails/  /blog/top-nail-trends-for-2025-whats-hot-in-the-world-of-nails/  301
+# Old WordPress pages that SEOPress already forwarded (keep them working)
+/about  /  301
+/about/  /  301
+/faqs  /  301
+/faqs/  /  301
+/salons  /locations/  301
+/salons/  /locations/  301
+/gallary  /gallery/  301
+/gallary/  /gallery/  301
+# Legacy WordPress archives and feed (same as the live site's public/_redirects)
+/category/*  /blog/  301
+/tag/*  /blog/  301
+/author/*  /blog/  301
+/feed  /rss.xml  301
+/feed/  /rss.xml  301
 # Shop retired 24 Sep 2026
 /shop  /  301
 /shop/  /  301

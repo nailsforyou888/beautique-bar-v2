@@ -1,5 +1,8 @@
 # Ads & tracking — what the live site does today, and the plan for launch
 
+> Setup/how-to for GTM, GA4, Ads, Search Console: see MARKETING-SETUP.md (single source). This file is the original audit/history.
+
+
 Read-only audit of beautiquebar.com on 24 Sep 2026 (tags observed loading in a browser + the public GTM container files). Nothing in Google Ads, GA4, GTM or Google Business Profile was changed.
 
 ## What is running on the live site today
