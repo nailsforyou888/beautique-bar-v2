@@ -59,6 +59,7 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .window{position:absolute;inset:0;overflow:hidden;background:var(--espresso);will-change:clip-path}
 .window img{position:absolute;inset:0;will-change:transform,opacity}
 .win-salon{object-position:50% 58%;transform:scale(1.18)}
+.window picture{display:contents}
 .win-hands{opacity:0;object-position:46% 50%}
 .veil{position:absolute;inset:0;background:var(--espresso);opacity:.5}
 .door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;will-change:transform}
@@ -246,7 +247,7 @@ body.show-notes .window::after{bottom:auto;top:100px}
   .site-header{grid-template-columns:1fr auto}
   .title{font-size:15vw;top:30vh}.t-in{margin-left:6vw}
   .r-left,.r-right{width:60vw}.r-left{right:auto;left:22px;top:21vh;transform:none;text-align:left}.r-right{left:auto;right:22px;top:auto;bottom:1vh;transform:none;text-align:right}
-  .win-hands{object-position:88% 50%}
+  .window .win-hands{inset:31vh 8vw;width:84vw;height:38vh;object-position:50% 50%}
   .nails,.services-head,.services-body{grid-template-columns:1fr}
   .nails-rail{position:relative;top:auto;height:auto}
   .nail-index{margin-top:40px}

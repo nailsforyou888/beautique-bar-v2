@@ -91,3 +91,4 @@ Skin & lashes overview; lashes; facial; brows; body hair removal. Temporary stoc
 - info@beautiquebar.com removed (does not exist). Yonge = beautiquebar.yonge@gmail.com, Bridlewood = beautiquebar88@gmail.com: contact page (per salon), footer (both), legal pages, per-salon JSON-LD; email click events map to the right salon.
 - Homepage frame with the red nails: on phones the frame is wider/taller and the photo is shifted so the nails sit centred; text moved clear of the frame.
 - "Beyond nails" (Lashes / Hair removal / Skin) on phones: photo now stays pinned under the header, cross-fades, and each row gets scroll room; switching happens below the photo.
+- Homepage red-nails frame on phones: uses a dedicated one-hand crop (work-oxblood-almond-crop.webp), so the second hand no longer appears.
