@@ -246,8 +246,8 @@ body.show-notes .window::after{bottom:auto;top:100px}
   .nav{display:none}
   .site-header{grid-template-columns:1fr auto}
   .title{font-size:15vw;top:30vh}.t-in{margin-left:6vw}
-  .r-left,.r-right{width:60vw}.r-left{right:auto;left:22px;top:21vh;transform:none;text-align:left}.r-right{left:auto;right:22px;top:auto;bottom:1vh;transform:none;text-align:right}
-  .window .win-hands{inset:31vh 8vw;width:84vw;height:38vh;object-position:50% 50%}
+  .r-left,.r-right{width:60vw}.r-left{right:auto;left:22px;top:160px;transform:none;text-align:left}.r-right{left:auto;right:22px;top:auto;bottom:-30px;transform:none;text-align:right}
+  .window .win-hands{inset:240px auto auto 8%;width:84%;height:min(calc(100% - 410px), 84vw);object-position:60% 50%}
   .nails,.services-head,.services-body{grid-template-columns:1fr}
   .nails-rail{position:relative;top:auto;height:auto}
   .nail-index{margin-top:40px}

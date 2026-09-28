@@ -63,7 +63,7 @@
     // the frame: one continuous window; the salon settles into it before anything changes
     const w = range(p, .61, .76);
     const narrow = innerWidth < 720, iv = narrow ? 31 : 12, ih = narrow ? 8 : 35.5;
-    const ins = `inset(${w * iv}vh ${w * ih}vw ${w * iv}vh ${w * ih}vw)`;
+    const ins = narrow ? `inset(${w * 240}px ${w * ih}% ${w * Math.max(170, innerHeight - 240 - .84 * innerWidth)}px ${w * ih}%)` : `inset(${w * iv}vh ${w * ih}vw ${w * iv}vh ${w * ih}vw)`;
     o.win.style.clipPath = ins; o.win.style.webkitClipPath = ins;
     o.veil.style.opacity = (lerp(.5, .12, split) + .2 * come + .22 * (1 - inOut) * split) * (1 - range(p, .61, .74));
 
