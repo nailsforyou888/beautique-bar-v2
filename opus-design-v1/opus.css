@@ -245,13 +245,18 @@ body.show-notes .window::after{bottom:auto;top:100px}
   .nav{display:none}
   .site-header{grid-template-columns:1fr auto}
   .title{font-size:15vw;top:30vh}.t-in{margin-left:6vw}
-  .r-left,.r-right{width:40vw}.r-left{right:auto;left:22px;top:18vh;transform:none;text-align:left}.r-right{left:auto;right:22px;top:auto;bottom:12vh;transform:none;text-align:right}
+  .r-left,.r-right{width:60vw}.r-left{right:auto;left:22px;top:21vh;transform:none;text-align:left}.r-right{left:auto;right:22px;top:auto;bottom:1vh;transform:none;text-align:right}
+  .win-hands{object-position:88% 50%}
   .nails,.services-head,.services-body{grid-template-columns:1fr}
   .nails-rail{position:relative;top:auto;height:auto}
   .nail-index{margin-top:40px}
   .s2,.s3,.s4,.s5{width:100%;margin-left:0}
-  .service-photo{position:relative;top:auto;height:60vh;order:-1}
-  .service{min-height:0}
+  .service-photo{position:sticky;top:76px;z-index:2;height:34vh;order:-1;margin-bottom:6px}
+  .service,.service:last-child{min-height:30vh;padding:26px 0}
+  .service:last-child{min-height:44vh}
+  .service-photo .sp{clip-path:none;opacity:0;transform:none;transition:opacity .7s ease}
+  .service-photo .sp.is-active{opacity:1;clip-path:none;transform:none}
+  .service-photo .sp.was-active{opacity:1;clip-path:none;transform:none;transition:none}
   .salon-pair{grid-template-columns:1fr}
   .salon-info,.salon:nth-child(n) .salon-info{padding:28px 0 50px}
   .salon-actions{flex-wrap:wrap;gap:20px}

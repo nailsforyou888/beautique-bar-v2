@@ -66,7 +66,10 @@ def hours_dl(k):
 
 PHOTO_BRIEF = {'yonge': 'REAL — owner photo, colour-corrected.',
                'warden': 'REAL — owner photo, Bridlewood interior.'}
-EMAIL = 'info@beautiquebar.com'
+EMAIL_Y = 'beautiquebar.yonge@gmail.com'      # Yonge & York Mills
+EMAIL_W = 'beautiquebar88@gmail.com'          # Bridlewood Mall
+EMAIL = EMAIL_W                               # organisation-level fallback (structured data)
+EMAILS = {'yonge': EMAIL_Y, 'warden': EMAIL_W}
 IG = 'https://www.instagram.com/beautiquebar88'
 IG_YONGE = 'https://www.instagram.com/beautiquebar_onyonge'
 FB = 'https://www.facebook.com/Beautiquebaryonge'
@@ -239,7 +242,7 @@ def footer():
     <div class="ft-locs">{locs}</div>
     <nav class="ft-nav" aria-label="Footer">
       <ul><li><a href="/nails/">Nails</a></li><li><a href="/skin/">Skin &amp; Lashes</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/locations/">Locations</a></li></ul>
-      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul>
+      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL_Y}">{EMAIL_Y}</a></li><li><a href="mailto:{EMAIL_W}">{EMAIL_W}</a></li></ul>
       <ul><li><a href="{IG}" target="_blank" rel="noopener">Instagram · Bridlewood ↗</a></li><li><a href="{IG_YONGE}" target="_blank" rel="noopener">Instagram · Yonge ↗</a></li><li><a href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></li></ul>
     </nav>
   </div>
@@ -289,7 +292,7 @@ SEO = {
   '/gallery/': ('Nail Art Gallery | Beautique Bar',
               'Recent nail sets by Beautique Bar technicians at Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
   '/contact/': ('Contact Beautique Bar | Yonge & Bridlewood Mall',
-              'Call, text or book online with Beautique Bar on Yonge (Toronto) or at Bridlewood Mall (Scarborough). Email info@beautiquebar.com.'),
+              'Call, text or book online with Beautique Bar on Yonge (Toronto) or at Bridlewood Mall (Scarborough).'),
 }
 NOINDEX_PROD = {'/thank-you/', '/skin/body-piercing/', '/404.html'}
 SERVICE_NAMES = {'/nails/manicure-pedicure/': 'Manicure and pedicure', '/nails/bio-gel/': 'Bio Gel nails', '/nails/acrylic/': 'Acrylic nails',
@@ -314,7 +317,7 @@ def business_ld(k):
     d = {'@context': 'https://schema.org', '@type': 'NailSalon', '@id': f'{SITE_URL}{l["href"]}#business',
          'name': f'Beautique Bar — {l["name"]}', 'url': f'{SITE_URL}{l["href"]}',
          'image': [f'{SITE_URL}/{l["photo"][0]}'] + ([f'{SITE_URL}/img/bridlewood-storefront.webp'] if k == 'warden' else []),
-         'telephone': '+1-' + l['phone'], 'email': EMAIL, 'priceRange': '$$',
+         'telephone': '+1-' + l['phone'], 'email': EMAILS[k], 'priceRange': '$$',
          'address': {'@type': 'PostalAddress', 'streetAddress': street, 'addressLocality': l['locality'], 'addressRegion': 'ON',
                      'postalCode': l['postal'], 'addressCountry': 'CA'},
          'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': days, 'opens': o, 'closes': c} for _, days, o, c in HOURS[k]],
@@ -849,7 +852,7 @@ for k, l in LOC.items():
 # ---- /contact/ -------------------------------------------------------------------------------
 def contact_col(l):
     return f'''<div class="ct-col"><p class="eyebrow">{e(l["area"])}</p><h2>{e(l["name"])}</h2><p class="addr">{e(l["addr"])}</p>
-    <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li>
+    <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li><li><span>Email</span><a href="mailto:{EMAILS[l["id"]]}">{EMAILS[l["id"]]}</a></li>
     <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li><li><span>Hours</span><em class="ct-val">{e(hours_inline(l["id"]))}</em></li></ul></div>'''
 # ---- /gallery/ (new page) -------------------------------------------------------------------
 add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets by Beautique Bar technicians at Yonge & York Mills and Bridlewood Mall.', f'''
@@ -860,29 +863,44 @@ add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets 
 {close_band('Seen something<br>you love?')}
 ''', active=None))
 
-add('/contact/', page('/contact/', 'Contact | Beautique Bar', 'Call, text or book online with Beautique Bar on Yonge or at Bridlewood Mall. Email info@beautiquebar.com.', f'''
+add('/contact/', page('/contact/', 'Contact | Beautique Bar', 'Call, text or book online with Beautique Bar on Yonge or at Bridlewood Mall.', f'''
 {hero([('Home','/'),('Contact',None)], 'Get in touch.', 'Have a question or want to book? Call, text or book online with the salon nearest you.')}
 <section class="pg-sec contact" data-tone="light" aria-label="Contact details">
   <div class="ct-pair">{contact_col(LOC['yonge'])}{contact_col(LOC['warden'])}</div>
-  <div class="ct-more"><p class="eyebrow">Anything else</p><p><a class="ct-mail" href="mailto:{EMAIL}">{EMAIL}</a></p><p><a class="line-link" href="{IG}" target="_blank" rel="noopener">Instagram ↗</a> <a class="line-link" href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></p></div>
+  <div class="ct-more"><p class="eyebrow">Follow us</p><p><a class="line-link" href="{IG}" target="_blank" rel="noopener">Instagram ↗</a> <a class="line-link" href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></p></div>
 </section>
 ''', active=None))
 
 # ---- /privacy/ & /terms/ (legal text as on the live site) ------------------------------------
-PRIVACY = f'''<p>This Privacy Policy explains how Beautique Bar (“we”, “us”) collects, uses and safeguards the personal information you provide when you visit our website or book an appointment.</p>
-<h2>Information we collect</h2><p>We do not collect payment information through this website.</p>
-<h2>How we use your information</h2><ul><li>To respond to your enquiries and booking requests.</li><li>To provide and improve our services.</li><li>To contact you about your appointments when you ask us to.</li></ul>
-<h2>How we protect it</h2><p>This website is served securely over HTTPS. We retain enquiry information only as long as needed to assist you.</p>
-<h2>Third-party services</h2><p>We may use privacy-respecting analytics and spam protection (such as Cloudflare Turnstile) to keep the site secure and understand how it is used. We do not sell your personal information.</p>
-<h2>Your choices</h2><p>You may request access to, correction of, or deletion of the personal information you have shared with us by contacting us at <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
-<h2>Contact us</h2><p>Questions about this policy? Email <a href="mailto:{EMAIL}">{EMAIL}</a> or reach out via <a href="{IG}" target="_blank" rel="noopener">Instagram</a>.</p>
-<p>This policy may be updated from time to time; the latest version always appears on this page.</p>'''
+PRIVACY = f'''<p class="legal-date">Last updated: 28 September 2026</p>
+<p>This Privacy Policy explains how Beautique Bar (“we”, “us”), operating salons at 3430 Yonge Street, Toronto and 2900 Warden Avenue (Bridlewood Mall), Scarborough, collects, uses and safeguards personal information when you visit beautiquebar.com or contact us to book an appointment.</p>
+<h2>Information we collect</h2>
+<p><strong>Information you give us.</strong> If you call, text, email or message us on social media, we receive what you choose to share, such as your name, phone number, email address and appointment details.</p>
+<p><strong>Information collected automatically.</strong> When you use this website, our analytics and advertising tools may collect your IP address, device and browser type, approximate location, the pages you view, how you arrived on the site, and which buttons or links you select (for example Book, Call, Text, Directions or Email). This information is collected using cookies and similar technologies.</p>
+<p>We do not collect payment information through this website.</p>
+<h2>How we use your information</h2>
+<ul><li>To respond to your enquiries and manage your appointments.</li><li>To understand how the website is used and to improve it.</li><li>To measure and improve our advertising, including showing our ads to people who have visited our site.</li><li>To keep the website secure and working properly.</li></ul>
+<h2>Cookies, analytics and advertising</h2>
+<p>This website uses the following Google services, loaded through Google Tag Manager:</p>
+<ul><li><strong>Google Analytics 4</strong> to measure visits and interactions, such as page views and clicks on our booking, call, text, directions and email links.</li><li><strong>Google Ads conversion tracking and remarketing</strong> to measure which of our ads lead to bookings and enquiries, and to show our ads to people who previously visited the site.</li></ul>
+<p>These services set cookies or use identifiers on your device and send information to Google, which may process it outside Canada, including in the United States. Google’s use of this information is described at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</p>
+<p>You can control this in several ways: change your browser settings to block or delete cookies; use Google’s <a href="https://adssettings.google.com" target="_blank" rel="noopener">Ads Settings</a> to opt out of personalized advertising; or install the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out browser add-on</a>. Blocking cookies will not stop you from using the site.</p>
+<h2>Booking with Fresha</h2>
+<p>Online bookings are made through Fresha, a third-party booking platform. When you select Book, you leave our website and go to Fresha, where the information you enter is collected and handled under Fresha’s own privacy policy and terms. We receive the details of your booking so we can serve you.</p>
+<h2>Sharing your information</h2>
+<p>We do not sell your personal information. We share it only with the service providers described above (Google and Fresha), with providers who host and secure this website, and where required by law.</p>
+<h2>How we protect it</h2>
+<p>This website is served securely over HTTPS. We keep enquiry and booking information only as long as needed to assist you or as required by law.</p>
+<h2>Your choices and rights</h2>
+<p>You may ask to see, correct or delete the personal information we hold about you, or withdraw your consent to how we use it, by contacting us at <a href="mailto:{EMAIL_Y}">{EMAIL_Y}</a> (Yonge &amp; York Mills) or <a href="mailto:{EMAIL_W}">{EMAIL_W}</a> (Bridlewood Mall). If you would rather not receive promotional messages from us, tell us and we will stop.</p>
+<h2>Contact us</h2><p>Questions about this policy? Email <a href="mailto:{EMAIL_Y}">{EMAIL_Y}</a> (Yonge &amp; York Mills) or <a href="mailto:{EMAIL_W}">{EMAIL_W}</a> (Bridlewood Mall), or reach out via <a href="{IG}" target="_blank" rel="noopener">Instagram</a>.</p>
+<p>We may update this policy from time to time. The latest version, with its date, always appears on this page.</p>'''
 TERMS = f'''<p>These terms apply to your use of the Beautique Bar website and to the services we provide at our Toronto locations. By using this site or booking with us, you agree to the following.</p>
 <h2>Appointments &amp; walk-ins</h2><p>We welcome walk-ins and recommend booking in advance to secure your preferred time and technician. Please let us know as early as possible if you need to reschedule or cancel so we can offer the slot to another guest.</p>
 <h2>Pricing</h2><p>Prices shown on this website are guides and may vary with nail length, design complexity and add-on services. Prices marked “+” start from the listed rate. We’ll always confirm pricing with you before your service.</p>
 <h2>Services &amp; results</h2><p>Our team takes pride in delivering high-quality, hygienic services. If you have any concerns about your service, please tell us before you leave so we can make it right.</p>
 <h2>Website content</h2><p>Content on this site is provided for general information. While we keep it as accurate as possible, services, pricing and availability may change without notice.</p>
-<h2>Contact</h2><p>Questions about these terms? Email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>'''
+<h2>Contact</h2><p>Questions about these terms? Email <a href="mailto:{EMAIL_Y}">{EMAIL_Y}</a> (Yonge &amp; York Mills) or <a href="mailto:{EMAIL_W}">{EMAIL_W}</a> (Bridlewood Mall).</p>'''
 for path, t, d, body in [('/privacy/', 'Privacy Policy', 'How Beautique Bar collects, uses and protects your personal information.', PRIVACY),
                          ('/terms/', 'Terms & Services', 'The terms that apply to your use of the Beautique Bar website and services.', TERMS)]:
     add(path, page(path, f'{t} | Beautique Bar', d, f'''

@@ -65,8 +65,8 @@
   //    bb_link: <href>, bb_placement: <where on the page>}
   // Google Tag Manager (GTM-M6WHQ2D5, production build only) turns these into GA4 events and Ads conversions.
   const SALON = [
-    [/e0fzhnga|4164847788|4374344884|3430/i, 'yonge'],
-    [/m7weksrj|pId=32159|6477705232|Bridlewood|2900/i, 'bridlewood'],
+    [/e0fzhnga|4164847788|4374344884|3430|beautiquebar\.yonge@/i, 'yonge'],
+    [/m7weksrj|pId=32159|6477705232|Bridlewood|2900|beautiquebar88@/i, 'bridlewood'],
   ];
   // Page context: on a salon page, a link without its own salon (the shared email) belongs to that salon.
   const PAGE_SALON = /^\/(locations\/)?yonge\/?$/.test(location.pathname) ? 'yonge'

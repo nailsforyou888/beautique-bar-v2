@@ -62,7 +62,8 @@
 
     // the frame: one continuous window; the salon settles into it before anything changes
     const w = range(p, .61, .76);
-    const ins = `inset(${w * 12}vh ${w * 35.5}vw ${w * 12}vh ${w * 35.5}vw)`;
+    const narrow = innerWidth < 720, iv = narrow ? 30 : 12, ih = narrow ? 15 : 35.5;
+    const ins = `inset(${w * iv}vh ${w * ih}vw ${w * iv}vh ${w * ih}vw)`;
     o.win.style.clipPath = ins; o.win.style.webkitClipPath = ins;
     o.veil.style.opacity = (lerp(.5, .12, split) + .2 * come + .22 * (1 - inOut) * split) * (1 - range(p, .61, .74));
 
@@ -148,7 +149,7 @@
   const rowIO = new IntersectionObserver(es => {
     if (performance.now() - pinned < 900) return; // keyboard/hover choice wins briefly over scroll
     es.forEach(e => { if (e.isIntersecting) selectService(+e.target.dataset.i); });
-  }, { rootMargin: '-40% 0px -50% 0px' });
+  }, { rootMargin: innerWidth < 720 ? '-55% 0px -35% 0px' : '-40% 0px -50% 0px' });
   rows.forEach((r, i) => {
     rowIO.observe(r);
     r.addEventListener('mouseenter', () => selectService(i));

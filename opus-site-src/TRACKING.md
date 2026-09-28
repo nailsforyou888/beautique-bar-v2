@@ -70,6 +70,6 @@ Built to the owner's tracking requirements (GTM-M6WHQ2D5 only; dataLayer schema;
 - **Events** (automated check: 393 tracked links on 37 pages, each fires exactly one event with the clicked href):
   `bb_book` 236 · `bb_call` 102 · `bb_email` 41 · `bb_directions` 10 · `bb_text` 4
   `bb_placement` values: `header` (none — the header Book button opens the salon chooser, whose links report `booking-dialog`), `booking-dialog`, `mobile-menu`, `hero`, `salon-details`, `salon-card`, `prices`, `closing`, `contact`, `footer`, `body`.
-  `bb_salon` is always `yonge` or `bridlewood` for book/call/text/directions. The one email address (info@) is shared: on the salon pages it reports that salon; elsewhere it reports `bb_salon: 'unknown'`.
+  `bb_salon` is always `yonge` or `bridlewood` for book/call/text/directions. Each salon has its own email (beautiquebar.yonge@ / beautiquebar88@), so email clicks now report the right salon everywhere.
 - **QR / short links:** `/yonge`, `/yonge/` → `/locations/yonge/`; `/warden`, `/warden/` → `/locations/warden/` (301). Old WordPress blog paths and `/home/` also forward.
 - **Security headers** allow Google Tag Manager, GA4, Google Ads (incl. google.ca endpoints) and GTM Preview / Tag Assistant.
