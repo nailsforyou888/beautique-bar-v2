@@ -1,0 +1,63 @@
+# Publish website — rebuilds the site and uploads it to Cloudflare Pages (project "beautique-bar").
+#   * A push to "main" (every save in Pages CMS) updates the LIVE site, beautiquebar.com.
+#   * A push to any other branch makes a private preview at https://<branch>.beautique-bar.pages.dev
+#   * If the build finds a problem (e.g. a phone number typed wrong), nothing is uploaded and the live site stays as it was.
+# Needs one repository secret: CLOUDFLARE_API_TOKEN (Cloudflare > My Profile > API Tokens, permission "Cloudflare Pages: Edit").
+name: Publish website
+
+on:
+  push:
+    paths:
+      - 'content/**'
+      - 'opus-site-src/**'
+      - 'opus-design-v1/**'
+      - '.github/workflows/publish.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: publish-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build tools
+        run: pip install "Markdown==3.10.2" "PyYAML==6.0.3" "pillow==12.2.0"
+
+      - name: Build the site
+        working-directory: opus-site-src
+        run: |
+          python build.py
+          python make_production.py
+
+      - name: Cloudflare token missing
+        if: env.HAS_TOKEN != 'true'
+        run: echo "::warning::Built OK but not uploaded - add the CLOUDFLARE_API_TOKEN repository secret to enable publishing."
+
+      - name: Upload to Cloudflare Pages
+        if: env.HAS_TOKEN == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 9852a60d0bca8fc330b21c6e5313c47b
+          command: pages deploy opus-site-production --project-name beautique-bar --branch ${{ github.ref_name }} --commit-dirty=true
+
+      - name: Summary
+        if: env.HAS_TOKEN == 'true'
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then URL="https://beautiquebar.com"; else URL="https://${{ github.ref_name }}.beautique-bar.pages.dev"; fi
+          echo "### Published: $URL" >> "$GITHUB_STEP_SUMMARY"

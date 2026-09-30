@@ -7,10 +7,11 @@ live beautiquebar.com site (folder/index.html, so Cloudflare Pages serves /path/
 this script only refreshes its shared header, footer and booking dialog.
 
 Facts come from the live site's own content files (copied into this folder):
-  yonge.md / warden.md   -> location price menus (parsed; nothing is typed in by hand)
+  ../content/menus/*.yml -> location price menus; ../content/salons.yml -> phones, emails, booking links, hours (Pages CMS)
   blog/*.md              -> the 17 blog articles
-Every price shown on a service page is looked up by exact name in those menus; a name that
-does not exist makes the build fail, so no price can be invented.
+Every price shown on a service page is looked up by exact name in those menus, so no price can be invented.
+If the owner renames or removes a service in Pages CMS, that line is left off the service-page teaser and the
+publish log shows a warning; the full salon menu always shows exactly what is in the menu file.
 """
 import html, json, os, re, shutil, datetime
 from pathlib import Path
@@ -78,7 +79,36 @@ def parse_menu(md_text):
     return cats
 
 DISCONTINUED = ('Piercing',)   # owner, 23 Sep 2026: piercing and tattoo services no longer offered
-MENUS = {k: [c for c in parse_menu((SRC / f'{k}.md').read_text()) if not any(d in c['title'] for d in DISCONTINUED)] for k in LOC}
+def load_menu(k):
+    """Price menus live in /content/menus/<salon>.yml (edited in Pages CMS). Same shape the pages always used."""
+    import yaml
+    f = SRC.parent / 'content' / 'menus' / f'{k}.yml'
+    data = yaml.safe_load(f.read_text()) or {}
+    cats = []
+    for c in data.get('categories') or []:
+        title = str(c.get('title') or '').strip()
+        if not title or any(d in title for d in DISCONTINUED):
+            continue
+        def rows(lst):
+            out = []
+            for i in lst or []:
+                name, pr = str(i.get('name') or '').strip(), str(i.get('price') or '').strip()
+                if not name:
+                    continue
+                if pr and not pr.startswith('$'):
+                    pr = '$' + pr
+                out.append({'name': name, 'price': pr})
+            return out
+        cat = {'title': title, 'items': rows(c.get('items'))}
+        if c.get('addons'):
+            cat['subs'] = [{'title': 'Add-ons', 'items': rows(c['addons'])}]
+        cats.append(cat)
+    if not cats:
+        raise SystemExit(f'content/menus/{k}.yml has no categories')
+    return cats
+
+MENUS = {k: load_menu(k) for k in LOC}
+WARNINGS = []   # shown in the GitHub publish log; never block a price edit
 
 def all_items(loc):
     for c in MENUS[loc]:
@@ -90,7 +120,8 @@ def price(loc, name):
     for it in all_items(loc):
         if it['name'] == name:
             return it['price']
-    raise SystemExit(f'Menu item not found at {loc}: {name!r}')
+    WARNINGS.append(f'Service page teaser: "{name}" is no longer on the {LOC[loc]["name"]} menu, so it was left off that list (full menu is unaffected).')
+    return None
 
 def slug(s):
     return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')
@@ -112,13 +143,16 @@ def load_posts():
     for f in sorted((SRC / 'blog').glob('*.md')):
         raw = f.read_text()
         _, fm, body = raw.split('---', 2)
-        meta = {}
-        for line in fm.strip().splitlines():
-            if ':' in line:
-                k, v = line.split(':', 1)
-                meta[k.strip()] = v.strip().strip('"')
-        posts.append(dict(slug=f.stem, title=meta['title'], seo_title=meta.get('seoTitle', ''), desc=meta.get('description', ''),
-                          date=datetime.date.fromisoformat(meta['pubDate']), cat=meta.get('category', ''), body=body))
+        import yaml
+        meta = yaml.safe_load(fm) or {}
+        if meta.get('draft'):
+            continue
+        d = meta.get('pubDate')
+        d = d if isinstance(d, datetime.date) else datetime.date.fromisoformat(str(d)[:10])
+        if isinstance(d, datetime.datetime):
+            d = d.date()
+        posts.append(dict(slug=f.stem, title=str(meta['title']), seo_title=str(meta.get('seoTitle') or ''), desc=str(meta.get('description') or ''),
+                          date=d, cat=str(meta.get('category') or ''), body=body))
     posts.sort(key=lambda p: p['date'], reverse=True)
     return posts
 
@@ -428,7 +462,7 @@ def book_pair(spec, title='Book at either salon', eyebrow='Where to book', note=
               <div class="bp-actions"><a class="line-link" href="{other['href']}">{e(other['name'])} <span aria-hidden="true">→</span></a></div></div>''')
             continue
         items, sub = (v, None) if isinstance(v, list) else (v['items'], v.get('note'))
-        lis = ''.join(f'<li><span>{e(n)}</span><span class="pr">{e(price(k, n))}</span></li>' for n in items)
+        lis = ''.join(f'<li><span>{e(n)}</span><span class="pr">{e(pr)}</span></li>' for n in items if (pr := price(k, n)) is not None)
         cols.append(f'''<div class="bp-col"><p class="eyebrow">{e(l["name"])}</p>
           <ul class="bp-menu">{lis}</ul>{f'<p class="bp-note">{sub}</p>' if sub else ''}
           <div class="bp-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["name"])} <span aria-hidden="true">↗</span></a>
@@ -1003,6 +1037,7 @@ def refresh_home():
 </section>
 <!--/WORK-->'''
     s = re.sub(r'<!--WORK-->.*?<!--/WORK-->', lambda m: home_work, s, count=1, flags=re.S)
+    s = patch_home_facts(s)
     # the generated <head> block sits between the robots meta and <!--/HEAD--> (or <!--HEADSLOT--> once cleared)
     if '<!--HEADSLOT-->' in s:
         s = s.replace('<!--HEADSLOT-->', home_head(), 1)
@@ -1063,6 +1098,27 @@ def add_srcset(doc):
     chunks = re.split(r'(<picture>.*?</picture>)', doc, flags=re.S)
     return ''.join(c if c.startswith('<picture>') else re.sub(r'<img\b[^>]*>', one, c) for c in chunks)
 
+def patch_home_facts(s):
+    """The homepage body is hand-authored. Keep its salon phone, hours and booking links in step with
+    /content/salons.yml, so an edit in Pages CMS shows up on the homepage too."""
+    for k, l in LOC.items():
+        disp = l['phone'].replace('-', ' ')
+        def block(m):
+            b = m.group(0)
+            b = re.sub(r'href="tel:[^"]*">[^<]*</a>', f'href="{l["tel"]}">{e(disp)}</a>', b)
+            b = re.sub(r'<p class="hours-line">.*?</p>', lambda _: f'<p class="hours-line">{e(hours_inline(k))}</p>', b)
+            b = re.sub(r'href="https://www\.fresha\.com[^"]*"', lambda _: f'href="{e(l["book"])}"', b)
+            return b
+        s, n = re.subn(r'<h3>' + re.escape(e(l['name'])) + r'</h3>.*?<div class="salon-actions">.*?</div>', block, s, count=1, flags=re.S)
+        assert n == 1, f'homepage salon block for {l["name"]} not found'
+        def li(m):
+            t = m.group(0)
+            if f'cl-meta">{e(l["street"])} ' in t:
+                t = re.sub(r'href="https://www\.fresha\.com[^"]*"', lambda _: f'href="{e(l["book"])}"', t)
+            return t
+        s = re.sub(r'<li><a [^>]*>.*?</li>', li, s, flags=re.S)
+    return s
+
 def check_home_facts(s):
     """The homepage body is hand-authored: fail the build if its contact links or hours drift from site_config."""
     body = re.sub(r'<(header|footer|dialog)\b.*?</\1>', '', s[s.index('<body'):], flags=re.S)
@@ -1096,6 +1152,10 @@ def main():
     (SRC / 'BLOG-AUDIT.md').write_text('\n'.join(lines) + '\n')
     json.dump({k: MENUS[k] for k in MENUS}, open(SRC / 'menus.parsed.json', 'w'), indent=1)
     print(f'{len(PAGES)} pages + rss.xml written to {OUT}')
+    for w in dict.fromkeys(WARNINGS):
+        print('WARNING:', w)
+        if os.environ.get('GITHUB_ACTIONS'):
+            print(f'::warning title=Price menu::{w}')
 
 if __name__ == '__main__':
     main()

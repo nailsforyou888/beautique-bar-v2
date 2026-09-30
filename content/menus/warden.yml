@@ -1,0 +1,146 @@
+# Bridlewood Mall price menu. Edit in Pages CMS (or here). Prices are shown exactly as typed, e.g. "$26" or "$37+".
+categories:
+- title: Natural Nail Care
+  items:
+  - name: Tropical Deluxe Pedicure
+    price: "$55"
+  - name: Tropical Deluxe Pedi w/ Shellac
+    price: "$65"
+  - name: Russian Manicure
+    price: "$45"
+  - name: Russian Manicure w/ Shellac
+    price: "$60"
+  - name: Spa Manicure
+    price: "$25"
+  - name: Deluxe Spa Manicure
+    price: "$35"
+  - name: Deluxe Spa Manicure w/ Shellac
+    price: "$47+"
+  - name: Spa Pedicure
+    price: "$35"
+  - name: Deluxe Spa Pedicure
+    price: "$50"
+  - name: Deluxe Spa Pedicure w/ Shellac
+    price: "$60+"
+  - name: Spa Manicure & Pedicure
+    price: "$53"
+  - name: Spa Manicure and Deluxe Pedicure
+    price: "$65"
+  - name: Spa Manicure w/ Shellac
+    price: "$37+"
+  - name: Spa Pedicure w/Shellac
+    price: "$47"
+  - name: Shellac Manicure and Spa Pedicure
+    price: "$69"
+  - name: Shellac Pedicure and Spa Manicure
+    price: "$69"
+  - name: Spa Manicure & Pedicure w/ Shellac
+    price: "$82"
+  - name: BIAB (Strong Shellac) w Spa Manicure
+    price: "$50"
+  - name: BIAB (Strong Shellac) no Manicure
+    price: "$40"
+  - name: Shellac Application Hands
+    price: "$27+"
+  - name: Shellac Application Toes
+    price: "$30+"
+  - name: Shellac Removal
+    price: "$10+"
+  - name: Gentleman's Pedicure
+    price: "$31"
+  - name: Gentleman's Manicure & Pedicure
+    price: "$49"
+  - name: Shellac Removal w/ Service
+    price: "$3+"
+  - name: French / Designs
+    price: "$5+"
+- title: Nail Enhancements
+  items:
+  - name: Gel-X Full Set
+    price: "$65+"
+  - name: Gel-X Refill
+    price: "$55+"
+  - name: Crystal Gel / Acrylic Overlay
+    price: "$50+"
+  - name: Crystal Gel / Acrylic Set w/Tips
+    price: "$55+"
+  - name: Crystal Gel / Acrylic Refill
+    price: "$45+"
+  - name: Bio Gel Overlay
+    price: "$60+"
+  - name: Bio Gel Full Set w/ Tips
+    price: "$65+"
+  - name: Bio Gel Refill
+    price: "$50+"
+  - name: Dipping Powder Set
+    price: "$45+"
+  - name: Dipping Powder w/ Manicure
+    price: "$60+"
+  - name: Artificial Nail Removal Only
+    price: "$15+"
+  - name: Designs
+    price: "$10+"
+  - name: Chrome / Unicorn
+    price: "$15"
+  - name: Airbrush
+    price: "$10+"
+- title: Waxing Services
+  items:
+  - name: Eyebrow Wax
+    price: "$12"
+  - name: Eyebrow Tinting
+    price: "$25+"
+  - name: Sideburns
+    price: "$10"
+  - name: Upper Lip
+    price: "$6"
+  - name: Chin
+    price: "$8+"
+  - name: Full Face
+    price: "$33"
+  - name: Under Arms
+    price: "$15+"
+  - name: Half Arms
+    price: "$20"
+  - name: Full Arms
+    price: "$30"
+  - name: Half Legs
+    price: "$27"
+  - name: Full Legs
+    price: "$49"
+  - name: Back
+    price: "$40+"
+  - name: Chest
+    price: "$25"
+  - name: Stomach
+    price: "$25"
+  - name: Bikini Line
+    price: "$25+"
+  - name: Bikini + Legs
+    price: "$70"
+  - name: Brazilian
+    price: "$43+"
+- title: Facial Services
+  items:
+  - name: Deep-pore Cleansing & Relaxing Facial
+    price: "$80"
+  - name: Classic Relaxing Facial
+    price: "$50"
+- title: Eyelash Services
+  items:
+  - name: Individual Classic Set
+    price: "$120+"
+  - name: Indiv. Natural Volume Set
+    price: "$130+"
+  - name: Indiv. Hybrid Set
+    price: "$140+"
+  - name: Indiv. Volume Set
+    price: "$150+"
+  - name: Bunch Light Volume Set
+    price: "$80+"
+  - name: Bunch Med Volume Set
+    price: "$90+"
+  - name: Bunch Thick Volume
+    price: "$100+"
+  - name: Bunch Wispy Set
+    price: "$105+"

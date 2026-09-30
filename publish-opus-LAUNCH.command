@@ -1,16 +1,7 @@
 #!/bin/bash
-# STEP 1 OF LAUNCH: puts the finished production site into its own Cloudflare Pages project
-# (in the nailsforyou888 Cloudflare account) at https://beautique-bar.pages.dev
-# It does NOT touch beautiquebar.com, DNS or the old site. Safe to run any time; re-run to update.
-# Attaching the real domain is a separate step (see LAUNCH-RUNBOOK.md).
-cd "$(dirname "$0")"
-export PATH="$PWD/.node/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
-W="npx --yes wrangler@latest"
-echo "Making sure the project exists (an 'already exists' message is fine)…"
-$W pages project create beautique-bar --production-branch main
-echo
-echo "Deploying the production site…"
-$W pages deploy opus-site-production --project-name beautique-bar --branch main --commit-dirty=true
-echo
-echo "Finished. Check it here: https://beautique-bar.pages.dev"
+# The website now publishes itself from GitHub: every save in Pages CMS (or push to "main") rebuilds beautiquebar.com.
+# This old one-click upload is switched off so it can never overwrite newer edits with an outdated copy.
+# To re-publish by hand: GitHub > nailsforyou888/beautique-bar-v2 > Actions > Publish website > Run workflow.
+echo "Publishing now happens automatically from GitHub (see EDITING.md)."
+echo "To re-publish by hand: GitHub > Actions > Publish website > Run workflow."
 read -n 1 -s -r -p "Press any key to close"

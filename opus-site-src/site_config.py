@@ -58,6 +58,49 @@ HOURS = {  # owner-supplied, 24 Sep 2026
 EMAIL_Y = 'beautiquebar.yonge@gmail.com'      # Yonge & York Mills
 EMAIL_W = 'beautiquebar88@gmail.com'          # Bridlewood Mall
 EMAILS = {'yonge': EMAIL_Y, 'warden': EMAIL_W}
+# ---- Editable salon details (Pages CMS) -------------------------------------------------------------
+# Phones, texting numbers, emails, booking links and hours are edited in /content/salons.yml (Pages CMS form
+# "Salon details & hours"). The values above are only the originals; the file below always wins.
+def _load_salons():
+    import re, yaml
+    from pathlib import Path
+    f = Path(__file__).resolve().parent.parent / 'content' / 'salons.yml'
+    data = yaml.safe_load(f.read_text()) or {}
+    week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    def digits(v, field, k):
+        d = re.sub(r'\D', '', str(v or ''))
+        d = d[1:] if len(d) == 11 and d.startswith('1') else d
+        if len(d) != 10:
+            raise SystemExit(f'content/salons.yml: {k} {field} "{v}" is not a 10-digit phone number')
+        return f'{d[:3]}-{d[3:6]}-{d[6:]}', d
+    for k, l in LOC.items():
+        c = data.get(k) or {}
+        if c.get('phone'):
+            l['phone'], d = digits(c['phone'], 'phone', k); l['tel'] = f'tel:+1{d}'
+        if c.get('text'):
+            l['text'], d = digits(c['text'], 'text', k); l['text_tel'] = f'sms:+1{d}'
+        if c.get('book'):
+            if not str(c['book']).startswith('https://'):
+                raise SystemExit(f'content/salons.yml: {k} booking link must start with https://')
+            l['book'] = str(c['book']).strip()
+        if c.get('email'):
+            EMAILS[k] = str(c['email']).strip()
+        if c.get('hours'):
+            rows = []
+            for h in c['hours']:
+                o, cl = str(h['open']).strip(), str(h['close']).strip()
+                for t in (o, cl):
+                    if not re.fullmatch(r'([01]\d|2[0-3]):[0-5]\d', t):
+                        raise SystemExit(f'content/salons.yml: {k} time "{t}" must look like 10:00 or 19:00')
+                days = [d for d in week if d in (h.get('days') or [])]
+                if not days:
+                    raise SystemExit(f'content/salons.yml: {k} hours row "{h.get("label")}" has no days ticked')
+                rows.append((str(h.get('label') or days[0][:3]).strip(), days, o, cl))
+            HOURS[k] = rows
+
+_load_salons()
+EMAIL_Y, EMAIL_W = EMAILS['yonge'], EMAILS['warden']
+
 IG = 'https://www.instagram.com/beautiquebar88'
 IG_YONGE = 'https://www.instagram.com/beautiquebar_onyonge'
 FB = 'https://www.facebook.com/Beautiquebaryonge'

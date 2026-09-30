@@ -1,0 +1,175 @@
+# Pages CMS (https://pagescms.org) — what the owner can edit without touching code.
+# Every save commits to GitHub; the "Publish website" workflow then rebuilds beautiquebar.com (about 2–3 minutes).
+
+components:
+  service:
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{name} — {price}"
+    fields:
+      - name: name
+        label: Service
+        type: string
+        required: true
+      - name: price
+        label: Price
+        type: string
+        description: 'Shown exactly as typed, e.g. $26, $37+ ("+" means "from") or $15/$20.'
+        pattern: '^\$?\d+(\.\d{1,2})?\+?(/\$?\d+(\.\d{1,2})?\+?)?$'
+
+  menu:
+    label: Menu sections
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: "{title}"
+    fields:
+      - name: title
+        label: Section name
+        type: string
+        required: true
+      - name: items
+        label: Services
+        component: service
+      - name: addons
+        label: Add-ons (optional)
+        component: service
+
+  salon:
+    type: object
+    fields:
+      - name: phone
+        label: Phone
+        type: string
+        required: true
+        description: 'Like 416-484-7788'
+      - name: text
+        label: Texting number
+        type: string
+        description: 'Like 437-434-4884 (can be the same as the phone)'
+      - name: email
+        label: Email
+        type: string
+      - name: book
+        label: Fresha booking link
+        type: string
+        required: true
+        description: 'Must start with https://'
+      - name: hours
+        label: Opening hours
+        type: object
+        list:
+          collapsible:
+            collapsed: false
+            summary: "{label} {open}–{close}"
+        fields:
+          - name: label
+            label: Label shown on the site
+            type: string
+            description: 'e.g. Mon–Fri, Sat, Sun'
+            required: true
+          - name: days
+            label: Days this row covers
+            type: select
+            options:
+              multiple: true
+              values: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+          - name: open
+            label: Opens (24-hour)
+            type: string
+            description: 'e.g. 10:00'
+            pattern: '^([01]\d|2[0-3]):[0-5]\d$'
+          - name: close
+            label: Closes (24-hour)
+            type: string
+            description: 'e.g. 19:00 for 7 pm'
+            pattern: '^([01]\d|2[0-3]):[0-5]\d$'
+
+content:
+  - name: prices-yonge
+    label: Prices — Yonge & York Mills
+    type: file
+    path: content/menus/yonge.yml
+    format: yaml
+    fields:
+      - name: categories
+        component: menu
+
+  - name: prices-bridlewood
+    label: Prices — Bridlewood Mall
+    type: file
+    path: content/menus/warden.yml
+    format: yaml
+    fields:
+      - name: categories
+        component: menu
+
+  - name: salons
+    label: Salon details & hours
+    type: file
+    path: content/salons.yml
+    format: yaml
+    fields:
+      - name: yonge
+        label: Yonge & York Mills
+        component: salon
+      - name: warden
+        label: Bridlewood Mall
+        component: salon
+
+  - name: blog
+    label: Blog posts
+    type: collection
+    path: opus-site-src/blog
+    format: yaml-frontmatter
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      fields: [title, pubDate, category]
+      primary: title
+      sort: [pubDate, title]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Short description (shown in Google and the blog list)
+        type: text
+        required: true
+      - name: pubDate
+        label: Publish date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: category
+        label: Category
+        type: string
+        description: 'e.g. Acrylic Nails, Lashes, Skin Care'
+      - name: seoTitle
+        label: Google title (optional)
+        type: string
+        description: 'Leave empty to use the title'
+      - name: draft
+        label: Draft (hide from the website)
+        type: boolean
+      - name: heroImage
+        type: string
+        hidden: true
+      - name: heroAlt
+        type: string
+        hidden: true
+      - name: body
+        label: Article
+        type: rich-text
+        options:
+          format: markdown
+          media: false

@@ -1,0 +1,158 @@
+# Yonge & York Mills price menu. Edit in Pages CMS (or here). Prices are shown exactly as typed, e.g. "$26" or "$37+".
+categories:
+- title: Nail Care
+  items:
+  - name: Tropical Deluxe Pedicure
+    price: "$55"
+  - name: Tropical Deluxe Pedi w/ Shellac
+    price: "$60"
+  - name: Spa Manicure
+    price: "$26"
+  - name: Spa Pedicure
+    price: "$38"
+  - name: Spa Manicure & Pedicure
+    price: "$62"
+  - name: Deluxe Spa Pedicure
+    price: "$50"
+  - name: Spa Manicure & Deluxe Pedicure
+    price: "$75"
+  - name: Gentleman's Manicure
+    price: "$26"
+  - name: Gentleman's Pedicure
+    price: "$38"
+  - name: Gentleman's Mani and Pedi
+    price: "$62"
+  - name: Shellac Spa Manicure
+    price: "$37+"
+  - name: Shellac Spa Pedicure
+    price: "$45+"
+  - name: Deluxe Pedicure w/ Shellac
+    price: "$55"
+  - name: Shellac Polish Application Hands
+    price: "$27+"
+  - name: Shellac Polish Application Toes
+    price: "$30+"
+  - name: Shellac Manicure & Spa Pedicure
+    price: "$72+"
+  - name: Shellac Pedicure & Spa Manicure
+    price: "$70+"
+  - name: Shellac Spa Manicure & Pedicure
+    price: "$80+"
+  - name: Shellac Manicure & Deluxe Spa Pedicure
+    price: "$85+"
+  - name: Regular Polish Change Hands/Toes
+    price: "$15/$20"
+  - name: Kids Shellac Manicure
+    price: "$27"
+  - name: Kids Shellac Pedicure
+    price: "$37"
+  - name: Shellac Change on Artificial Nails
+    price: "$32"
+  addons:
+  - name: Shellac Removal Only
+    price: "$10"
+  - name: "Add-on : French"
+    price: "$10+"
+  - name: Shellac Removal w/ Service
+    price: "$5"
+- title: Crystal Gel / Bio Gel / Gel-X
+  items:
+  - name: Crystal Gel Full Set
+    price: "$50+"
+  - name: Crystal Gel Full Set w/Tips
+    price: "$55+"
+  - name: Crystal Gel Refill
+    price: "$50+"
+  - name: Bio Gel Full Set
+    price: "$65+"
+  - name: Bio Gel Full Set w/ Tips
+    price: "$70+"
+  - name: Bio Gel Refill
+    price: "$55+"
+  - name: Gel-X Full Set
+    price: "$65+"
+  - name: Gel-X Refill
+    price: "$55+"
+  - name: Artificial Nail Removal Only
+    price: "$18+"
+  addons:
+  - name: Manicure for Artificial Nails
+    price: "$15"
+  - name: Chrome/Ombre/Unicorn
+    price: "$15"
+  - name: French on Artificial Nails
+    price: "$15+"
+- title: Waxing Services
+  items:
+  - name: Eyebrow Wax
+    price: "$12"
+  - name: Eyebrow Tinting
+    price: "$20"
+  - name: Eyebrow Wax & Tint
+    price: "$30"
+  - name: Sideburns
+    price: "$10"
+  - name: Upper Lip
+    price: "$8"
+  - name: Chin
+    price: "$8+"
+  - name: Full Face
+    price: "$35"
+  - name: Under Arms
+    price: "$15+"
+  - name: Half Arms
+    price: "$22"
+  - name: Full Arms
+    price: "$35"
+  - name: Lower Legs
+    price: "$25"
+  - name: Upper Legs
+    price: "$30"
+  - name: Full Legs
+    price: "$50"
+  - name: Full Back
+    price: "$45+"
+  - name: Chest
+    price: "$25"
+  - name: Stomach
+    price: "$25"
+  - name: Bikini Line
+    price: "$25"
+  - name: Bikini + Legs
+    price: "$70"
+  - name: Brazilian
+    price: "$40+"
+- title: Threading Services
+  items:
+  - name: Eyebrow Threading
+    price: "$15"
+  - name: Lip Threading
+    price: "$10"
+  - name: Chin Threading
+    price: "$14"
+  - name: Full Face Threading
+    price: "$45+"
+- title: Facial Services
+  items:
+  - name: Deep-pore Cleansing & Relaxing Facial
+    price: "$100"
+  - name: Anti-wrinkle & Hydrating Facial w/ Lifting Mask
+    price: "$110"
+  - name: Regeneration & Firming Facial w/ Lifting Mask
+    price: "$110"
+  - name: Back Facial Exfoliation
+    price: "$80"
+- title: Eyelash Services
+  items:
+  - name: Classic Set
+    price: "$100+"
+  - name: Hybrid Set
+    price: "$120+"
+  - name: Volume Set
+    price: "$130+"
+  - name: Refill Classic
+    price: "$80+"
+  - name: Refill Hybrid
+    price: "$100+"
+  - name: Refill Volume
+    price: "$110+"
