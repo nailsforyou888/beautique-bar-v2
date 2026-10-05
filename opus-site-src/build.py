@@ -163,6 +163,27 @@ PRICE_NOTE = ('<aside class="note" role="note"><p class="eyebrow">Beautique Bar 
               'the original article have been removed. For current prices, see the '
               '<a href="/locations/yonge/#menu">Yonge &amp; York Mills menu</a> or the '
               '<a href="/locations/warden/#menu">Bridlewood Mall menu</a>.</p></aside>')
+# Cost articles: show each salon's real prices, read from the menus (so a price edit in Pages CMS updates the article too).
+COST_BOXES = {
+  'cost-of-shellac-manicures': {
+    'yonge': ['Shellac Spa Manicure', 'Shellac Polish Application Hands', 'Shellac Removal Only', 'Shellac Removal w/ Service'],
+    'warden': ['Spa Manicure w/ Shellac', 'Shellac Application Hands', 'Shellac Removal', 'Shellac Removal w/ Service']},
+  'costs-of-manicures-and-pedicures': {
+    'yonge': ['Spa Manicure', 'Spa Pedicure', 'Spa Manicure & Pedicure', 'Deluxe Spa Pedicure'],
+    'warden': ['Spa Manicure', 'Spa Pedicure', 'Spa Manicure & Pedicure', 'Deluxe Spa Pedicure']},
+  'acrylic-nails-costs': {
+    'yonge': ['Crystal Gel Full Set w/Tips', 'Crystal Gel Refill', 'Artificial Nail Removal Only'],
+    'warden': ['Crystal Gel / Acrylic Set w/Tips', 'Crystal Gel / Acrylic Refill', 'Artificial Nail Removal Only']},
+}
+def price_box(slug_):
+    cols = []
+    for k, names in COST_BOXES[slug_].items():
+        lis = ''.join(f'<li><span>{e(n)}</span><span class="pr">{e(pr)}</span></li>' for n in names if (pr := price(k, n)) is not None)
+        cols.append(f'<div class="pb-col"><p class="pb-h">{e(LOC[k]["name"])}</p><ul class="bp-menu">{lis}</ul></div>')
+    return ('<aside class="note price-box" role="note"><p class="eyebrow">Beautique Bar prices</p>'
+            f'<div class="pb-cols">{"".join(cols)}</div>'
+            '<p class="pb-foot">Prices are guides from each salon’s current menu; “+” means from, and your technician will confirm before your service. '
+            'See the full <a href="/locations/yonge/#menu">Yonge &amp; York Mills menu</a> or the <a href="/locations/warden/#menu">Bridlewood Mall menu</a>.</p></aside>')
 POST_NOTES = {
   'full-body-laser-hair-removal-costs': '<aside class="note" role="note"><p class="eyebrow">Please note</p><p>Laser hair removal is not on either Beautique Bar menu. '
       'Our salons offer waxing, and threading at Yonge &amp; York Mills — see <a href="/skin/body-hair-removal/">Body hair removal</a>.</p></aside>',
@@ -314,7 +335,7 @@ def business_ld(k):
             a = _price_amount(i['price'])
             offers.append({'@type': 'Offer', 'name': i['name'], **({'price': a, 'priceCurrency': 'CAD'} if a else {})})
         cats.append({'@type': 'OfferCatalog', 'name': c['title'], 'itemListElement': offers})
-    street = '2900 Warden Avenue, 2nd floor' if k == 'warden' else l['street']
+    street = '2900 Warden Avenue, Unit 244' if k == 'warden' else l['street']
     d = {'@context': 'https://schema.org', '@type': 'NailSalon', '@id': f'{SITE_URL}{l["href"]}#business',
          'name': f'Beautique Bar — {l["name"]}', 'url': f'{SITE_URL}{l["href"]}',
          'image': [f'{SITE_URL}/{l["photo"][0]}'] + ([f'{SITE_URL}/img/bridlewood-storefront.webp'] if k == 'warden' else []),
@@ -648,7 +669,7 @@ add('/nails/acrylic/', page('/nails/acrylic/', 'Acrylic Nails | Beautique Bar', 
   ])}
 </section>
 {book_pair({'yonge': {'items': ['Crystal Gel Full Set', 'Crystal Gel Full Set w/Tips', 'Crystal Gel Refill', 'Chrome/Ombre/Unicorn', 'French on Artificial Nails'],
-                      'note': 'The Yonge menu lists these sets as Crystal Gel. Call to confirm acrylic before booking.'},
+                      'note': 'On the Yonge menu, acrylic sets are listed as Crystal Gel.'},
             'warden': ['Crystal Gel / Acrylic Overlay', 'Crystal Gel / Acrylic Set w/Tips', 'Crystal Gel / Acrylic Refill', 'Designs', 'Chrome / Unicorn']})}
 {quote('julia')}
 {reading(['acrylic-nails', 'acrylic-nails-costs', 'removing-acrylic-nails'])}
@@ -788,7 +809,7 @@ add('/locations/', page('/locations/', 'Locations | Beautique Bar', 'Beautique B
 
 # ---- /locations/yonge/ & /locations/warden/ --------------------------------------------------
 HERE = {
-  'yonge': ['Manicures, pedicures and Shellac', 'Crystal Gel, Bio Gel and Gel-X', 'Waxing, brow tinting and threading', 'Facials', 'Eyelash extensions'],
+  'yonge': ['Manicures, pedicures and Shellac', 'Crystal Gel (acrylic), Bio Gel and Gel-X', 'Waxing, brow tinting and threading', 'Facials', 'Eyelash extensions'],
   'warden': ['Manicures, pedicures and Shellac, including Russian manicure and BIAB', 'Gel-X, Bio Gel, Crystal Gel / acrylic and dipping powder', 'Waxing and brow tinting', 'Facials', 'Eyelash extensions'],
 }
 def menu_html(k):
@@ -828,6 +849,7 @@ for k, l in LOC.items():
     <div><dt>Hours</dt><dd>{hours_dl(k)}</dd></div>
     <div><dt>Walk-ins</dt><dd>Welcome — booking ahead secures your time and technician.</dd></div>
   </dl>
+  {f'<p class="book-note">{e(l["book_note"])}</p>' if l.get('book_note') else ''}
   <div class="facts-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["name"])} <span aria-hidden="true">↗</span></a>
   <a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a><a class="line-link" href="#menu">Menu &amp; prices</a></div>
 </section>
@@ -960,7 +982,9 @@ for p in POSTS:
     art = MD.convert(body)
     art = fix_heading_levels(art)
     note = POST_NOTES.get(p['slug'], '')
-    if removed:
+    if p['slug'] in COST_BOXES:
+        note += price_box(p['slug'])
+    elif removed:
         note += PRICE_NOTE
     if p['slug'] in POST_NOTES:
         AUDIT.setdefault(p['slug'], []).append('Covers methods/services not on either salon menu (see note added to the article).')

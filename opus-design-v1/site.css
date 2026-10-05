@@ -55,6 +55,11 @@ body.inner{background:var(--paper)}
 .bp-off{font:400 26px/1.3 var(--serif);max-width:420px}
 .bp-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;margin-top:28px}
 .bp-foot{margin-top:34px;font-size:13.5px;opacity:.85;max-width:640px}
+.book-note{margin-top:28px;max-width:560px;font-size:14.5px;line-height:1.6;opacity:.9}
+.book-note+.facts-actions{margin-top:18px}
+.price-box .pb-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 36px;margin-top:6px}
+.price-box .pb-h{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px}
+.price-box .pb-foot{margin-top:16px;font-size:13.5px;opacity:.85}
 
 /* Review */
 .pg-quote{background:var(--stone);padding:120px var(--gutter);text-align:center}
