@@ -7,50 +7,50 @@ categories:
   - name: Tropical Deluxe Pedi w/ Shellac
     price: "$60"
   - name: Spa Manicure
-    price: "$26"
+    price: "$27"
   - name: Spa Pedicure
-    price: "$38"
+    price: "$40"
   - name: Spa Manicure & Pedicure
-    price: "$62"
+    price: "$65"
   - name: Deluxe Spa Pedicure
-    price: "$50"
+    price: "$55"
   - name: Spa Manicure & Deluxe Pedicure
-    price: "$75"
+    price: "$80"
   - name: Gentleman's Manicure
     price: "$26"
   - name: Gentleman's Pedicure
     price: "$38"
   - name: Gentleman's Mani and Pedi
-    price: "$62"
+    price: "$65"
   - name: Shellac Spa Manicure
-    price: "$37+"
+    price: "$39+"
   - name: Shellac Spa Pedicure
-    price: "$45+"
+    price: "$49+"
   - name: Deluxe Pedicure w/ Shellac
-    price: "$55"
+    price: "$64+"
   - name: Shellac Polish Application Hands
     price: "$27+"
   - name: Shellac Polish Application Toes
     price: "$30+"
   - name: Shellac Manicure & Spa Pedicure
-    price: "$72+"
+    price: "$74"
   - name: Shellac Pedicure & Spa Manicure
-    price: "$70+"
+    price: "$74"
   - name: Shellac Spa Manicure & Pedicure
-    price: "$80+"
+    price: "$83"
   - name: Shellac Manicure & Deluxe Spa Pedicure
-    price: "$85+"
+    price: "$89"
   - name: Regular Polish Change Hands/Toes
-    price: "$15/$20"
+    price: "$18/$22"
   - name: Kids Shellac Manicure
-    price: "$27"
+    price: "$30+"
   - name: Kids Shellac Pedicure
-    price: "$37"
+    price: "$40+"
   - name: Shellac Change on Artificial Nails
     price: "$32"
   addons:
   - name: Shellac Removal Only
-    price: "$10"
+    price: "$12"
   - name: "Add-on : French"
     price: "$10+"
   - name: Shellac Removal w/ Service
@@ -60,21 +60,21 @@ categories:
   - name: Crystal Gel Full Set
     price: "$50+"
   - name: Crystal Gel Full Set w/Tips
-    price: "$55+"
+    price: "$65+"
   - name: Crystal Gel Refill
-    price: "$50+"
+    price: "$55+"
   - name: Bio Gel Full Set
     price: "$65+"
   - name: Bio Gel Full Set w/ Tips
     price: "$70+"
   - name: Bio Gel Refill
-    price: "$55+"
+    price: "$60+"
   - name: Gel-X Full Set
-    price: "$65+"
+    price: "$70+"
   - name: Gel-X Refill
     price: "$55+"
   - name: Artificial Nail Removal Only
-    price: "$18+"
+    price: "$20"
   addons:
   - name: Manicure for Artificial Nails
     price: "$15"
@@ -85,53 +85,53 @@ categories:
 - title: Waxing Services
   items:
   - name: Eyebrow Wax
-    price: "$12"
+    price: "$13"
   - name: Eyebrow Tinting
     price: "$20"
   - name: Eyebrow Wax & Tint
     price: "$30"
   - name: Sideburns
-    price: "$10"
+    price: "$15"
   - name: Upper Lip
-    price: "$8"
+    price: "$9"
   - name: Chin
-    price: "$8+"
+    price: "$12"
   - name: Full Face
-    price: "$35"
+    price: "$37"
   - name: Under Arms
     price: "$15+"
   - name: Half Arms
-    price: "$22"
+    price: "$25"
   - name: Full Arms
-    price: "$35"
+    price: "$37"
   - name: Lower Legs
-    price: "$25"
+    price: "$27"
   - name: Upper Legs
-    price: "$30"
+    price: "$33"
   - name: Full Legs
-    price: "$50"
+    price: "$55"
   - name: Full Back
-    price: "$45+"
+    price: "$50"
   - name: Chest
-    price: "$25"
+    price: "$30"
   - name: Stomach
-    price: "$25"
+    price: "$30"
   - name: Bikini Line
-    price: "$25"
+    price: "$28"
   - name: Bikini + Legs
     price: "$70"
   - name: Brazilian
-    price: "$40+"
+    price: "$50"
 - title: Threading Services
   items:
   - name: Eyebrow Threading
     price: "$15"
   - name: Lip Threading
-    price: "$10"
+    price: "$13"
   - name: Chin Threading
-    price: "$14"
+    price: "$15"
   - name: Full Face Threading
-    price: "$45+"
+    price: "$50+"
 - title: Facial Services
   items:
   - name: Deep-pore Cleansing & Relaxing Facial
