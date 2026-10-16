@@ -212,11 +212,9 @@ def strip_prices(slug_, body):
     return '\n'.join(res), removed
 
 # ----------------------------------------------------------------------------------------------
-# WhatsApp (both salons share one WhatsApp number; the pre-filled text tells the assistant which salon)
+# WhatsApp: one number for both salons; every button opens a plain chat and the assistant asks which salon
 WA_NUMBER = '16477705232'
 WA = f'https://wa.me/{WA_NUMBER}'
-def wa(l=None):
-    return WA if l is None else f'{WA}?text=' + ('Hi%20Beautique%20Bar%20' + ('Yonge' if l['id'] == 'yonge' else 'Bridlewood') + '!')
 WA_ICON = '<svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29Z"/></svg>'
 
 # ----------------------------------------------------------------------------------------------
@@ -238,15 +236,14 @@ def header(active, tone='light'):
     <ul class="mp-main">{''.join(f'<li><a href="{h}">{e(t)}</a></li>' for t, h in NAV)}</ul>
     <ul class="mp-sub"><li><a href="/gallery/">Gallery</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li></ul>
     <div class="mp-book"><p class="eyebrow">Book online</p>{''.join(f'<a href="{e(l["book"])}" target="_blank" rel="noopener">{e(l["name"])} <span aria-hidden="true">↗</span></a>' for l in LOC.values())}</div>
-    <div class="mp-book mp-wa"><p class="eyebrow">Questions? WhatsApp us</p>{''.join(f'<a href="{wa(l)}" target="_blank" rel="noopener">{e(l["name"])} <span aria-hidden="true">↗</span></a>' for l in LOC.values())}</div>
+    <div class="mp-book mp-wa"><p class="eyebrow">Questions?</p><a href="{WA}" target="_blank" rel="noopener">WhatsApp us <span aria-hidden="true">↗</span></a></div>
   </nav>
 </div>'''
 
 def footer(path=None):
     locs = ''.join(f'''<div class="ft-loc"><p class="ft-h"><a href="{l["href"]}">{e(l["name"])}</a></p>
-      <p>{e(l["addr"])}</p><p><a href="{l["tel"]}">Call {e(l["phone"])}</a>{f' · Text {e(l["text"])}' if l["text"] != l["phone"] else ' · Call or text'} · <a href="{wa(l)}" target="_blank" rel="noopener">WhatsApp</a></p></div>''' for l in LOC.values())
-    here = next((l for l in LOC.values() if path and path.rstrip('/') in (l['href'].rstrip('/'), '/' + l['id'])), None)
-    fab = f'<a class="wa-fab" href="{wa(here) if here else WA}" target="_blank" rel="noopener" aria-label="Message Beautique Bar on WhatsApp" data-placement="floating-button">{WA_ICON}<span>WhatsApp</span></a>'
+      <p>{e(l["addr"])}</p><p><a href="{l["tel"]}">Call {e(l["phone"])}</a>{f' · Text {e(l["text"])}' if l["text"] != l["phone"] else ' · Call or text'}</p></div>''' for l in LOC.values())
+    fab = f'<a class="wa-fab" href="{WA}" target="_blank" rel="noopener" aria-label="Message Beautique Bar on WhatsApp" data-placement="floating-button">{WA_ICON}<span>WhatsApp</span></a>'
     return f'''<footer class="site-footer">
   {fab}
   <div class="ft-grid">
@@ -254,7 +251,7 @@ def footer(path=None):
     <div class="ft-locs">{locs}</div>
     <nav class="ft-nav" aria-label="Footer">
       <ul><li><a href="/nails/">Nails</a></li><li><a href="/skin/">Skin &amp; Lashes</a></li><li><a href="/eyelash-extensions/">Eyelash Extensions</a></li><li><a href="/locations/">Locations</a></li></ul>
-      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="mailto:{EMAIL_Y}">{EMAIL_Y}</a></li><li><a href="mailto:{EMAIL_W}">{EMAIL_W}</a></li></ul>
+      <ul><li><a href="/gallery/">Gallery</a></li><li><a href="/blog/">Blog</a></li><li><a href="/contact/">Contact</a></li><li><a href="{WA}" target="_blank" rel="noopener">WhatsApp us ↗</a></li><li><a href="mailto:{EMAIL_Y}">{EMAIL_Y}</a></li><li><a href="mailto:{EMAIL_W}">{EMAIL_W}</a></li></ul>
       <ul><li><a href="{IG}" target="_blank" rel="noopener">Instagram · Bridlewood ↗</a></li><li><a href="{IG_YONGE}" target="_blank" rel="noopener">Instagram · Yonge ↗</a></li><li><a href="{FB}" target="_blank" rel="noopener">Facebook ↗</a></li></ul>
     </nav>
   </div>
@@ -271,7 +268,7 @@ def dialog():
   <p class="eyebrow">Choose your salon</p>
   <h2 id="dlg-title">Where shall we see you?</h2>
   {rows}
-  <p class="dlg-wa">{WA_ICON} Questions before you book? WhatsApp {' · '.join(f'<a href="{wa(l)}" target="_blank" rel="noopener">{e(l["short"])}</a>' for l in LOC.values())}</p>
+  <p class="dlg-wa">{WA_ICON} Questions before you book? <a href="{WA}" target="_blank" rel="noopener">WhatsApp us</a></p>
 </dialog>'''
 
 OG_IMAGE = '/img/og-default.jpg'
@@ -832,13 +829,13 @@ for k, l in LOC.items():
     monthly = '<p class="mn-note">Monthly special pedicure: ask in salon for this month’s version.</p>'
     add(l['href'], page(l['href'], f'{l["name"]} Nail Salon | Beautique Bar', f'{l["long"]} — {l["addr"]}. Call {l["phone"]}. Book online.', f'''
 {hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(l['name']), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media,
-      actions=f'<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link wa-link" href="{wa(l)}" target="_blank" rel="noopener">{WA_ICON}WhatsApp us</a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
+      actions=f'<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link wa-link" href="{WA}" target="_blank" rel="noopener">{WA_ICON}WhatsApp us</a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
 <section class="pg-sec facts-sec" data-tone="light" aria-label="Visit">
   <dl class="facts">
     <div><dt>Address</dt><dd>{e(l["addr"])}</dd></div>
     <div><dt>Call</dt><dd><a href="{l["tel"]}">{e(l["phone"])}</a></dd></div>
     <div><dt>Text</dt><dd><a href="{l["text_tel"]}">{e(l["text"])}</a></dd></div>
-    <div><dt>WhatsApp</dt><dd><a href="{wa(l)}" target="_blank" rel="noopener">Message us — quick answers on prices &amp; hours</a></dd></div>
+    <div><dt>WhatsApp</dt><dd><a href="{WA}" target="_blank" rel="noopener">Message us — quick answers on prices &amp; hours</a></dd></div>
     <div><dt>Hours</dt><dd>{hours_dl(k)}</dd></div>
     <div><dt>Walk-ins</dt><dd>Welcome — booking ahead secures your time and technician.</dd></div>
   </dl>
@@ -867,7 +864,7 @@ for k, l in LOC.items():
 # ---- /contact/ -------------------------------------------------------------------------------
 def contact_col(l):
     return f'''<div class="ct-col"><p class="eyebrow">{e(l["area"])}</p><h2>{e(l["name"])}</h2><p class="addr">{e(l["addr"])}</p>
-    <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li><li><span>WhatsApp</span><a href="{wa(l)}" target="_blank" rel="noopener">Message us ↗</a></li><li><span>Email</span><a href="mailto:{EMAILS[l["id"]]}">{EMAILS[l["id"]]}</a></li>
+    <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li><li><span>WhatsApp</span><a href="{WA}" target="_blank" rel="noopener">Message us ↗</a></li><li><span>Email</span><a href="mailto:{EMAILS[l["id"]]}">{EMAILS[l["id"]]}</a></li>
     <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li><li><span>Hours</span><em class="ct-val">{e(hours_inline(l["id"]))}</em></li></ul></div>'''
 # ---- /gallery/ (new page) -------------------------------------------------------------------
 add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets by Beautique Bar technicians at Yonge & York Mills and Bridlewood Mall.', f'''

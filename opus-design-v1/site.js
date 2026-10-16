@@ -91,9 +91,8 @@
     const kind = /wa\.me\//i.test(href) ? 'whatsapp' : /fresha\.com/i.test(href) ? 'book' : /^tel:/i.test(href) ? 'call' : /^sms:/i.test(href) ? 'text'
       : /google\.[^/]+\/maps/i.test(href) ? 'directions' : /^mailto:/i.test(href) ? 'email' : null;
     if (!kind) return;
-    // WhatsApp: one shared number, so the salon comes from the pre-filled text (or the page).
-    const hit = kind === 'whatsapp' ? ((/Yonge/i.test(href) && [0, 'yonge']) || (/Bridlewood/i.test(href) && [0, 'bridlewood']) || null)
-      : SALON.find(([re]) => re.test(href));
+    // WhatsApp: one shared number for both salons, so the salon comes from the page it was tapped on.
+    const hit = kind === 'whatsapp' ? null : SALON.find(([re]) => re.test(href));
     (window.dataLayer = window.dataLayer || []).push({
       event: 'bb_' + kind, bb_salon: hit ? hit[1] : (PAGE_SALON || 'unknown'), bb_link: href, bb_placement: placement(a),
     });
