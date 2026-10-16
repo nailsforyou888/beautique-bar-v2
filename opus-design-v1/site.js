@@ -61,7 +61,7 @@
 
   // ---- Conversion events (all pages) ----------------------------------------------------------
   // One dataLayer event per booking, call, text, directions or email click:
-  //   {event: 'bb_book'|'bb_call'|'bb_text'|'bb_directions'|'bb_email', bb_salon: 'yonge'|'bridlewood',
+  //   {event: 'bb_book'|'bb_call'|'bb_text'|'bb_whatsapp'|'bb_directions'|'bb_email', bb_salon: 'yonge'|'bridlewood',
   //    bb_link: <href>, bb_placement: <where on the page>}
   // Google Tag Manager (GTM-M6WHQ2D5, production build only) turns these into GA4 events and Ads conversions.
   const SALON = [
@@ -72,7 +72,7 @@
   const PAGE_SALON = /^\/(locations\/)?yonge\/?$/.test(location.pathname) ? 'yonge'
     : /^\/(locations\/)?warden\/?$/.test(location.pathname) ? 'bridlewood' : null;
   const PLACES = [
-    ['.book-dialog', 'booking-dialog'], ['.menu-panel', 'mobile-menu'], ['.site-header', 'header'],
+    ['.wa-fab', 'floating-button'], ['.book-dialog', 'booking-dialog'], ['.menu-panel', 'mobile-menu'], ['.site-header', 'header'],
     ['.site-footer', 'footer'], ['.pg-hero', 'hero'], ['.opening', 'hero'], ['.facts', 'salon-details'],
     ['.facts-sec', 'salon-details'], ['.book-pair', 'prices'], ['.menu', 'menu'], ['.salon', 'salon-card'], ['.close, .close--inner', 'closing'],
     ['.ct-col', 'contact'], ['.contact', 'contact'], ['.post-body', 'article'],
@@ -88,10 +88,12 @@
     const a = ev.target.closest && ev.target.closest('a[href]');
     if (!a) return;
     const href = a.getAttribute('href');
-    const kind = /fresha\.com/i.test(href) ? 'book' : /^tel:/i.test(href) ? 'call' : /^sms:/i.test(href) ? 'text'
+    const kind = /wa\.me\//i.test(href) ? 'whatsapp' : /fresha\.com/i.test(href) ? 'book' : /^tel:/i.test(href) ? 'call' : /^sms:/i.test(href) ? 'text'
       : /google\.[^/]+\/maps/i.test(href) ? 'directions' : /^mailto:/i.test(href) ? 'email' : null;
     if (!kind) return;
-    const hit = SALON.find(([re]) => re.test(href));
+    // WhatsApp: one shared number, so the salon comes from the pre-filled text (or the page).
+    const hit = kind === 'whatsapp' ? ((/Yonge/i.test(href) && [0, 'yonge']) || (/Bridlewood/i.test(href) && [0, 'bridlewood']) || null)
+      : SALON.find(([re]) => re.test(href));
     (window.dataLayer = window.dataLayer || []).push({
       event: 'bb_' + kind, bb_salon: hit ? hit[1] : (PAGE_SALON || 'unknown'), bb_link: href, bb_placement: placement(a),
     });
