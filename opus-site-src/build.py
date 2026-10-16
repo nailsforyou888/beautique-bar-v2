@@ -243,7 +243,7 @@ def header(active, tone='light'):
 def footer(path=None):
     locs = ''.join(f'''<div class="ft-loc"><p class="ft-h"><a href="{l["href"]}">{e(l["name"])}</a></p>
       <p>{e(l["addr"])}</p><p><a href="{l["tel"]}">Call {e(l["phone"])}</a>{f' · Text {e(l["text"])}' if l["text"] != l["phone"] else ' · Call or text'}</p></div>''' for l in LOC.values())
-    fab = f'<a class="wa-fab" href="{WA}" target="_blank" rel="noopener" aria-label="Message Beautique Bar on WhatsApp" data-placement="floating-button">{WA_ICON}<span>WhatsApp</span></a>'
+    fab = f'<a class="wa-fab" href="{WA}" target="_blank" rel="noopener" aria-label="Message Beautique Bar on WhatsApp" data-placement="floating-button">{WA_ICON}<span><span class="wa-q">Questions? </span>WhatsApp us</span></a>'
     return f'''<footer class="site-footer">
   {fab}
   <div class="ft-grid">
@@ -864,7 +864,7 @@ for k, l in LOC.items():
 # ---- /contact/ -------------------------------------------------------------------------------
 def contact_col(l):
     return f'''<div class="ct-col"><p class="eyebrow">{e(l["area"])}</p><h2>{e(l["name"])}</h2><p class="addr">{e(l["addr"])}</p>
-    <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li><li><span>WhatsApp</span><a href="{WA}" target="_blank" rel="noopener">Message us ↗</a></li><li><span>Email</span><a href="mailto:{EMAILS[l["id"]]}">{EMAILS[l["id"]]}</a></li>
+    <ul class="ct-list"><li><span>Call</span><a href="{l["tel"]}">{e(l["phone"])}</a></li><li><span>Text</span><a href="{l["text_tel"]}">{e(l["text"])}</a></li><li><span>WhatsApp</span><a href="{WA}" data-bb-salon="{'yonge' if l['id'] == 'yonge' else 'bridlewood'}" target="_blank" rel="noopener">Message us ↗</a></li><li><span>Email</span><a href="mailto:{EMAILS[l["id"]]}">{EMAILS[l["id"]]}</a></li>
     <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li><li><span>Hours</span><em class="ct-val">{e(hours_inline(l["id"]))}</em></li></ul></div>'''
 # ---- /gallery/ (new page) -------------------------------------------------------------------
 add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets by Beautique Bar technicians at Yonge & York Mills and Bridlewood Mall.', f'''

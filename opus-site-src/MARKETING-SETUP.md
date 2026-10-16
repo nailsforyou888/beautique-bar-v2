@@ -94,15 +94,16 @@ Sitemap, RSS, schema, canonical, OG and responsive images are all automatic.
 | `bb_text` | any `sms:` link | secondary conversion |
 | `bb_directions` | any Google Maps link | secondary / GBP-style action |
 | `bb_email` | any `mailto:` link | secondary |
+| `bb_whatsapp` | any `wa.me` link (one shared number, +1 647-770-5232) | **Key event** (message started); optional Ads conversion |
 
-Parameters on every event: `bb_salon` = `yonge` \| `bridlewood` (never unknown), `bb_link` = the href, `bb_placement` = where on the page
+Parameters on every event: `bb_salon` = `yonge` \| `bridlewood` (never unknown; `bb_whatsapp` also uses `shared` when tapped outside a salon page, because both salons share one WhatsApp number and the assistant asks which salon), `bb_link` = the href, `bb_placement` = where on the page
 (`header`, `booking-dialog`, `mobile-menu`, `hero`, `salon-card`, `salon-details`, `prices`, `contact`, `closing`, `footer`, `article`, …).
 Detection is by link type, so any new booking/phone/map link added anywhere is tracked automatically — no attributes to remember.
 
 **GTM wiring (for the agent that connects accounts):**
 1. Data Layer Variables: `bb_salon`, `bb_link`, `bb_placement`.
-2. Custom Event triggers: `bb_book`, `bb_call`, `bb_text`, `bb_directions`, `bb_email` (or one regex trigger `^bb_`).
-3. GA4 Event tag → event name `{{Event}}`, params salon/link/placement. Mark `bb_book` and `bb_call` as key events in GA4.
+2. Custom Event triggers: `bb_book`, `bb_call`, `bb_text`, `bb_whatsapp`, `bb_directions`, `bb_email` (or one regex trigger `^bb_`).
+3. GA4 Event tag → event name `{{Event}}`, params salon/link/placement. Mark `bb_book`, `bb_call` and `bb_whatsapp` as key events in GA4.
 4. Google Ads Conversion tags on `bb_book` and `bb_call` (optionally split by `bb_salon` into Yonge / Bridlewood conversions) + Conversion Linker on All Pages + Ads Remarketing if wanted.
 5. **Do not** also create "Click URL contains fresha / tel:" triggers — those would duplicate the `bb_*` events.
    **Existing container check (28 Sep 2026):** GTM-M6WHQ2D5 already fires `gtm.linkClick` on this site, i.e. the container has a *Just Links* click trigger. Before publishing, open the container and make sure no GA4/Ads conversion tag uses that trigger (or a Click-URL trigger) for Fresha/phone clicks — move them to the `bb_*` Custom Event triggers so each click counts once.

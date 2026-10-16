@@ -61,7 +61,7 @@
 
   // ---- Conversion events (all pages) ----------------------------------------------------------
   // One dataLayer event per booking, call, text, directions or email click:
-  //   {event: 'bb_book'|'bb_call'|'bb_text'|'bb_whatsapp'|'bb_directions'|'bb_email', bb_salon: 'yonge'|'bridlewood',
+  //   {event: 'bb_book'|'bb_call'|'bb_text'|'bb_whatsapp'|'bb_directions'|'bb_email', bb_salon: 'yonge'|'bridlewood'|'shared' (WhatsApp only),
   //    bb_link: <href>, bb_placement: <where on the page>}
   // Google Tag Manager (GTM-M6WHQ2D5, production build only) turns these into GA4 events and Ads conversions.
   const SALON = [
@@ -91,10 +91,11 @@
     const kind = /wa\.me\//i.test(href) ? 'whatsapp' : /fresha\.com/i.test(href) ? 'book' : /^tel:/i.test(href) ? 'call' : /^sms:/i.test(href) ? 'text'
       : /google\.[^/]+\/maps/i.test(href) ? 'directions' : /^mailto:/i.test(href) ? 'email' : null;
     if (!kind) return;
-    // WhatsApp: one shared number for both salons, so the salon comes from the page it was tapped on.
+    // WhatsApp: one shared number for both salons, so the salon is the page it was tapped on ('yonge' / 'bridlewood'),
+    // or 'shared' anywhere else (the WhatsApp assistant then asks the customer which salon).
     const hit = kind === 'whatsapp' ? null : SALON.find(([re]) => re.test(href));
     (window.dataLayer = window.dataLayer || []).push({
-      event: 'bb_' + kind, bb_salon: hit ? hit[1] : (PAGE_SALON || 'unknown'), bb_link: href, bb_placement: placement(a),
+      event: 'bb_' + kind, bb_salon: hit ? hit[1] : (a.dataset.bbSalon || PAGE_SALON || (kind === 'whatsapp' ? 'shared' : 'unknown')), bb_link: href, bb_placement: placement(a),
     });
   }, true);
 
