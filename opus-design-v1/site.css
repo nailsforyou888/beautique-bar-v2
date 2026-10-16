@@ -220,3 +220,23 @@ body.inner{background:var(--paper)}
 @media (max-width:900px){.facts>div:nth-child(even){padding-left:4vw;border-left:1px solid var(--hair)}.facts>div:nth-child(odd){padding-left:0;border-left:0}}
 .gal--one{grid-template-columns:1fr}.gal--one .g1{height:72vh}
 @media (max-width:900px){.gal--one .g1{height:48vh}}
+
+/* WhatsApp (one shared number for both salons; the assistant asks which salon) */
+.wa-ico{width:1.05em;height:1.05em;vertical-align:-.16em;margin-right:.45em;flex:none}
+.wa-link{display:inline-flex;align-items:center}
+.dlg-wa{margin:26px 0 0;font-size:14px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.book-dialog .dlg-wa a{display:inline;padding:0;border:0;text-decoration:underline;text-underline-offset:3px}
+.book-dialog .dlg-wa .wa-ico{margin-right:4px;color:#1fa855}
+.wa-fab{display:inline-flex;align-items:center;gap:10px;position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;
+  background:var(--espresso);color:var(--paper);padding:8px 22px 8px 8px;border-radius:999px;font:500 14px/1 var(--sans);letter-spacing:.03em;
+  box-shadow:0 10px 30px rgba(23,20,17,.35),inset 0 0 0 1px rgba(238,233,223,.22);text-decoration:none;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.wa-fab:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(23,20,17,.42)}
+.wa-fab:focus-visible{outline:2px solid var(--paper);outline-offset:3px}
+.wa-fab .wa-ico{width:36px;height:36px;margin:0;padding:6px;box-sizing:border-box;border-radius:50%;background:#25D366;color:#fff}
+.wa-fab span{white-space:nowrap}
+.hero-actions .wa-link{background:none;border:1px solid currentColor;padding:16px 26px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin:0}
+.hero-actions .wa-link:hover{background:rgba(33,30,26,.06)}
+.hero-actions .wa-link .wa-ico{width:18px;height:18px;color:#1fa855}
+.site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+@media (min-width:821px){.wa-fab{right:32px;bottom:32px}}
+@media (max-width:360px){.wa-fab .wa-q{display:none}}
