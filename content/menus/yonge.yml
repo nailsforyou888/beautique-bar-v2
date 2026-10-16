@@ -29,9 +29,9 @@ categories:
   - name: Deluxe Pedicure w/ Shellac
     price: "$64+"
   - name: Shellac Polish Application Hands
-    price: "$27+"
+    price: "$27"
   - name: Shellac Polish Application Toes
-    price: "$30+"
+    price: "$30"
   - name: Shellac Manicure & Spa Pedicure
     price: "$74"
   - name: Shellac Pedicure & Spa Manicure
@@ -58,7 +58,7 @@ categories:
 - title: Crystal Gel / Bio Gel / Gel-X
   items:
   - name: Crystal Gel Full Set
-    price: "$50+"
+    price: "$55"
   - name: Crystal Gel Full Set w/Tips
     price: "$65+"
   - name: Crystal Gel Refill
