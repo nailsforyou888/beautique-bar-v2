@@ -2,7 +2,8 @@
 """Make the launch-ready copy of the site in ../opus-site-production/ from the preview in ../opus-design-v1/.
 
 The preview stays hidden from search engines. This copy is what would go on beautiquebar.com:
-  - search engines allowed (noindex kept only on thank-you, the retired piercing page and 404)
+  - search engines allowed (noindex kept only on thank-you, the retired piercing page and 404; the Instagram bio page
+    /ig/yonge/ is noindex, nofollow and left out of the sitemap)
   - Google Tag Manager (GTM_ID in site_config.py) on every page — the ONLY tag; GA4 + Google Ads live inside the container
   - robots.txt + sitemap.xml for beautiquebar.com
   - the live site's security headers (CSP allows only self-hosted fonts and Google's tag/ads domains)
@@ -22,6 +23,7 @@ SITE = SITE_URL
 GTM = GTM_ID
 LASTMOD = SRC / 'sitemap-lastmod.json'   # page -> [content hash, date first seen with that content]
 NOINDEX = {'thank-you/index.html', 'skin/body-piercing/index.html', '404.html'}
+HIDDEN = {'ig/yonge/index.html'}   # Instagram bio landing page: noindex, nofollow and never in the sitemap
 
 GTM_HEAD = ("<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
             "var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;"
@@ -69,7 +71,8 @@ def main():
     for f in sorted(OUT.rglob('*.html')):
         rel = f.relative_to(OUT).as_posix()
         s = f.read_text()
-        robots = '<meta name="robots" content="noindex,nofollow">\n' if tagtest else ('<meta name="robots" content="noindex,follow">\n' if rel in NOINDEX else '')
+        robots = '<meta name="robots" content="noindex,nofollow">\n' if tagtest else ('<meta name="robots" content="noindex, nofollow">\n' if rel in HIDDEN
+                  else '<meta name="robots" content="noindex,follow">\n' if rel in NOINDEX else '')
         s = s.replace('<meta name="robots" content="noindex,nofollow">\n', robots)
         assert tagtest or 'noindex,nofollow' not in s, rel
         assert s.count('<head>\n') == 1 and s.count('<body') == 1, rel
@@ -81,7 +84,7 @@ def main():
         s = re.sub(r'<button type="button" class="notes-toggle"[^>]*>.*?</button>', '', s)
         s = s.replace('© Beautique Bar · Design preview — not the live site', f'© {datetime.date.today().year} Beautique Bar')
         f.write_text(s)
-        if rel not in NOINDEX and rel.endswith('index.html'):
+        if rel not in NOINDEX and rel not in HIDDEN and rel.endswith('index.html'):
             pages.append('/' + rel[:-len('index.html')])
     if tagtest:
         (OUT / '_headers').write_text(HEADERS.replace('/*\n', '/*\n  X-Robots-Tag: noindex, nofollow\n', 1))
