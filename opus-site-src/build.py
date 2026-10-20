@@ -859,6 +859,91 @@ for k, l in LOC.items():
 {close_band('Book at<br>' + e(l['name']) + '.', 'Whenever you’re ready')}
 ''', active='/locations/'))
 
+# ---- /ig/yonge/ — Instagram bio landing page (@beautiquebar_onyonge) --------------------------
+# Reached only from the Instagram bio: no header, nav, footer or gallery, and linked from nowhere on the site.
+# make_production.py keeps it noindex, nofollow and out of the sitemap. Prices, hours, phone and booking link
+# come from the same content files as /locations/yonge/. GTM (production) receives ig_landing_view on load and
+# ig_book_click / ig_call_click on taps.
+IG_PRICES = {'yonge': [('Bio Gel Full Set', None), ('Bio Gel Refill', None), ('Gel-X Full Set', None), ('Gel-X Refill', None),
+                       ('Shellac Spa Manicure', None), ('Spa Pedicure', None), ('Spa Manicure & Pedicure', None), ('Classic Set', 'Classic Set (lashes)')]}
+IG_CSS = '''.ig{max-width:440px;min-height:100vh;min-height:100svh;margin:0 auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column}
+.ig .lockup{width:156px}
+.ig h1{font-size:32px;line-height:1.1;margin-top:16px}
+.ig-where{font-size:14.5px;margin-top:6px}
+.ig .hours{margin-top:12px;gap:2px;font-size:14.5px;line-height:1.5}
+.ig-prices{margin-top:18px}
+.ig-prices .eyebrow{margin-bottom:6px}
+.ig .mn-list li{padding:6px 0;line-height:1.5}
+.ig-note{font-size:12.5px;opacity:.75;margin-top:6px}
+.ig-actions{display:grid;gap:10px;margin-top:18px}
+.ig-actions .btn-solid{justify-content:center;min-height:58px;font-size:13px}
+.ig-call{display:flex;justify-content:center;align-items:center;min-height:52px;border:1px solid currentColor;font-size:12px;letter-spacing:.18em;text-transform:uppercase;transition:background-color .35s}
+.ig-call:hover{background:rgba(33,30,26,.06)}
+.ig-actions .line-link{justify-self:center;margin-top:4px}
+.ig-foot{margin-top:auto;padding-top:14px;text-align:center}
+@media (min-width:721px){.ig{justify-content:center}.ig-foot{margin-top:0}}'''
+IG_JS = '''(() => {
+  const dl = window.dataLayer = window.dataLayer || [];
+  dl.push({event: 'ig_landing_view', location: '%s'});
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest && ev.target.closest('a[data-ig]');
+    if (a) dl.push({event: 'ig_' + a.dataset.ig + '_click', location: '%s'});
+  }, true);
+})();'''
+
+def ig_landing(k):
+    l = LOC[k]
+    menu = {i['name']: i['price'] for i in all_items(k)}
+    rows = []
+    for name, label in IG_PRICES[k]:
+        if name not in menu:
+            WARNINGS.append(f'Instagram page: "{name}" is no longer on the {l["name"]} menu, so it was left off /ig/{k}/ (full menu is unaffected).')
+            continue
+        rows.append(f'<li><span>{e(label or name)}</span><span class="pr">{e(menu[name])}</span></li>')
+    days = {d for _, ds, _, _ in HOURS[k] for d in ds}
+    path, title = f'/ig/{k}/', f'{l["long"]} | Hours, prices & booking'
+    desc = f'{l["long"]}, {l["street"]} at York Mills, Toronto. Hours, prices and online booking.'
+    return f'''<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{e(title)}</title>
+<meta name="description" content="{e(desc)}">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+{head_common(path, title, desc)}
+<link rel="stylesheet" href="/opus.css?v={VERSION}">
+<link rel="stylesheet" href="/site.css?v={VERSION}">
+<style>{IG_CSS}</style>
+<script>{IG_JS % (k, k)}</script>
+</head>
+<body class="ig-page">
+<main class="ig" id="main">
+  <span class="lockup" role="img" aria-label="Beautique Bar"></span>
+  <h1>{e(l["long"])}</h1>
+  <p class="ig-where">{e(l["street"])}, at York Mills{' · Open 7 days' if len(days) == 7 else ''}</p>
+  {hours_dl(k)}
+  <section class="ig-prices" aria-labelledby="ig-prices-h">
+    <p class="eyebrow" id="ig-prices-h">Prices</p>
+    <ul class="mn-list">{''.join(rows)}</ul>
+    <p class="ig-note">“+” means from.</p>
+  </section>
+  <div class="ig-actions">
+    <a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener" data-ig="book">Book now <span aria-hidden="true">↗</span></a>
+    <a class="ig-call" href="{l["tel"]}" data-ig="call">Call {e(l["phone"])}</a>
+    <a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a>
+  </div>
+  <p class="ig-foot"><a class="line-link" href="{l["href"]}">Full price list</a></p>
+</main>
+</body>
+</html>
+'''
+
+add('/ig/yonge/', ig_landing('yonge'))
+
 # ---- /shop/ — retired 24 Sep 2026 (products were for a grant); /shop/ 301s to / via _redirects.
 
 # ---- /contact/ -------------------------------------------------------------------------------
