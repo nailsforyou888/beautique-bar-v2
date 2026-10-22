@@ -33,8 +33,8 @@
      0.38–0.56  "Come in. Switch off." surfaces and leaves
      0.56–0.61  the salon again, a beat to register "we're inside"
      0.61–0.76  the room settles into the frame (no swap yet)
-     0.72–0.82  "Your everyday / beauty ritual." arrives around the framed salon
-     0.80–0.95  inside the same frame, salon dissolves slowly into the manicure
+     0.76–0.84  "Your everyday / beauty ritual." arrives once the frame has settled
+     0.84–0.96  inside the same frame, the manicure wipes up over the salon (no double exposure)
      0.95–1.00  hold                                                          */
   function drawOpening(p) {
     const vw = innerWidth / 100;
@@ -67,14 +67,15 @@
     o.win.style.clipPath = ins; o.win.style.webkitClipPath = ins;
     o.veil.style.opacity = (lerp(.5, .12, split) + .2 * come + .22 * (1 - inOut) * split) * (1 - range(p, .61, .74));
 
-    // slow dissolve inside the same frame: both images drift together so it reads as one scene changing
-    const d = range(p, .80, .95);
+    // wipe inside the same frame: the manicure rises over the salon, so the two never blend
+    const d = range(p, .84, .96);
     o.salon.style.transform = `scale(${lerp(1.2, 1, range(p, .08, .6)) * lerp(1, 1.06, range(p, .76, 1))})`;
-    o.salon.style.opacity = 1 - d * .999;
-    o.hands.style.opacity = d;
+    o.hands.style.opacity = d > 0 ? 1 : 0;
+    const wipe = `inset(${(100 * (1 - d)).toFixed(2)}% 0 0 0)`;
+    o.hands.style.clipPath = wipe; o.hands.style.webkitClipPath = wipe;
     o.hands.style.transform = `scale(${lerp(1.08, 1, range(p, .78, 1))})`;
 
-    const r = range(p, .72, .82);
+    const r = range(p, .76, .84);
     o.rl.style.opacity = r; o.rr.style.opacity = r;
     o.rl.style.transform = `translateY(-50%) translate3d(${lerp(-24, 0, r)}px,0,0)`;
     o.rr.style.transform = `translateY(-50%) translate3d(${lerp(24, 0, r)}px,0,0)`;
