@@ -292,6 +292,16 @@ SEO = {
               'Bio Gel overlays, full sets with tips, refills and Gel-X at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
   '/nails/acrylic/': ('Acrylic Nails in Toronto & Scarborough | Beautique Bar',
               'Acrylic and Crystal Gel full sets, overlays and refills at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
+  '/nails/gel-x/': ('Gel-X Nails in Toronto & Scarborough | Beautique Bar',
+              'Gel-X full sets and refills at Beautique Bar — Bridlewood Mall, Scarborough and Yonge & York Mills, Toronto. Prices, refills, removal and booking.'),
+  '/nails/biab/': ('BIAB Nails at Bridlewood Mall, Scarborough | Beautique Bar',
+              'BIAB builder gel (Strong Shellac) to strengthen natural nails, on its own or with a spa manicure, at Beautique Bar, Bridlewood Mall, Scarborough.'),
+  '/nails/russian-manicure/': ('Russian Manicure in Scarborough | Beautique Bar',
+              'Russian manicure with detailed cuticle work, with regular polish or Shellac, at Beautique Bar, Bridlewood Mall, Scarborough. Prices and booking.'),
+  '/nails/pedicure/': ('Pedicures in Toronto & Scarborough | Beautique Bar',
+              'Spa, deluxe and tropical pedicures with polish or Shellac at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+  '/nails/nail-art/': ('Nail Art in Toronto & Scarborough | Beautique Bar',
+              'French, chrome and custom designs on Shellac or a set at Beautique Bar — Yonge & York Mills and Bridlewood Mall. Send us your idea on WhatsApp.'),
   '/skin/': ('Lashes, Facials & Waxing in Toronto | Beautique Bar',
               'Eyelash extensions, facials, waxing and threading at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
   '/eyelash-extensions/': ('Eyelash Extensions in Toronto & Scarborough | Beautique Bar',
@@ -318,7 +328,10 @@ SEO = {
 NOINDEX_PROD = {'/thank-you/', '/skin/body-piercing/', '/404.html'}
 SERVICE_NAMES = {'/nails/manicure-pedicure/': 'Manicure and pedicure', '/nails/bio-gel/': 'Bio Gel nails', '/nails/acrylic/': 'Acrylic nails',
                  '/eyelash-extensions/': 'Eyelash extensions', '/skin/facials/': 'Facials', '/skin/facial-hair-removal/': 'Facial hair removal',
-                 '/skin/body-hair-removal/': 'Body waxing'}
+                 '/skin/body-hair-removal/': 'Body waxing', '/nails/gel-x/': 'Gel-X nail extensions', '/nails/biab/': 'BIAB builder gel',
+                 '/nails/russian-manicure/': 'Russian manicure', '/nails/pedicure/': 'Pedicure', '/nails/nail-art/': 'Nail art'}
+SERVICE_AT = {'/nails/biab/': ['warden'], '/nails/russian-manicure/': ['warden']}   # services on one salon's menu only
+SERVICE_FAQ = {}   # path -> [(question, answer)], shown on the page and as FAQPage data
 
 def _price_amount(raw):
     m = re.match(r'^\$(\d+(?:\.\d{1,2})?)\+?$', (raw or '').strip())
@@ -383,9 +396,12 @@ def page_ld(path, title, desc, body):
             lds.append(business_ld(k))
             lds.append(faq_ld(k))
     if path in SERVICE_NAMES:
+        at = SERVICE_AT.get(path, list(LOC))
         lds.append({'@context': 'https://schema.org', '@type': 'Service', 'name': SERVICE_NAMES[path], 'serviceType': SERVICE_NAMES[path],
-                    'description': desc, 'url': SITE_URL + path, 'provider': [{'@id': f'{SITE_URL}{l["href"]}#business'} for l in LOC.values()],
-                    'areaServed': [{'@type': 'City', 'name': n} for n in ('Toronto', 'North York', 'Scarborough')]})
+                    'description': desc, 'url': SITE_URL + path, 'provider': [{'@id': f'{SITE_URL}{LOC[k]["href"]}#business'} for k in at],
+                    'areaServed': [{'@type': 'City', 'name': n} for n in (['Scarborough'] if at == ['warden'] else ['Toronto', 'North York', 'Scarborough'])]})
+    if path in SERVICE_FAQ:
+        lds.append(faq_data(SERVICE_FAQ[path]))
     m = re.match(r'^/blog/([^/]+)/$', path)
     if m and m.group(1) in PBY:
         p = PBY[m.group(1)]
@@ -501,6 +517,17 @@ def book_pair(spec, title='Book at either salon', eyebrow='Where to book', note=
   <div class="book-pair">{''.join(cols)}</div>{n}
 </section>'''
 
+def faq_block(qs, eyebrow='Questions', title='Good to know'):
+    rows = ''.join(f'<details class="faq-q"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in qs)
+    return f'''<section class="pg-sec faq-sec" data-tone="light" aria-labelledby="faq">
+  {sec_head(eyebrow, e(title), 'faq')}
+  <div class="faq">{rows}</div>
+</section>'''
+
+def faq_data(qs):
+    return {'@context': 'https://schema.org', '@type': 'FAQPage',
+            'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in qs]}
+
 def quote(key):
     t, who = REV[key]
     return f'''<section class="pg-quote" data-tone="light" aria-label="Client review">
@@ -581,9 +608,14 @@ add('/nails/', page('/nails/', 'Nails | Beautique Bar', 'Manicures, pedicures, S
   {sec_head('Treatments', 'Choose your treatment', 't-h')}
   {svc_list([
     ('Manicure & Pedicure', '/nails/manicure-pedicure/', 'Spa and deluxe treatments for hands and feet, finished with regular polish or Shellac.', BOTH),
+    ('Pedicures', '/nails/pedicure/', 'Spa, deluxe and seasonal pedicures, with regular polish or Shellac.', BOTH),
     ('Shellac', '/nails/manicure-pedicure/#shellac', 'A glossy gel polish with no drying time, on its own or with a spa manicure or pedicure.', BOTH),
-    ('Bio Gel & Gel-X', '/nails/bio-gel/', 'A natural-looking gel overlay or full set with tips; Gel-X full sets and refills.', BOTH),
+    ('Russian Manicure', '/nails/russian-manicure/', 'A detailed manicure with careful cuticle work, with polish or Shellac.', 'Bridlewood Mall'),
+    ('BIAB', '/nails/biab/', 'A builder gel that strengthens your natural nails without adding length.', 'Bridlewood Mall'),
+    ('Gel-X', '/nails/gel-x/', 'Soft-gel tips that cover the whole nail, for length in any colour or design.', BOTH),
+    ('Bio Gel', '/nails/bio-gel/', 'A natural-looking gel overlay, or a full set with tips.', BOTH),
     ('Acrylic', '/nails/acrylic/', 'Sculpted sets, overlays and refills, shaped and finished to your design.', BOTH),
+    ('Nail Art', '/nails/nail-art/', 'French, chrome and custom designs, on Shellac or a set.', BOTH),
   ])}
 </section>
 {quote('sangeetha')}
@@ -606,14 +638,14 @@ add('/nails/manicure-pedicure/', page('/nails/manicure-pedicure/', 'Manicure & P
   {options([
     ('Spa Pedicure', 'A warm foot soak, nail trimming and shaping, cuticle care, light exfoliation, and a hot-stone foot massage with moisturising lotion. Finished with your choice of polish.'),
     ('Deluxe Spa Pedicure', 'Everything in the Spa Pedicure, plus an exfoliating scrub, an extended foot and lower-leg hot-stone massage, a hydrating foot mask and a hot-towel wrap.'),
-    ('Monthly Special Pedicure', 'A seasonal pedicure that changes through the year. Both menus currently list it as the Tropical Deluxe Pedicure; ask in salon for this month’s version.'),
+    ('Monthly Special Pedicure', 'A seasonal pedicure that changes through the year. Both menus currently list it as the Tropical Deluxe Pedicure; ask in salon for this month’s version. All pedicure prices are on the <a href="/nails/pedicure/">pedicures page</a>.'),
   ])}
 </section>
 <section class="pg-sec pg-sec--tight" data-tone="light" aria-labelledby="man-h">
   {sec_head('Manicures', 'Hands, finished your way', 'man-h')}
   {options([
     ('Spa Manicure', 'On the menu at both salons, with regular polish or Shellac, and as a manicure-and-pedicure combination.'),
-    ('Deluxe Spa Manicure & Russian Manicure', 'On the Bridlewood Mall menu, each also available with Shellac.'),
+    ('Deluxe Spa Manicure & Russian Manicure', 'On the Bridlewood Mall menu, each also available with Shellac. See <a href="/nails/russian-manicure/">Russian manicure</a>.'),
     ('Gentleman’s Manicure & Pedicure', 'On the menu at both salons.'),
   ])}
   <div class="inline-ph">{img('img/stock-pedicure.webp', 1448, 1086, 'A finished pedicure in soft pink, feet resting on a white towel', 'frame', '50% 50%', True, 'Licensed stock chosen by the owner.')}</div>
@@ -641,7 +673,7 @@ add('/nails/bio-gel/', page('/nails/bio-gel/', 'Bio Gel Nails | Beautique Bar', 
   {options([
     ('Overlay or full set', 'An overlay strengthens your natural nails; a full set with tips adds length. Both are finished in the colour or design you choose.'),
     ('Refills', 'Refills fill in the growth so the set keeps its shape. Book them on the same menu.'),
-    ('Gel-X', 'Both salons also offer Gel-X full sets and refills.'),
+    ('Gel-X', 'Both salons also offer <a href="/nails/gel-x/">Gel-X</a> full sets and refills.'),
     ('Removal', 'Artificial nail removal is available at both salons.'),
   ])}
 </section>
@@ -671,6 +703,175 @@ add('/nails/acrylic/', page('/nails/acrylic/', 'Acrylic Nails | Beautique Bar', 
 {quote('julia')}
 {reading(['acrylic-nails', 'acrylic-nails-costs', 'removing-acrylic-nails'])}
 {close_band()}
+''', active='/nails/'))
+
+# ---- Service pages added 22 Oct 2026: one page per service people search for by name ------------
+# Every price is read from the salon menus; a question is left out if its price isn't on the menu.
+def pfrom(k, name):
+    """'$65+' -> 'from $65'; fixed prices unchanged; None if the service isn't on that salon's menu."""
+    p = price(k, name)
+    return None if p is None else (f'from {p[:-1]}' if p.endswith('+') else p)
+
+def qa(*rows):
+    """Keep only the questions whose answer could be written (answer is None when a price is missing)."""
+    return [(q, a) for q, a in rows if a]
+
+def both(fmt, y, w):
+    return fmt.format(y=y, w=w) if y and w else None
+
+# ---- /nails/gel-x/ ---------------------------------------------------------------------------
+gx = {k: pfrom(k, 'Gel-X Full Set') for k in LOC}
+gxr = {k: pfrom(k, 'Gel-X Refill') for k in LOC}
+SERVICE_FAQ['/nails/gel-x/'] = qa(
+    ('How much is a Gel-X full set?', both('A Gel-X full set is {w} at Bridlewood Mall and {y} at Yonge & York Mills. The final price depends on length and design, and your technician confirms it before starting.', gx['yonge'], gx['warden'])),
+    ('How much is a Gel-X refill?', both('A Gel-X refill is {w} at Bridlewood Mall and {y} at Yonge & York Mills.', gxr['yonge'], gxr['warden'])),
+    ('How often do I need a refill?', 'Most clients come back every three to four weeks, as the natural nail grows out under the set. Your technician can suggest timing for your nails.'),
+    ('Gel-X or Bio Gel: which should I choose?', 'Gel-X uses full-cover tips, so it is the way to add length. Bio Gel is usually applied over your own nails for strength, or with tips if you want length too. If you are unsure, ask your technician at the start of your appointment.'),
+    ('Can I add nail art to Gel-X?', 'Yes. French, chrome and designs can be added to any set. See the nail art page for how design pricing works.'),
+    ('Do you remove Gel-X?', both('Yes. Artificial nail removal is {w} at Bridlewood Mall and {y} at Yonge & York Mills.', pfrom('yonge', 'Artificial Nail Removal Only'), pfrom('warden', 'Artificial Nail Removal Only'))),
+)
+add('/nails/gel-x/', page('/nails/gel-x/', 'Gel-X Nails | Beautique Bar', 'Gel-X full sets and refills at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Nails','/nails/'),('Gel-X',None)], 'Gel-X', 'Soft-gel tips that cover the whole nail, shaped to the length you want and finished in any colour or design. At both salons.',
+      img('img/work-gold-chrome-lines.webp', 1440, 1440, 'Long nails with fine gold chrome lines', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
+<section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
+  {sec_head('At a glance', 'What to know before you book', 'opt-h')}
+  {options([
+    ('What it is', 'Each Gel-X tip covers the whole nail. It is bonded with gel, cured under a lamp, then shaped and finished, so you get length without a sculpted acrylic set.'),
+    ('Full set', f'Bridlewood Mall: {gx["warden"] or "see menu"}. Yonge &amp; York Mills: {gx["yonge"] or "see menu"}. Length and design change the final price.'),
+    ('Refills', 'A refill fills in the growth so the set stays even. Most clients book one every three to four weeks.'),
+    ('Finishes', 'French, chrome, ombré and custom designs can be added. See <a href="/nails/nail-art/">nail art</a>.'),
+  ])}
+</section>
+{book_pair({'yonge': ['Gel-X Full Set', 'Gel-X Refill', 'Chrome/Ombre/Unicorn', 'French on Artificial Nails', 'Artificial Nail Removal Only'],
+            'warden': ['Gel-X Full Set', 'Gel-X Refill', 'Designs', 'Chrome / Unicorn', 'Artificial Nail Removal Only']})}
+<section class="pg-sec" data-tone="light" aria-labelledby="work-h">
+  {sec_head('Our work', 'Recent sets', 'work-h', '<a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>')}
+  {work_strip(['jewelled-red-stiletto', 'caramel-coffin', 'oxblood-almond', 'pink-3d-details'])}
+</section>
+{faq_block(SERVICE_FAQ['/nails/gel-x/'])}
+{reading(['what-are-nail-enhancements', 'extend-longevity-nail-art'])}
+{close_band()}
+''', active='/nails/'))
+
+# ---- /nails/biab/ (Bridlewood menu only: "BIAB (Strong Shellac)") ------------------------------
+bi, bim = pfrom('warden', 'BIAB (Strong Shellac) no Manicure'), pfrom('warden', 'BIAB (Strong Shellac) w Spa Manicure')
+SERVICE_FAQ['/nails/biab/'] = qa(
+    ('What is BIAB?', 'BIAB is a builder gel: a thicker layer of gel that strengthens your natural nails without adding length. Our Bridlewood Mall menu lists it as Strong Shellac.'),
+    ('How much is BIAB?', both('BIAB is {w} on its own, or {y} with a spa manicure, at Bridlewood Mall.', bim, bi)),
+    ('Is BIAB the same as Shellac?', 'No. Shellac is a thin gel polish for colour. BIAB is a thicker builder gel that adds strength, which helps if your nails bend or break easily.'),
+    ('Can I get BIAB at Yonge & York Mills?', 'BIAB is on the Bridlewood Mall menu only. At Yonge & York Mills, a Bio Gel overlay is the closest option.'),
+    ('How long does BIAB last?', 'Most clients rebook every three to four weeks as the nail grows out. Your technician can suggest timing for your nails.'),
+)
+add('/nails/biab/', page('/nails/biab/', 'BIAB | Beautique Bar', 'BIAB builder gel at Beautique Bar, Bridlewood Mall.', f'''
+{hero([('Home','/'),('Nails','/nails/'),('BIAB',None)], 'BIAB', 'A builder gel that strengthens your natural nails without adding length. On our Bridlewood Mall menu as Strong Shellac.',
+      img('img/work-short-sparkle.webp', 1200, 1600, 'Short square nails with sparkling 3D details', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
+<section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
+  {sec_head('At a glance', 'What to know before you book', 'opt-h')}
+  {options([
+    ('What it is', 'A thicker gel than Shellac, built up over your own nails for strength and a smooth shape, then finished in colour.'),
+    ('Who it suits', 'Clients who want to keep their natural length but find their nails bend, peel or break.'),
+    ('Price', f'{bi or "See the menu"} on its own, or {bim or "see the menu"} with a spa manicure.'),
+    ('Where', 'Bridlewood Mall only. At Yonge &amp; York Mills, ask for a <a href="/nails/bio-gel/">Bio Gel</a> overlay.'),
+  ])}
+</section>
+{book_pair({'yonge': 'BIAB is on the Bridlewood Mall menu. At Yonge &amp; York Mills, a Bio Gel overlay is the closest option.',
+            'warden': ['BIAB (Strong Shellac) no Manicure', 'BIAB (Strong Shellac) w Spa Manicure', 'Shellac Removal w/ Service', 'French / Designs']})}
+{faq_block(SERVICE_FAQ['/nails/biab/'])}
+{reading(['what-are-nail-enhancements', 'bio-gel-nails'])}
+{close_band()}
+''', active='/nails/'))
+
+# ---- /nails/russian-manicure/ (Bridlewood menu only) -----------------------------------------
+ru, rus = pfrom('warden', 'Russian Manicure'), pfrom('warden', 'Russian Manicure w/ Shellac')
+SERVICE_FAQ['/nails/russian-manicure/'] = qa(
+    ('What is a Russian manicure?', 'A detailed manicure focused on careful cuticle work, so the polish can sit close to the cuticle and grows out neatly.'),
+    ('How much is a Russian manicure?', both('A Russian manicure is {y} at Bridlewood Mall, or {w} with Shellac.', ru, rus)),
+    ('How is it different from a spa manicure?', 'A spa manicure includes a soak and a relaxing finish. A Russian manicure is a dry, detail-focused service that takes extra care around the cuticles.'),
+    ('Can I get a Russian manicure at Yonge & York Mills?', 'It is on the Bridlewood Mall menu only. Yonge & York Mills offers spa and Shellac spa manicures.'),
+)
+add('/nails/russian-manicure/', page('/nails/russian-manicure/', 'Russian Manicure | Beautique Bar', 'Russian manicure at Beautique Bar, Bridlewood Mall.', f'''
+{hero([('Home','/'),('Nails','/nails/'),('Russian Manicure',None)], 'Russian<br>Manicure', 'A detailed manicure with careful cuticle work, finished with regular polish or Shellac. At Bridlewood Mall.',
+      img('img/work-red-maple.webp', 1280, 1600, 'Short red nails with hand-painted maple leaves', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
+<section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
+  {sec_head('At a glance', 'What to know before you book', 'opt-h')}
+  {options([
+    ('What it is', 'Careful, detailed cuticle work and shaping, so colour can be applied close to the cuticle for a clean finish.'),
+    ('Price', f'{ru or "See the menu"}, or {rus or "see the menu"} with Shellac.'),
+    ('Where', 'Bridlewood Mall only. At Yonge &amp; York Mills, see <a href="/nails/manicure-pedicure/">spa manicures</a>.'),
+  ])}
+</section>
+{book_pair({'yonge': 'The Russian manicure is on the Bridlewood Mall menu. Yonge &amp; York Mills offers spa and Shellac spa manicures.',
+            'warden': ['Russian Manicure', 'Russian Manicure w/ Shellac', 'Spa Manicure', 'Deluxe Spa Manicure']})}
+{faq_block(SERVICE_FAQ['/nails/russian-manicure/'])}
+{reading(['what-are-manicures-and-pedicures', 'cost-of-shellac-manicures'])}
+{close_band()}
+''', active='/nails/'))
+
+# ---- /nails/pedicure/ ------------------------------------------------------------------------
+sp = {k: pfrom(k, 'Spa Pedicure') for k in LOC}
+dp = {k: pfrom(k, 'Deluxe Spa Pedicure') for k in LOC}
+ssp = {'yonge': pfrom('yonge', 'Shellac Spa Pedicure'), 'warden': pfrom('warden', 'Spa Pedicure w/Shellac')}
+gp = {k: pfrom(k, "Gentleman's Pedicure") for k in LOC}
+SERVICE_FAQ['/nails/pedicure/'] = qa(
+    ('How much is a pedicure?', both('A spa pedicure is {w} at Bridlewood Mall and {y} at Yonge & York Mills.', sp['yonge'], sp['warden'])),
+    ('What is the difference between a spa and a deluxe pedicure?', 'The deluxe adds an exfoliating scrub, a longer hot-stone massage for the foot and lower leg, a hydrating foot mask and a hot-towel wrap.'),
+    ('How much is a deluxe pedicure?', both('A deluxe spa pedicure is {w} at Bridlewood Mall and {y} at Yonge & York Mills.', dp['yonge'], dp['warden'])),
+    ('Can I get Shellac on my toes?', both('Yes. A spa pedicure with Shellac is {w} at Bridlewood Mall and {y} at Yonge & York Mills.', ssp['yonge'], ssp['warden'])),
+    ('Do you do pedicures for men?', both('Yes. A gentleman’s pedicure is {w} at Bridlewood Mall and {y} at Yonge & York Mills.', gp['yonge'], gp['warden'])),
+    ('Do I need to book?', 'Walk-ins are welcome at both salons. Booking ahead secures your time and technician.'),
+)
+add('/nails/pedicure/', page('/nails/pedicure/', 'Pedicures | Beautique Bar', 'Spa, deluxe and tropical pedicures at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Nails','/nails/'),('Pedicures',None)], 'Pedicures', 'Spa, deluxe and seasonal pedicures in a massage chair, finished with regular polish or Shellac. At both salons.',
+      img('img/promo-pedicure-chair.webp', 1600, 993, 'A pedicure chair at Beautique Bar on Yonge, with the care products ready on the tray', 'frame', '50% 50%', False, 'REAL — Yonge promo still.'))}
+<section class="pg-sec" data-tone="light" aria-labelledby="ped-h">
+  {sec_head('Pedicures', 'Choose your pedicure', 'ped-h')}
+  {options([
+    ('Spa Pedicure', 'A warm foot soak, nail trimming and shaping, cuticle care, light exfoliation, and a hot-stone foot massage with moisturising lotion. Finished with your choice of polish.'),
+    ('Deluxe Spa Pedicure', 'Everything in the Spa Pedicure, plus an exfoliating scrub, an extended foot and lower-leg hot-stone massage, a hydrating foot mask and a hot-towel wrap.'),
+    ('Monthly special', 'A seasonal pedicure that changes through the year, currently the Tropical Deluxe Pedicure on both menus. Ask in salon for this month’s version.'),
+    ('With Shellac', 'Spa, deluxe and tropical pedicures can each be finished with Shellac for long-lasting, glossy colour on your toes.'),
+    ('Gentleman’s Pedicure', 'On the menu at both salons, on its own or with a manicure.'),
+  ])}
+</section>
+{book_pair({'yonge': ['Spa Pedicure', 'Deluxe Spa Pedicure', 'Tropical Deluxe Pedicure', 'Shellac Spa Pedicure', "Gentleman's Pedicure", 'Spa Manicure & Pedicure'],
+            'warden': ['Spa Pedicure', 'Deluxe Spa Pedicure', 'Tropical Deluxe Pedicure', 'Spa Pedicure w/Shellac', "Gentleman's Pedicure", 'Spa Manicure & Pedicure']})}
+<section class="pg-sec gallery" data-tone="light" aria-label="Inside the salon">
+  <div class="gal gal--one">{img('img/yonge-pedicure-row.webp', 2400, 1800, 'The row of pedicure chairs at Beautique Bar on Yonge', 'g1', '50% 58%', True, 'REAL — owner photo.')}</div>
+</section>
+{quote('samantha')}
+{faq_block(SERVICE_FAQ['/nails/pedicure/'])}
+{reading(['what-are-manicures-and-pedicures', 'costs-of-manicures-and-pedicures'])}
+{close_band()}
+''', active='/nails/'))
+
+# ---- /nails/nail-art/ ------------------------------------------------------------------------
+SERVICE_FAQ['/nails/nail-art/'] = qa(
+    ('How much does nail art cost?', both('Designs are priced by detail and added to your manicure or set. At Bridlewood Mall, French or simple designs start {w}; at Yonge & York Mills, chrome, ombré or unicorn finishes are {y}. Your technician confirms the price before starting.', pfrom('yonge', 'Chrome/Ombre/Unicorn'), pfrom('warden', 'French / Designs'))),
+    ('Can I bring a picture of the design I want?', 'Yes. Send it to us on WhatsApp before your visit so we can tell you the price and how much time to book.'),
+    ('Can I get nail art on my natural nails?', 'Yes. Designs can be added to a Shellac manicure, or to a set such as Gel-X, Bio Gel or acrylic if you want length.'),
+    ('Do both salons do nail art?', 'Yes. French and chrome finishes are on the menu at both salons, and design add-ons are on the Bridlewood Mall menu. For a hand-painted or detailed design, send us a photo first so we can confirm the price and the salon.'),
+)
+add('/nails/nail-art/', page('/nails/nail-art/', 'Nail Art | Beautique Bar', 'Nail art at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Nails','/nails/'),('Nail Art',None)], 'Nail Art', 'French tips, chrome and custom designs, added to Shellac or to a set. Send us your idea and we will price it before you book.',
+      img('img/work-painted-florals-green.webp', 900, 1600, 'Hand-painted florals on long nails', 'frame', '50% 40%', False, WORK_BRIEF))}
+<section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
+  {sec_head('At a glance', 'How it works', 'opt-h')}
+  {options([
+    ('Bring your idea', f'Send a photo of the design you want on <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a> before your visit. We will tell you the price and how much time to book.'),
+    ('On your own nails or a set', 'Designs go on a Shellac manicure, or on <a href="/nails/gel-x/">Gel-X</a>, <a href="/nails/bio-gel/">Bio Gel</a> or <a href="/nails/acrylic/">acrylic</a> if you want length.'),
+    ('Priced by detail', 'A French tip or a simple accent costs less than full hand-painted art. Design prices are added to your manicure or set, and your technician confirms the total before starting.'),
+  ])}
+</section>
+<section class="pg-sec" data-tone="light" aria-labelledby="work-h">
+  {sec_head('Our work', 'Recent designs', 'work-h', '<a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>')}
+  {work_strip(['plum-chrome-gems', 'pink-french-flower', 'almond-painted-flowers', 'leopard-tips'])}
+</section>
+{book_pair({'yonge': ['Add-on : French', 'Chrome/Ombre/Unicorn', 'French on Artificial Nails', 'Shellac Spa Manicure', 'Gel-X Full Set'],
+            'warden': ['French / Designs', 'Designs', 'Chrome / Unicorn', 'Airbrush', 'Gel-X Full Set']})}
+{quote('julia')}
+{faq_block(SERVICE_FAQ['/nails/nail-art/'])}
+{reading(['extend-longevity-nail-art', 'toronto-trending-nail-art-design'])}
+{close_band('Seen something<br>you love?')}
 ''', active='/nails/'))
 
 # ---- /skin/ ----------------------------------------------------------------------------------
@@ -809,6 +1010,10 @@ HERE = {
   'yonge': ['Manicures, pedicures and Shellac', 'Crystal Gel, Bio Gel and Gel-X', 'Waxing, brow tinting and threading', 'Facials', 'Eyelash extensions'],
   'warden': ['Manicures, pedicures and Shellac, including Russian manicure and BIAB', 'Gel-X, Bio Gel, Crystal Gel / acrylic and dipping powder', 'Waxing and brow tinting', 'Facials', 'Eyelash extensions'],
 }
+HERE_LINKS = {  # the service pages for what each salon is known for
+  'yonge': [('Gel-X', '/nails/gel-x/'), ('Nail art', '/nails/nail-art/'), ('Pedicures', '/nails/pedicure/'), ('Bio Gel', '/nails/bio-gel/')],
+  'warden': [('Russian manicure', '/nails/russian-manicure/'), ('BIAB', '/nails/biab/'), ('Gel-X', '/nails/gel-x/'), ('Nail art', '/nails/nail-art/'), ('Pedicures', '/nails/pedicure/')],
+}
 # Descriptive headings (proposed 15 Oct, approved 22 Oct 2026) — say what the page is and where, for search and AI answers.
 H1_LOC = {'yonge': 'Nail Salon on Yonge at York Mills', 'warden': 'Nail Salon at Bridlewood Mall, Scarborough'}
 H2_HERE = {'yonge': 'Manicures, pedicures & nails on Yonge', 'warden': 'Russian manicure, Gel-X, BIAB & more at Bridlewood Mall'}
@@ -835,15 +1040,10 @@ def faq_items(k):
     return qs
 
 def faq_html(k):
-    rows = ''.join(f'<details class="faq-q"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in faq_items(k))
-    return f'''<section class="pg-sec faq-sec" data-tone="light" aria-labelledby="faq">
-  {sec_head('Questions', 'Good to know', 'faq')}
-  <div class="faq">{rows}</div>
-</section>'''
+    return faq_block(faq_items(k))
 
 def faq_ld(k):
-    return {'@context': 'https://schema.org', '@type': 'FAQPage',
-            'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faq_items(k)]}
+    return faq_data(faq_items(k))
 
 def menu_html(k):
     blocks = []
@@ -890,6 +1090,7 @@ for k, l in LOC.items():
 <section class="pg-sec here" data-tone="light" aria-labelledby="here-h">
   {sec_head('At this salon', e(H2_HERE[k]), 'here-h')}
   <ul class="here-list">{''.join(f'<li>{e(x)}</li>' for x in HERE[k])}</ul>
+  <div class="facts-actions">{''.join(f'<a class="line-link" href="{h}">{e(t)} <span aria-hidden="true">→</span></a>' for t, h in HERE_LINKS[k])}</div>
 </section>
 {gallery}
 <section class="pg-sec menu-sec" data-tone="light" aria-labelledby="menu">

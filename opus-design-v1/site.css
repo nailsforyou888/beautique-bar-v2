@@ -251,3 +251,4 @@ body.inner{background:var(--paper)}
 .faq-q summary::after{content:"+";font-family:var(--sans);font-size:20px;line-height:1;transition:transform .3s var(--ease)}
 .faq-q[open] summary::after{transform:rotate(45deg)}
 .faq-q p{margin:0 0 24px;max-width:62ch;font-size:15px;line-height:1.6}
+.opt p a{border-bottom:1px solid currentColor}
