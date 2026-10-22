@@ -509,33 +509,23 @@ def svc_list(rows):
 
 BOTH = 'Yonge &amp; York Mills · Bridlewood Mall'
 
-# Our work — finished sets from the salons' own Instagram accounts (see opus-site-src/INSTAGRAM.md).
-WORK = [  # (file stem, width, height, caption)
-  ('plum-chrome-gems', 1320, 1320, 'Plum chrome with 3D gems'),
-  ('white-french-gold', 1269, 1600, 'White French, gold accent'),
-  ('burgundy-gloss', 1440, 1440, 'Burgundy gloss'),
-  ('painted-florals-green', 900, 1600, 'Hand-painted florals'),
-  ('milky-almond', 1356, 1600, 'Milky almond'),
-  ('silver-chrome-almond', 1290, 1290, 'Silver chrome'),
-  ('pink-french-flower', 1320, 1320, 'Pink French with a 3D flower'),
-  ('leopard-tips', 1280, 1600, 'Leopard tips'),
-  ('sheer-nude-detail', 1600, 1600, 'Sheer nude, fine detail'),
-  ('jewelled-red-stiletto', 1440, 1440, 'Jewelled red stiletto'),
-  ('coral-flowers', 1290, 1290, 'Coral flowers'),
-  ('oxblood-almond', 1326, 1600, 'Oxblood almond'),
-  ('gold-chrome-lines', 1440, 1440, 'Gold chrome lines'),
-  ('sheer-pink-hearts', 1235, 1600, 'Sheer pink, tiny hearts'),
-  ('brown-french', 1440, 1440, 'Brown French'),
-  ('almond-painted-flowers', 1600, 1600, 'Painted flowers'),
-  ('petal-art', 1440, 1485, 'Petal art'),
-  ('caramel-coffin', 1440, 1456, 'Caramel with detail'),
-  ('icy-blue-accents', 1440, 1440, 'Icy blue accents'),
-  ('short-sparkle', 1200, 1600, 'Short and sparkling'),
-  ('chocolate-cream', 1290, 1290, 'Chocolate and cream'),
-  ('nude-sunny-florals', 1261, 1261, 'Nude with sunny florals'),
-  ('red-maple', 1280, 1600, 'Red with maple leaves'),
-  ('pink-3d-details', 1280, 1600, 'Pink with 3D details'),
-]
+# Our work — finished sets from the salons' own photos (see opus-site-src/INSTAGRAM.md), listed newest first in
+# /content/gallery.yml. The weekly Tuesday task adds one photo from the "Nails" Google Drive folder there.
+def load_gallery():
+    import yaml
+    f = Path(__file__).resolve().parent.parent / 'content' / 'gallery.yml'
+    rows = (yaml.safe_load(f.read_text()) or {}).get('photos') or []
+    out = []
+    for r in rows:
+        stem = r['file']
+        for suffix in ('', '-sm'):
+            if not (OUT / 'img' / f'work-{stem}{suffix}.webp').exists():
+                raise SystemExit(f'content/gallery.yml: image opus-design-v1/img/work-{stem}{suffix}.webp is missing')
+        out.append((stem, int(r['width']), int(r['height']), str(r['caption'])))
+    if len({w[0] for w in out}) != len(out):
+        raise SystemExit('content/gallery.yml: the same file is listed twice')
+    return out
+WORK = load_gallery()  # (file stem, width, height, caption)
 WORK_BY = {w[0]: w for w in WORK}
 WORK_BRIEF = 'REAL — Beautique Bar Instagram.'
 
@@ -953,7 +943,7 @@ def contact_col(l):
     <li><span>Book</span><a href="{e(l["book"])}" target="_blank" rel="noopener">Book online with Fresha ↗</a></li><li><span>Visit</span><a href="{e(l["maps"])}" target="_blank" rel="noopener">Directions ↗</a></li><li><span>Hours</span><em class="ct-val">{e(hours_inline(l["id"]))}</em></li></ul></div>'''
 # ---- /gallery/ (new page) -------------------------------------------------------------------
 add('/gallery/', page('/gallery/', 'Gallery | Beautique Bar', 'Recent nail sets by Beautique Bar technicians at Yonge & York Mills and Bridlewood Mall.', f'''
-{hero([('Home','/'),('Gallery',None)], 'Our work.', f'Recent sets by our technicians, first shared on Instagram. See more at <a href="{IG}" target="_blank" rel="noopener">@beautiquebar88</a> and <a href="{IG_YONGE}" target="_blank" rel="noopener">@beautiquebar_onyonge</a>.')}
+{hero([('Home','/'),('Gallery',None)], 'Our work.', f'Recent sets by our technicians, with a new one added every week. See more at <a href="{IG}" target="_blank" rel="noopener">@beautiquebar88</a> and <a href="{IG_YONGE}" target="_blank" rel="noopener">@beautiquebar_onyonge</a>.')}
 <section class="pg-sec pg-sec--flush" data-tone="light" aria-label="Nail sets">
   <div class="work-grid">{''.join(work_fig(w[0], 'wk', i > 5) for i, w in enumerate(WORK))}</div>
 </section>

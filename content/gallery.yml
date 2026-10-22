@@ -1,0 +1,102 @@
+# Nail gallery on beautiquebar.com/gallery/ — newest first.
+# Each photo lives in opus-design-v1/img/ as work-<file>.webp (full size, long side 1600px) and work-<file>-sm.webp (720px wide).
+# New photos are added with:  python3 opus-site-src/add_gallery_photo.py <photo> "<caption>" --drive-id <id>
+# To remove a photo from the gallery, delete its entry here (the image files can stay).
+# drive_id = the Google Drive file it came from (the weekly Tuesday task uses it to never post the same photo twice).
+photos:
+- file: plum-chrome-gems
+  width: 1320
+  height: 1320
+  caption: Plum chrome with 3D gems
+- file: white-french-gold
+  width: 1269
+  height: 1600
+  caption: White French, gold accent
+- file: burgundy-gloss
+  width: 1440
+  height: 1440
+  caption: Burgundy gloss
+- file: painted-florals-green
+  width: 900
+  height: 1600
+  caption: Hand-painted florals
+- file: milky-almond
+  width: 1356
+  height: 1600
+  caption: Milky almond
+- file: silver-chrome-almond
+  width: 1290
+  height: 1290
+  caption: Silver chrome
+- file: pink-french-flower
+  width: 1320
+  height: 1320
+  caption: Pink French with a 3D flower
+- file: leopard-tips
+  width: 1280
+  height: 1600
+  caption: Leopard tips
+- file: sheer-nude-detail
+  width: 1600
+  height: 1600
+  caption: Sheer nude, fine detail
+- file: jewelled-red-stiletto
+  width: 1440
+  height: 1440
+  caption: Jewelled red stiletto
+- file: coral-flowers
+  width: 1290
+  height: 1290
+  caption: Coral flowers
+- file: oxblood-almond
+  width: 1326
+  height: 1600
+  caption: Oxblood almond
+- file: gold-chrome-lines
+  width: 1440
+  height: 1440
+  caption: Gold chrome lines
+- file: sheer-pink-hearts
+  width: 1235
+  height: 1600
+  caption: Sheer pink, tiny hearts
+- file: brown-french
+  width: 1440
+  height: 1440
+  caption: Brown French
+- file: almond-painted-flowers
+  width: 1600
+  height: 1600
+  caption: Painted flowers
+- file: petal-art
+  width: 1440
+  height: 1485
+  caption: Petal art
+- file: caramel-coffin
+  width: 1440
+  height: 1456
+  caption: Caramel with detail
+- file: icy-blue-accents
+  width: 1440
+  height: 1440
+  caption: Icy blue accents
+- file: short-sparkle
+  width: 1200
+  height: 1600
+  caption: Short and sparkling
+- file: chocolate-cream
+  width: 1290
+  height: 1290
+  caption: Chocolate and cream
+- file: nude-sunny-florals
+  width: 1261
+  height: 1261
+  caption: Nude with sunny florals
+- file: red-maple
+  width: 1280
+  height: 1600
+  caption: Red with maple leaves
+- file: pink-3d-details
+  width: 1280
+  height: 1600
+  caption: Pink with 3D details
