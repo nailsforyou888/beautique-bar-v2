@@ -33,7 +33,9 @@ LOC = {
     addr='3430 Yonge Street, Toronto, ON', postal='M4N 2M9', locality='Toronto', short='Yonge', ig='https://www.instagram.com/beautiquebar_onyonge',
     phone='416-484-7788', tel='tel:+14164847788', text='437-434-4884', text_tel='sms:+14374344884',
     book='https://www.fresha.com/a/beautique-bar-on-yonge-toronto-3430-yonge-street-e0fzhnga/booking?menu=true',
-    maps='https://www.google.com/maps/search/?api=1&query=3430%20Yonge%20St%2C%20Toronto%2C%20ON',
+    maps='https://maps.google.com/?cid=3115765850667802737',   # opens the Google listing itself (was a Maps search)
+    cid='3115765850667802737', geo=(43.7334745, -79.4045807),   # Google Business Profile "Beautique Bar on Yonge" (Maps CID + pin), checked 22 Oct 2026
+    fresha='https://www.fresha.com/a/beautique-bar-on-yonge-toronto-3430-yonge-street-e0fzhnga', fb='https://www.facebook.com/Beautiquebaryonge',
     where='Right on the Yonge line, north of Lawrence Avenue and south of York Mills.',
     serves='Yonge & York Mills, Lawrence Park, Leaside and North Toronto',
     photo=('img/yonge-colour-wall.webp', 1170, 1554, 'Inside Beautique Bar on Yonge: the colour wall, chandelier and stations'),
@@ -41,11 +43,13 @@ LOC = {
   'warden': dict(
     id='warden', name='Bridlewood Mall', long='Beautique Bar on Warden', href='/locations/warden/',
     area='Scarborough', street='2900 Warden Avenue', city='Scarborough, ON',
-    addr='Bridlewood Mall, 2900 Warden Avenue, 2nd floor by the library, Scarborough, ON', postal='M1W 2S8', locality='Scarborough', short='Bridlewood', ig='https://www.instagram.com/beautiquebar88',
+    addr='Bridlewood Mall, 2900 Warden Avenue, Unit 244 (2nd floor, by the library), Scarborough, ON', postal='M1W 2S8', locality='Scarborough', short='Bridlewood', ig='https://www.instagram.com/beautiquebar88',
     phone='647-770-5232', tel='tel:+16477705232', text='647-770-5232', text_tel='sms:+16477705232',
     book='https://www.fresha.com/a/nails-for-you-beautique-bar-toronto-2900-warden-avenue-bkuolnwc/booking?menu=true&pId=32159',   # direct to the service menu (the old /book-now/…m7weksrj link redirected to a Book/Group/Gift chooser)
-    maps='https://www.google.com/maps/search/?api=1&query=Beautique%20Bar%2C%20Bridlewood%20Mall%2C%202900%20Warden%20Ave%2C%20Scarborough%2C%20ON',
-    where='On the 2nd floor of Bridlewood Mall, by the library.',
+    maps='https://maps.google.com/?cid=11450623828444848637',   # opens the Google listing itself (was a Maps search)
+    cid='11450623828444848637', geo=(43.798763, -79.318636),   # Google Business Profile "Beautique Bar" Unit 244 (Maps CID + pin), checked 22 Oct 2026
+    fresha=None, fb=None,   # Fresha venue is still shared with Nails For You; add it here once Fresha splits it
+    where='Unit 244, on the 2nd floor of Bridlewood Mall, by the library.',
     serves='Scarborough, Bridlewood, L’Amoreaux and surrounding communities',
     photo=('img/bridlewood-interior.webp', 1448, 1086, 'Inside Beautique Bar at Bridlewood Mall: manicure stations, the colour wall and wood-slat walls'),
   ),

@@ -12,7 +12,7 @@ categories:
       - name: Spa Manicure
         price: $25
       - name: Deluxe Spa Manicure
-        price: $35
+        price: $37
       - name: Deluxe Spa Manicure w/ Shellac
         price: $47+
       - name: Spa Pedicure
@@ -136,7 +136,7 @@ categories:
       - name: Indiv. Volume Set
         price: $150+
       - name: Bunch Light Volume Set
-        price: $80+
+        price: $85+
       - name: Bunch Med Volume Set
         price: $90+
       - name: Bunch Thick Volume

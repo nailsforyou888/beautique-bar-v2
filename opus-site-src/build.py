@@ -136,6 +136,16 @@ REV = {
   'valerie': ('The space is beautiful, classy and clean, and the staff are so welcoming. A lovely experience every time.', 'Valerie'),
 }
 
+# Google rating shown beside each salon's Book buttons — copied from the live Google listings, 21 Oct 2026. Update every few months.
+RATING = {'yonge': ('4.8', 268, 'Beautique+Bar+on+Yonge+reviews'), 'warden': ('4.3', 568, 'Beautique+Bar+Bridlewood+Mall+reviews')}
+LOC_REVIEW = {'yonge': 'samantha', 'warden': 'sangeetha'}   # which REV quote sits beside each salon's Book buttons (owner to confirm)
+
+def proof(k):
+    r, n, q = RATING[k]
+    t, who = REV[LOC_REVIEW[k]]
+    return f'''<p class="proof"><a href="https://www.google.com/search?q={q}" target="_blank" rel="noopener"><span aria-hidden="true">★</span> {r} from {n} Google reviews</a>
+  <span class="pf-q">“{e(t)}” — {e(who)}</span></p>'''
+
 # ----------------------------------------------------------------------------------------------
 # Blog
 def load_posts():
@@ -322,9 +332,14 @@ def business_ld(k):
         offers = []
         for i in items:
             a = _price_amount(i['price'])
-            offers.append({'@type': 'Offer', 'name': i['name'], **({'price': a, 'priceCurrency': 'CAD'} if a else {})})
+            if a and i['price'].strip().endswith('+'):   # "$37+" is a starting price, not a fixed one
+                price = {'priceSpecification': {'@type': 'PriceSpecification', 'minPrice': a, 'priceCurrency': 'CAD'}}
+            else:
+                price = {'price': a, 'priceCurrency': 'CAD'} if a else {}
+            offers.append({'@type': 'Offer', 'name': i['name'], **price})
         cats.append({'@type': 'OfferCatalog', 'name': c['title'], 'itemListElement': offers})
-    street = '2900 Warden Avenue, 2nd floor' if k == 'warden' else l['street']
+    street = '2900 Warden Avenue, Unit 244' if k == 'warden' else l['street']
+    gmaps = f'https://maps.google.com/?cid={l["cid"]}'
     d = {'@context': 'https://schema.org', '@type': 'NailSalon', '@id': f'{SITE_URL}{l["href"]}#business',
          'name': f'Beautique Bar — {l["name"]}', 'url': f'{SITE_URL}{l["href"]}',
          'image': [f'{SITE_URL}/{l["photo"][0]}'] + ([f'{SITE_URL}/img/bridlewood-storefront.webp'] if k == 'warden' else []),
@@ -332,7 +347,9 @@ def business_ld(k):
          'address': {'@type': 'PostalAddress', 'streetAddress': street, 'addressLocality': l['locality'], 'addressRegion': 'ON',
                      'postalCode': l['postal'], 'addressCountry': 'CA'},
          'openingHoursSpecification': [{'@type': 'OpeningHoursSpecification', 'dayOfWeek': days, 'opens': o, 'closes': c} for _, days, o, c in HOURS[k]],
-         'hasMap': l['maps'], 'sameAs': [l['ig']], 'parentOrganization': {'@id': f'{SITE_URL}/#organization'},
+         'geo': {'@type': 'GeoCoordinates', 'latitude': l['geo'][0], 'longitude': l['geo'][1]},
+         'hasMap': gmaps, 'sameAs': [gmaps, l['ig']] + [u for u in (l['fb'], l['fresha']) if u],
+         'parentOrganization': {'@id': f'{SITE_URL}/#organization'},
          'potentialAction': {'@type': 'ReserveAction', 'target': l['book'], 'name': 'Book online'},
          'hasOfferCatalog': {'@type': 'OfferCatalog', 'name': 'Services & prices', 'itemListElement': cats}}
     if k == 'warden':
@@ -364,6 +381,7 @@ def page_ld(path, title, desc, body):
     for k, l in LOC.items():
         if path == l['href']:
             lds.append(business_ld(k))
+            lds.append(faq_ld(k))
     if path in SERVICE_NAMES:
         lds.append({'@context': 'https://schema.org', '@type': 'Service', 'name': SERVICE_NAMES[path], 'serviceType': SERVICE_NAMES[path],
                     'description': desc, 'url': SITE_URL + path, 'provider': [{'@id': f'{SITE_URL}{l["href"]}#business'} for l in LOC.values()],
@@ -791,6 +809,42 @@ HERE = {
   'yonge': ['Manicures, pedicures and Shellac', 'Crystal Gel, Bio Gel and Gel-X', 'Waxing, brow tinting and threading', 'Facials', 'Eyelash extensions'],
   'warden': ['Manicures, pedicures and Shellac, including Russian manicure and BIAB', 'Gel-X, Bio Gel, Crystal Gel / acrylic and dipping powder', 'Waxing and brow tinting', 'Facials', 'Eyelash extensions'],
 }
+# Descriptive headings (proposed 15 Oct, approved 22 Oct 2026) — say what the page is and where, for search and AI answers.
+H1_LOC = {'yonge': 'Nail Salon on Yonge at York Mills', 'warden': 'Nail Salon at Bridlewood Mall, Scarborough'}
+H2_HERE = {'yonge': 'Manicures, pedicures & nails on Yonge', 'warden': 'Russian manicure, Gel-X, BIAB & more at Bridlewood Mall'}
+
+def faq_items(k):
+    """Location FAQ: every answer comes from salons.yml, the menu file or the site's terms; a question is left out if its price isn't on the menu."""
+    l = LOC[k]
+    first = lambda *names: next(((n, p) for n in names for i in all_items(k) if i['name'] == n and (p := i['price'])), None)
+    contact = f'call {l["phone"]}' + (f', text {l["text"]}' if l['text'] != l['phone'] else '')
+    qs = [('Do you take walk-ins?', 'Yes. Walk-ins are welcome. Booking ahead secures your preferred time and technician.'),
+          ('What are your hours?', hours_inline(k).replace(' · ', '. ') + '.'),
+          ('How do I book?', f'Book online with Fresha, {contact}, or message us on WhatsApp.'),
+          ('Where are you?', f'{l["street"]}, {l["city"]}. {l["where"]}')]
+    if (g := first("Gentleman's Manicure", "Gentleman's Pedicure")):
+        qs.append(('Do you do manicures and pedicures for men?', f'Yes. A {g[0]} is {g[1]}.'))
+    if (s := first('Shellac Spa Pedicure')):
+        qs.append(('Can I get Shellac on my toes?', f'Yes. A Shellac Spa Pedicure is {s[1]}.'))
+    refills = [f'{n} {p}' for n in ('Crystal Gel Refill', 'Crystal Gel / Acrylic Refill', 'Bio Gel Refill', 'Gel-X Refill') if (r := first(n)) and (p := r[1])]
+    if refills:
+        qs.append(('Do you do refills?', 'Yes. ' + ', '.join(refills) + '.'))
+    qs += [('Why do some prices say “+”?', 'Those are starting prices. The total depends on length, design and add-ons, and your technician will confirm the price before your service.'),
+           ('How do I cancel or reschedule?', f'Please let us know as early as possible so we can offer the time to another guest: {contact}.'),
+           ('What if I’m not happy with my service?', 'Tell us before you leave so we can make it right.')]
+    return qs
+
+def faq_html(k):
+    rows = ''.join(f'<details class="faq-q"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in faq_items(k))
+    return f'''<section class="pg-sec faq-sec" data-tone="light" aria-labelledby="faq">
+  {sec_head('Questions', 'Good to know', 'faq')}
+  <div class="faq">{rows}</div>
+</section>'''
+
+def faq_ld(k):
+    return {'@context': 'https://schema.org', '@type': 'FAQPage',
+            'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faq_items(k)]}
+
 def menu_html(k):
     blocks = []
     for c in MENUS[k]:
@@ -818,11 +872,11 @@ for k, l in LOC.items():
 </section>'''
     monthly = '<p class="mn-note">Monthly special pedicure: ask in salon for this month’s version.</p>'
     add(l['href'], page(l['href'], f'{l["name"]} Nail Salon | Beautique Bar', f'{l["long"]} — {l["addr"]}. Call {l["phone"]}. Book online.', f'''
-{hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(l['name']), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media,
-      actions=f'<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link wa-link" href="{WA}" target="_blank" rel="noopener">{WA_ICON}WhatsApp us</a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
+{hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(H1_LOC[k]), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media,
+      actions=f'{proof(k)}<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link wa-link" href="{WA}" target="_blank" rel="noopener">{WA_ICON}WhatsApp us</a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
 <section class="pg-sec facts-sec" data-tone="light" aria-label="Visit">
   <dl class="facts">
-    <div><dt>Address</dt><dd>{e(l["addr"])}</dd></div>
+    <div><dt>Address</dt><dd>{e(l["addr"])} {e(l["postal"])}</dd></div>
     <div><dt>Call</dt><dd><a href="{l["tel"]}">{e(l["phone"])}</a></dd></div>
     <div><dt>Text</dt><dd><a href="{l["text_tel"]}">{e(l["text"])}</a></dd></div>
     <div><dt>WhatsApp</dt><dd><a href="{WA}" target="_blank" rel="noopener">Message us — quick answers on prices &amp; hours</a></dd></div>
@@ -831,9 +885,10 @@ for k, l in LOC.items():
   </dl>
   <div class="facts-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["name"])} <span aria-hidden="true">↗</span></a>
   <a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a><a class="line-link" href="#menu">Menu &amp; prices</a></div>
+  {proof(k)}
 </section>
 <section class="pg-sec here" data-tone="light" aria-labelledby="here-h">
-  {sec_head('At this salon', 'What you can book here', 'here-h')}
+  {sec_head('At this salon', e(H2_HERE[k]), 'here-h')}
   <ul class="here-list">{''.join(f'<li>{e(x)}</li>' for x in HERE[k])}</ul>
 </section>
 {gallery}
@@ -843,6 +898,7 @@ for k, l in LOC.items():
   {monthly}
   <div class="menu">{menu_html(k)}</div>
 </section>
+{faq_html(k)}
 <section class="pg-sec other-loc" data-tone="light" aria-label="Our other salon">
   <p class="eyebrow">Our other salon</p><a class="ol-link" href="{other["href"]}"><span>{e(other["name"])}</span><small>{e(other["addr"])}</small><span aria-hidden="true">→</span></a>
 </section>
@@ -1123,6 +1179,10 @@ def refresh_home():
 </section>
 <!--/WORK-->'''
     s = re.sub(r'<!--WORK-->.*?<!--/WORK-->', lambda m: home_work, s, count=1, flags=re.S)
+    # The visual headline stays a tagline; the page's one H1 says what the business is (approved 22 Oct 2026).
+    s = s.replace('<p class="kicker eyebrow">Beautique Bar <i>/</i> Yonge &amp; York Mills <i>/</i> Bridlewood Mall</p>',
+                  '<h1 class="kicker eyebrow">Nail salons <i>/</i> Yonge &amp; York Mills <i>/</i> Bridlewood Mall</h1>')
+    s = re.sub(r'<h1 class="title" id="opening-title">(.*?)</h1>', r'<p class="title display" id="opening-title">\1</p>', s, count=1, flags=re.S)
     s = patch_home_facts(s)
     # the generated <head> block sits between the robots meta and <!--/HEAD--> (or <!--HEADSLOT--> once cleared)
     if '<!--HEADSLOT-->' in s:
@@ -1194,6 +1254,7 @@ def patch_home_facts(s):
             b = re.sub(r'href="tel:[^"]*">[^<]*</a>', f'href="{l["tel"]}">{e(disp)}</a>', b)
             b = re.sub(r'<p class="hours-line">.*?</p>', lambda _: f'<p class="hours-line">{e(hours_inline(k))}</p>', b)
             b = re.sub(r'href="https://www\.fresha\.com[^"]*"', lambda _: f'href="{e(l["book"])}"', b)
+            b = re.sub(r'href="https://(?:www\.google\.[a-z.]+/maps|maps\.google\.com/)[^"]*"', lambda _: f'href="{e(l["maps"])}"', b)
             return b
         s, n = re.subn(r'<h3>' + re.escape(e(l['name'])) + r'</h3>.*?<div class="salon-actions">.*?</div>', block, s, count=1, flags=re.S)
         assert n == 1, f'homepage salon block for {l["name"]} not found'
@@ -1213,10 +1274,14 @@ def check_home_facts(s):
     bad += [h for h in re.findall(r'<p class="hours-line">(.*?)</p>', body) if h not in {e(hours_inline(k)) for k in LOC}]
     assert not bad, f'Homepage has contact details / hours that differ from site_config.py: {bad}'
 
+def space_br(doc):
+    """Line breaks inside headings are for the eye only: give text readers a space so "Make time<br>for" isn't read as "timefor"."""
+    return re.sub(r'<(h[1-3]|p class="[^"]*(?:title|display)[^"]*")([^>]*)>(.*?)</', lambda m: m.group(0).replace('<br>', ' <br>').replace('  <br>', ' <br>'), doc, flags=re.S)
+
 def main():
     n = make_variants()
     for path in list(PAGES):
-        PAGES[path] = add_srcset(PAGES[path])
+        PAGES[path] = space_br(add_srcset(PAGES[path]))
     for path, doc in PAGES.items():
         if path.endswith('.html'):
             f = OUT / path.lstrip('/')
@@ -1228,7 +1293,7 @@ def main():
     refresh_home()
     home = OUT / 'index.html'
     check_home_facts(home.read_text())
-    home.write_text(add_srcset(home.read_text()))
+    home.write_text(space_br(add_srcset(home.read_text())))
     print(f'{n} responsive image variants generated')
     # review file
     lines = ['# Blog audit (generated)', '']
