@@ -764,7 +764,7 @@ SERVICE_FAQ['/nails/biab/'] = qa(
 )
 add('/nails/biab/', page('/nails/biab/', 'BIAB | Beautique Bar', 'BIAB builder gel at Beautique Bar, Bridlewood Mall.', f'''
 {hero([('Home','/'),('Nails','/nails/'),('BIAB',None)], 'BIAB', 'A builder gel that strengthens your natural nails without adding length. On our Bridlewood Mall menu as Strong Shellac.',
-      img('img/work-sheer-nude-detail.webp', 1600, 1600, 'Short natural nails in a sheer nude with fine detail', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
+      img('img/work-short-sparkle.webp', 1200, 1600, 'Short square nails with sparkling 3D details', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('At a glance', 'What to know before you book', 'opt-h')}
   {options([
@@ -791,7 +791,7 @@ SERVICE_FAQ['/nails/russian-manicure/'] = qa(
 )
 add('/nails/russian-manicure/', page('/nails/russian-manicure/', 'Russian Manicure | Beautique Bar', 'Russian manicure at Beautique Bar, Bridlewood Mall.', f'''
 {hero([('Home','/'),('Nails','/nails/'),('Russian Manicure',None)], 'Russian<br>Manicure', 'A detailed manicure with careful cuticle work, finished with regular polish or Shellac. At Bridlewood Mall.',
-      img('img/work-sheer-pink-hearts.webp', 1235, 1600, 'Short sheer pink nails with tiny hearts', 'frame', '50% 45%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
+      img('img/work-red-maple.webp', 1280, 1600, 'Short red nails with hand-painted maple leaves', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('At a glance', 'What to know before you book', 'opt-h')}
   {options([
