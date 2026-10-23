@@ -41,7 +41,7 @@ LOC = {
     photo=('img/yonge-colour-wall.webp', 1170, 1554, 'Inside Beautique Bar on Yonge: the colour wall, chandelier and stations'),
   ),
   'warden': dict(
-    id='warden', name='Bridlewood Mall', long='Beautique Bar on Warden', href='/locations/warden/',
+    id='warden', name='Bridlewood Mall', long='Beautique Bar Bridlewood', href='/locations/warden/',
     area='Scarborough', street='2900 Warden Avenue', city='Scarborough, ON',
     addr='Bridlewood Mall, 2900 Warden Avenue, Unit 244 (2nd floor, by the library), Scarborough, ON', postal='M1W 2S8', locality='Scarborough', short='Bridlewood', ig='https://www.instagram.com/beautiquebar88',
     phone='647-770-5232', tel='tel:+16477705232', text='647-770-5232', text_tel='sms:+16477705232',

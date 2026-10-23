@@ -1045,6 +1045,18 @@ def faq_html(k):
 def faq_ld(k):
     return faq_data(faq_items(k))
 
+def menu_updated(k):
+    """Date the salon's price menu file last changed, from git history (None on a shallow clone, where it can't be known)."""
+    import subprocess
+    try:
+        run = lambda *a: subprocess.run(['git', *a], cwd=SRC, capture_output=True, text=True, check=True).stdout.strip()
+        if run('rev-parse', '--is-shallow-repository') == 'true':
+            return None
+        d = run('log', '-1', '--format=%cs', '--', f'../content/menus/{k}.yml')
+        return datetime.date.fromisoformat(d) if d else None
+    except Exception:
+        return None
+
 def menu_html(k):
     blocks = []
     for c in MENUS[k]:
@@ -1071,6 +1083,9 @@ for k, l in LOC.items():
   {work_strip(['plum-chrome-gems', 'burgundy-gloss', 'brown-french', 'leopard-tips'])}
 </section>'''
     monthly = '<p class="mn-note">Monthly special pedicure: ask in salon for this month’s version.</p>'
+    upd = menu_updated(k)
+    if upd:
+        monthly = f'<p class="mn-note">Menu updated <time datetime="{upd.isoformat()}">{upd.strftime('%B %-d, %Y')}</time>.</p>' + monthly
     add(l['href'], page(l['href'], f'{l["name"]} Nail Salon | Beautique Bar', f'{l["long"]} — {l["addr"]}. Call {l["phone"]}. Book online.', f'''
 {hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(H1_LOC[k]), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media,
       actions=f'{proof(k)}<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link wa-link" href="{WA}" target="_blank" rel="noopener">{WA_ICON}WhatsApp us</a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
@@ -1479,6 +1494,36 @@ def space_br(doc):
     """Line breaks inside headings are for the eye only: give text readers a space so "Make time<br>for" isn't read as "timefor"."""
     return re.sub(r'<(h[1-3]|p class="[^"]*(?:title|display)[^"]*")([^>]*)>(.*?)</', lambda m: m.group(0).replace('<br>', ' <br>').replace('  <br>', ' <br>'), doc, flags=re.S)
 
+def llms_txt():
+    """/llms.txt: a plain-text summary for AI assistants and crawlers, built from the same menus and salon data as the pages."""
+    out = ['# Beautique Bar', '',
+           '> Beautique Bar is a nail salon with two Toronto locations: Yonge & York Mills (3430 Yonge Street) and Bridlewood Mall '
+           '(2900 Warden Avenue, Scarborough). Manicures, pedicures, Shellac, Gel-X, Bio Gel, acrylic, nail art, lashes, waxing and facials. '
+           'Walk-ins welcome; book online with Fresha.', '']
+    for k, l in LOC.items():
+        out += [f'## {l["long"]} ({l["name"]})',
+                f'- Address: {l["addr"]} {l["postal"]}',
+                f'- Getting there: {l["where"]}',
+                f'- Call: {l["phone"]}' + (f' · Text: {l["text"]}' if l['text'] != l['phone'] else ' (call or text)'),
+                f'- Book online: {l["book"]}',
+                f'- Page with full menu: {SITE_URL}{l["href"]}',
+                *[f'- Hours, {d}: {t}' for d, t in hours_rows(k)],
+                f'- Services: {"; ".join(HERE[k])}', '',
+                f'### Prices at {l["name"]} (CAD)',
+                'Prices are guides and may vary with length, design and add-ons. "+" means from.', '']
+        for c in MENUS[k]:
+            out.append(f'#### {c["title"]}')
+            out += [f'- {i["name"]}: {i["price"]}' for i in c['items'] if i['price']]
+            for s in c.get('subs', []):
+                out += [f'- {s["title"]}: {i["name"]}: {i["price"]}' for i in s['items'] if i['price']]
+            out.append('')
+    out += ['## Service guides',
+            *[f'- [{t}]({SITE_URL}{h})' for t, h in [('All nail services', '/nails/'), ('Manicure & pedicure', '/nails/manicure-pedicure/'),
+              ('Pedicures', '/nails/pedicure/'), ('Gel-X', '/nails/gel-x/'), ('Bio Gel', '/nails/bio-gel/'), ('Acrylic', '/nails/acrylic/'),
+              ('BIAB', '/nails/biab/'), ('Russian manicure', '/nails/russian-manicure/'), ('Nail art', '/nails/nail-art/'),
+              ('Eyelash extensions', '/eyelash-extensions/'), ('Facials', '/skin/facials/'), ('Contact', '/contact/')]], '']
+    return '\n'.join(out)
+
 def main():
     n = make_variants()
     for path in list(PAGES):
@@ -1491,6 +1536,7 @@ def main():
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(doc)
     (OUT / 'rss.xml').write_text(RSS)
+    (OUT / 'llms.txt').write_text(llms_txt())
     refresh_home()
     home = OUT / 'index.html'
     check_home_facts(home.read_text())
