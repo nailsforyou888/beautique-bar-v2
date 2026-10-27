@@ -260,3 +260,20 @@ body.inner{background:var(--paper)}
 .faq-q[open] summary::after{transform:rotate(45deg)}
 .faq-q p{margin:0 0 24px;max-width:62ch;font-size:15px;line-height:1.6}
 .opt p a{border-bottom:1px solid currentColor}
+/* "At a glance" quick-answer card (27 Oct 2026): small labels, prices as the strongest text */
+.glance{padding-top:72px;padding-bottom:72px}
+.gl-card{background:var(--linen);border:1px solid var(--hair);padding:40px 44px 34px}
+.gl-card>.eyebrow{margin-bottom:10px}
+.gl-card h2{font-size:clamp(32px,3vw,44px);line-height:1.05;margin-bottom:28px}
+.gl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 4vw;margin:0;border-top:1px solid var(--hair)}
+.gl-row{padding:20px 0;border-bottom:1px solid var(--hair)}
+.gl-row dt{font:500 11.5px/1.45 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+.gl-row dd{margin:0;font-size:16.5px;line-height:1.55;font-weight:400}
+.gl-row dd a{border-bottom:1px solid currentColor}
+.gl-p{display:flex;justify-content:space-between;gap:16px;max-width:380px}
+.gl-p b{font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.gl-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 32px;margin-top:22px}
+.glance-date{font-size:14px;font-weight:400;max-width:640px}
+.glance-date time{white-space:nowrap}
+.gl-book{min-height:44px;display:inline-flex;align-items:center}
+@media (max-width:520px){.glance{padding-top:48px;padding-bottom:48px}.gl-card{padding:28px 20px 22px;margin:0 -2vw}.gl-row dd{padding-right:0}}

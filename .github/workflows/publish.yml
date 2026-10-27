@@ -30,6 +30,8 @@ jobs:
       HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, so the "prices last updated" date comes from the last menu change
 
       - uses: actions/setup-python@v5
         with:
