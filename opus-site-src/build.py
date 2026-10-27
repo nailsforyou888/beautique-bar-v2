@@ -19,7 +19,7 @@ import markdown
 
 SRC = Path(__file__).resolve().parent
 OUT = SRC.parent / 'opus-design-v1'
-VERSION = '10'
+VERSION = '11'
 e = html.escape
 CUR = ' aria-current="page"'
 LAZY = ' loading="lazy"'
@@ -254,8 +254,9 @@ def footer(path=None):
     locs = ''.join(f'''<div class="ft-loc"><p class="ft-h"><a href="{l["href"]}">{e(l["name"])}</a></p>
       <p>{e(l["addr"])}</p><p><a href="{l["tel"]}">Call {e(l["phone"])}</a>{f' · Text {e(l["text"])}' if l["text"] != l["phone"] else ' · Call or text'}</p></div>''' for l in LOC.values())
     fab = f'<a class="wa-fab" href="{WA}" target="_blank" rel="noopener" aria-label="Message Beautique Bar on WhatsApp" data-placement="floating-button">{WA_ICON}<span><span class="wa-q">Questions? </span>WhatsApp us</span></a>'
+    mbar = f'<div class="m-bar" data-placement="mobile-book-bar"><button type="button" class="m-book" data-book>Book appointment</button><a class="m-wa" href="{WA}" target="_blank" rel="noopener" aria-label="WhatsApp us">{WA_ICON}</a></div>'
     return f'''<footer class="site-footer">
-  {fab}
+  {fab}{mbar}
   <div class="ft-grid">
     <div class="ft-brand"><a class="ft-lockup" href="/" aria-label="Beautique Bar — home"></a><p>Nails, lashes and skin at Yonge &amp; York Mills and Bridlewood Mall.</p></div>
     <div class="ft-locs">{locs}</div>
@@ -271,13 +272,30 @@ def footer(path=None):
   </div>
 </footer>'''
 
-def dialog():
-    rows = ''.join(f'<a href="{e(l["book"])}" target="_blank" rel="noopener"><span>{e(l["name"])}</span><small>{e(l["street"])}, {e(l["area"])} · Book with Fresha ↗</small></a>' for l in LOC.values())
+DLG_WHERE = {'yonge': '3430 Yonge Street, Toronto', 'warden': 'Bridlewood Mall, Unit 244 (2nd floor), Scarborough'}
+DLG_NOTE = {'/nails/acrylic/': {'yonge': 'This salon’s menu lists acrylic sets as Crystal Gel. Call {tel} to confirm before you book.'}}
+
+def dialog(path=None):
+    """The Book window. On a service page it knows which salons offer that service (SERVICE_AT) and any
+    per-salon note (DLG_NOTE); both salons are always listed, in the same order."""
+    at = SERVICE_AT.get(path, list(LOC))
+    svc = SERVICE_NAMES.get(path)
+    rows = []
+    for k, l in LOC.items():
+        tel = f'<a href="{l["tel"]}">{e(l["phone"])}</a>'
+        hours = f'<small class="dlg-hours">{e(hours_inline(k))}</small>'
+        if k not in at:
+            rows.append(f'''<div class="dlg-row is-off"><p class="dlg-name">{e(l["name"])}</p>
+    <p class="dlg-note">{e(svc or 'This treatment')} isn’t on this salon’s menu. Call {tel} or <a href="{WA}" target="_blank" rel="noopener">WhatsApp us</a> to ask what’s available.</p></div>''')
+            continue
+        note = DLG_NOTE.get(path, {}).get(k)
+        rows.append(f'''<div class="dlg-row"><a class="dlg-go" href="{e(l["book"])}" target="_blank" rel="noopener"><span>{e(l["name"])}</span><small>{e(DLG_WHERE[k])} · Book with Fresha ↗</small>{hours}</a>{f'<p class="dlg-note">{note.format(tel=tel)}</p>' if note else ''}</div>''')
     return f'''<dialog class="book-dialog" aria-labelledby="dlg-title">
   <button type="button" class="dlg-close" aria-label="Close">×</button>
   <p class="eyebrow">Choose your salon</p>
   <h2 id="dlg-title">Where shall we see you?</h2>
-  {rows}
+  <p class="dlg-sub">Fresha opens next, where you choose your service and time.</p>
+  <div class="dlg-rows">{''.join(rows)}</div>
   <p class="dlg-wa">{WA_ICON} Questions before you book? <a href="{WA}" target="_blank" rel="noopener">WhatsApp us</a></p>
 </dialog>'''
 
@@ -428,7 +446,15 @@ def head_common(path, title, desc, og_type='website'):
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#211e1a">'''
 
+def gl_book(path):
+    """Book buttons inside an "At a glance" card: one per salon that offers the page's service, Yonge first."""
+    at = SERVICE_AT.get(path, list(LOC))
+    return '<div class="gl-actions">' + ''.join(
+        f'<a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} <span aria-hidden="true">↗</span></a>'
+        for k, l in LOC.items() if k in at) + '</div>'
+
 def page(path, title, desc, body, tone='light', active=None, noindex_extra=False, bodyclass=''):
+    body = body.replace('<!--GL-BOOK-->', gl_book(path))
     if path in SEO:
         title, desc = SEO[path]
     canonical = f'{SITE_URL}{path}'
@@ -459,7 +485,7 @@ def page(path, title, desc, body, tone='light', active=None, noindex_extra=False
 {body}
 </main>
 {footer(path)}
-{dialog()}
+{dialog(path)}
 </body>
 </html>
 '''
@@ -651,10 +677,11 @@ def glance(rows, h2='Before you book', dated=True):
     """A compact card: small labels, prices as the largest text. rows: (label, html); a row whose html is
     None (price missing from a menu) is left out. Links down to the page's "Where to book" prices."""
     items = ''.join(f'<div class="gl-row"><dt>{e(t)}</dt><dd>{v}</dd></div>' for t, v in rows if v)
-    foot = f'{prices_updated_html() if dated else ""}<a class="line-link gl-book" href="#book-h">See prices &amp; book <span aria-hidden="true">↓</span></a>'
+    foot = f'{prices_updated_html() if dated else ""}<a class="line-link gl-book" href="#book-h">All prices <span aria-hidden="true">↓</span></a>'
     return f'''<section class="pg-sec glance" data-tone="light" aria-labelledby="glance-h">
   <div class="gl-card"><p class="eyebrow">At a glance</p><h2 id="glance-h">{h2}</h2>
   <dl class="gl-list">{items}</dl>
+  <!--GL-BOOK-->
   <div class="gl-foot">{foot}</div></div>
 </section>'''
 

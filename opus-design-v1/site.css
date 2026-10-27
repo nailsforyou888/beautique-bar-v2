@@ -277,3 +277,5 @@ body.inner{background:var(--paper)}
 .glance-date time{white-space:nowrap}
 .gl-book{min-height:44px;display:inline-flex;align-items:center}
 @media (max-width:520px){.glance{padding-top:48px;padding-bottom:48px}.gl-card{padding:28px 20px 22px;margin:0 -2vw}.gl-row dd{padding-right:0}}
+.gl-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+@media (max-width:520px){.gl-actions .btn-solid{flex:1 1 100%;justify-content:center}}

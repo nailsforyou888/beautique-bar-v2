@@ -114,6 +114,7 @@
     if (footer && footer.getBoundingClientRect().top <= probe) bg = 'dark';
     if (!document.documentElement.classList.contains('menu-open') && header.dataset.bg !== bg) header.dataset.bg = bg;
     header.classList.toggle('is-solid', scrollY > 30);
+    document.body.classList.toggle('mbar-on', scrollY > innerHeight * .6);   // phone Book bar (CSS shows it only on phones)
   }
   const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(draw); } };
   addEventListener('scroll', schedule, { passive: true });
