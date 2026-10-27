@@ -612,10 +612,20 @@ def qa(*rows):
 def both(fmt, y, w):
     return fmt.format(y=y, w=w) if y and w else None
 
+def gl_price(where, p):
+    """One salon-and-price line in an "At a glance" box."""
+    return f'<span class="gl-p"><span>{where}</span> <b>{e(p)}</b></span>' if p else None
+
 def at_both(y_name, w_name=None):
-    """'Bridlewood Mall $25, Yonge & York Mills $27' from each salon's menu, or None if either is missing."""
+    """Both salons' prices from their menus, Yonge first like the price lists; None if either is missing."""
     y, w = pfrom('yonge', y_name), pfrom('warden', w_name or y_name)
-    return f'Bridlewood Mall {w}, Yonge &amp; York Mills {y}' if y and w else None
+    if not (y and w):
+        return None
+    return gl_price('At both salons', y) if y == w else gl_price('Yonge &amp; York Mills', y) + gl_price('Bridlewood Mall', w)
+
+def only_at(k, name, label=None):
+    """A service on one salon's menu: 'Bridlewood Mall only · $50'."""
+    return gl_price(label or f'{LOC[k]["name"]} only', pfrom(k, name))
 
 # "At a glance" quick answer near the top of each service page, for clients and AI answers (27 Oct 2026).
 # The date is the last change to the price menus in git (Pages CMS saves are commits), so it only moves when prices do.
@@ -637,12 +647,15 @@ def prices_updated_inline():
     d = PRICES_UPDATED
     return f' Last updated <time datetime="{d.isoformat()}">{d.strftime("%B %-d, %Y")}</time>.' if d else ''
 
-def glance(rows, h2='What to know before you book', dated=True):
-    """rows: (label, text); a row whose text is None (price missing from a menu) is left out."""
-    return f'''<section class="pg-sec" data-tone="light" aria-labelledby="glance-h">
-  {sec_head('At a glance', h2, 'glance-h')}
-  {options([r for r in rows if r[1]])}
-  {prices_updated_html() if dated else ''}
+def glance(rows, h2='Before you book', dated=True):
+    """A compact card: small labels, prices as the largest text. rows: (label, html); a row whose html is
+    None (price missing from a menu) is left out. Links down to the page's "Where to book" prices."""
+    items = ''.join(f'<div class="gl-row"><dt>{e(t)}</dt><dd>{v}</dd></div>' for t, v in rows if v)
+    foot = f'{prices_updated_html() if dated else ""}<a class="line-link gl-book" href="#book-h">See prices &amp; book <span aria-hidden="true">↓</span></a>'
+    return f'''<section class="pg-sec glance" data-tone="light" aria-labelledby="glance-h">
+  <div class="gl-card"><p class="eyebrow">At a glance</p><h2 id="glance-h">{h2}</h2>
+  <dl class="gl-list">{items}</dl>
+  <div class="gl-foot">{foot}</div></div>
 </section>'''
 
 # ---- /nails/ ---------------------------------------------------------------------------------
@@ -683,7 +696,7 @@ add('/nails/manicure-pedicure/', page('/nails/manicure-pedicure/', 'Manicure & P
     ('Spa manicure', at_both('Spa Manicure')),
     ('Spa pedicure', at_both('Spa Pedicure')),
     ('Manicure & pedicure together', at_both('Spa Manicure & Pedicure')),
-    ('With Shellac', (lambda t: t and f'Shellac spa manicure: {t}.')(at_both('Shellac Spa Manicure', 'Spa Manicure w/ Shellac'))),
+    ('Shellac spa manicure', at_both('Shellac Spa Manicure', 'Spa Manicure w/ Shellac')),
     ('Where', 'Both salons. The Russian and deluxe spa manicures are on the Bridlewood Mall menu.'),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="ped-h">
@@ -726,7 +739,7 @@ add('/nails/bio-gel/', page('/nails/bio-gel/', 'Bio Gel Nails | Beautique Bar', 
     ('Overlay', at_both('Bio Gel Full Set', 'Bio Gel Overlay')),
     ('Full set with tips', at_both('Bio Gel Full Set w/ Tips')),
     ('Refill', at_both('Bio Gel Refill')),
-    ('Where', 'Both salons. Length and design can change the final price; your technician confirms it before starting.'),
+    ('Where', 'Both salons. The Yonge &amp; York Mills menu lists the overlay as Bio Gel Full Set. Length and design can change the price; your technician confirms it first.'),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Options', 'How to book it', 'opt-h')}
@@ -791,8 +804,8 @@ add('/nails/gel-x/', page('/nails/gel-x/', 'Gel-X Nails | Beautique Bar', 'Gel-X
       img('img/work-gold-chrome-lines.webp', 1440, 1440, 'Long nails with fine gold chrome lines', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
 {glance([
     ('What it is', 'Each Gel-X tip covers the whole nail. It is bonded with gel, cured under a lamp, then shaped and finished, so you get length without a sculpted acrylic set.'),
-    ('Full set', f'Bridlewood Mall: {gx["warden"] or "see menu"}. Yonge &amp; York Mills: {gx["yonge"] or "see menu"}. Length and design change the final price.'),
-    ('Refills', 'A refill fills in the growth so the set stays even. Most clients book one every three to four weeks.'),
+    ('Full set', at_both('Gel-X Full Set')),
+    ('Refill', at_both('Gel-X Refill')),
     ('Finishes', 'French, chrome, ombré and custom designs can be added. See <a href="/nails/nail-art/">nail art</a>.'),
   ])}
 {book_pair({'yonge': ['Gel-X Full Set', 'Gel-X Refill', 'Chrome/Ombre/Unicorn', 'French on Artificial Nails', 'Artificial Nail Removal Only'],
@@ -821,7 +834,8 @@ add('/nails/biab/', page('/nails/biab/', 'BIAB | Beautique Bar', 'BIAB builder g
 {glance([
     ('What it is', 'A thicker gel than Shellac, built up over your own nails for strength and a smooth shape, then finished in colour.'),
     ('Who it suits', 'Clients who want to keep their natural length but find their nails bend, peel or break.'),
-    ('Price', f'{bi or "See the menu"} on its own, or {bim or "see the menu"} with a spa manicure.'),
+    ('On its own', only_at('warden', 'BIAB (Strong Shellac) no Manicure', 'Bridlewood Mall')),
+    ('With a spa manicure', only_at('warden', 'BIAB (Strong Shellac) w Spa Manicure', 'Bridlewood Mall')),
     ('Where', 'Bridlewood Mall only. At Yonge &amp; York Mills, ask for a <a href="/nails/bio-gel/">Bio Gel</a> overlay.'),
   ])}
 {book_pair({'yonge': 'BIAB is on the Bridlewood Mall menu. At Yonge &amp; York Mills, a Bio Gel overlay is the closest option.',
@@ -844,7 +858,8 @@ add('/nails/russian-manicure/', page('/nails/russian-manicure/', 'Russian Manicu
       img('img/work-red-maple.webp', 1280, 1600, 'Short red nails with hand-painted maple leaves', 'frame', '50% 50%', False, WORK_BRIEF + ' Service type not stated on the post.'))}
 {glance([
     ('What it is', 'Careful, detailed cuticle work and shaping, so colour can be applied close to the cuticle for a clean finish.'),
-    ('Price', f'{ru or "See the menu"}, or {rus or "see the menu"} with Shellac.'),
+    ('Russian manicure', only_at('warden', 'Russian Manicure', 'Bridlewood Mall')),
+    ('With Shellac', only_at('warden', 'Russian Manicure w/ Shellac', 'Bridlewood Mall')),
     ('Where', 'Bridlewood Mall only. At Yonge &amp; York Mills, see <a href="/nails/manicure-pedicure/">spa manicures</a>.'),
   ])}
 {book_pair({'yonge': 'The Russian manicure is on the Bridlewood Mall menu. Yonge &amp; York Mills offers spa and Shellac spa manicures.',
@@ -874,7 +889,7 @@ add('/nails/pedicure/', page('/nails/pedicure/', 'Pedicures | Beautique Bar', 'S
     ('What it is', 'A foot soak, nail and cuticle care, light exfoliation and a hot-stone massage in a massage chair, finished with your choice of polish.'),
     ('Spa pedicure', at_both('Spa Pedicure')),
     ('Deluxe spa pedicure', at_both('Deluxe Spa Pedicure')),
-    ('With Shellac', (lambda t: t and f'Spa pedicure with Shellac: {t}.')(at_both('Shellac Spa Pedicure', 'Spa Pedicure w/Shellac'))),
+    ('Spa pedicure with Shellac', at_both('Shellac Spa Pedicure', 'Spa Pedicure w/Shellac')),
     ('Walk-ins', 'Welcome at both salons. Booking ahead secures your time and technician.'),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="ped-h">
@@ -912,7 +927,7 @@ add('/nails/nail-art/', page('/nails/nail-art/', 'Nail Art | Beautique Bar', 'Na
     ('Bring your idea', f'Send a photo of the design you want on <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a> before your visit. We will tell you the price and how much time to book.'),
     ('On your own nails or a set', 'Designs go on a Shellac manicure, or on <a href="/nails/gel-x/">Gel-X</a>, <a href="/nails/bio-gel/">Bio Gel</a> or <a href="/nails/acrylic/">acrylic</a> if you want length.'),
     ('Priced by detail', 'A French tip or a simple accent costs less than full hand-painted art. Design prices are added to your manicure or set, and your technician confirms the total before starting.'),
-  ], 'How it works', dated=False)}
+  ], 'How nail art works', dated=False)}
 <section class="pg-sec" data-tone="light" aria-labelledby="work-h">
   {sec_head('Our work', 'Recent designs', 'work-h', '<a class="line-link" href="/gallery/">See the gallery <span aria-hidden="true">→</span></a>')}
   {work_strip(['plum-chrome-gems', 'pink-french-flower', 'almond-painted-flowers', 'leopard-tips'])}
@@ -949,8 +964,7 @@ add('/eyelash-extensions/', page('/eyelash-extensions/', 'Eyelash Extensions | B
     ('What it is', 'Individual extensions applied to your natural lashes, as a classic, hybrid or volume set.'),
     ('Classic set', at_both('Classic Set', 'Individual Classic Set')),
     ('Volume set', at_both('Volume Set', 'Indiv. Volume Set')),
-    ('Refills', (lambda r: r and f'On the Yonge &amp; York Mills menu, {r}. At Bridlewood Mall, ask when you book.')(pfrom('yonge', 'Refill Classic'))),
-    ('Where', 'Both salons.'),
+    ('Classic refill', (lambda r: r and r + gl_price('Bridlewood Mall', 'Ask when you book'))(only_at('yonge', 'Refill Classic', 'Yonge &amp; York Mills'))),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Options', 'Choose your set', 'opt-h')}
@@ -977,9 +991,8 @@ add('/skin/facials/', page('/skin/facials/', 'Facials | Beautique Bar', 'Deep-po
       img('img/skin-facial.webp', 1536, 1024, 'A relaxing facial with a cream mask, eyes closed', 'frame', '45% 50%', False, 'Licensed stock chosen by the owner.'))}
 {glance([
     ('Deep-pore cleansing & relaxing facial', at_both('Deep-pore Cleansing & Relaxing Facial')),
-    ('Classic relaxing facial', (lambda p: p and f'Bridlewood Mall {p}')(pfrom('warden', 'Classic Relaxing Facial'))),
-    ('Anti-wrinkle or firming facial', (lambda p: p and f'With a lifting mask, Yonge &amp; York Mills {p}')(pfrom('yonge', 'Anti-wrinkle & Hydrating Facial w/ Lifting Mask'))),
-    ('Where', 'Both salons. Each salon has its own facial menu, listed below.'),
+    ('Classic relaxing facial', only_at('warden', 'Classic Relaxing Facial')),
+    ('Anti-wrinkle or firming, with lifting mask', only_at('yonge', 'Anti-wrinkle & Hydrating Facial w/ Lifting Mask')),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('On the menus', 'Choose your facial', 'opt-h')}
@@ -1005,7 +1018,7 @@ add('/skin/facial-hair-removal/', page('/skin/facial-hair-removal/', 'Facial Hai
     ('Eyebrow wax', at_both('Eyebrow Wax')),
     ('Upper lip wax', at_both('Upper Lip')),
     ('Full face wax', at_both('Full Face')),
-    ('Threading', (lambda p: p and f'Yonge &amp; York Mills only, eyebrow threading {p}')(pfrom('yonge', 'Eyebrow Threading'))),
+    ('Eyebrow threading', only_at('yonge', 'Eyebrow Threading')),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Methods', 'Waxing, tinting, threading', 'opt-h')}
@@ -1029,7 +1042,6 @@ add('/skin/body-hair-removal/', page('/skin/body-hair-removal/', 'Body Hair Remo
     ('Underarms', at_both('Under Arms')),
     ('Full legs', at_both('Full Legs')),
     ('Brazilian', at_both('Brazilian')),
-    ('Where', 'Both salons. Every area and price is on each salon’s menu below.'),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('Waxing', 'Areas on the menu', 'opt-h')}
