@@ -255,9 +255,11 @@ body.show-notes .window::after{bottom:auto;top:100px}
   .nails-rail{position:relative;top:auto;height:auto}
   .nail-index{margin-top:40px}
   .s2,.s3,.s4,.s5{width:100%;margin-left:0}
-  .service-photo{position:sticky;top:76px;z-index:2;height:34vh;order:-1;margin-bottom:6px}
+  /* The extra bottom margin releases the sticky photo early, so the last row ("Skin") never slides under it; the list is pulled back up to keep the 6px gap. */
+  .service-photo{position:sticky;top:76px;z-index:2;height:34vh;order:-1;margin-bottom:170px}
+  .service-list{margin-top:-164px}
   .service,.service:last-child{min-height:30vh;padding:26px 0}
-  .service:last-child{min-height:44vh}
+  .service:last-child{min-height:0;padding-bottom:40px}
   .service-photo .sp{clip-path:none;opacity:0;transform:none;transition:opacity .7s ease}
   .service-photo .sp.is-active{opacity:1;clip-path:none;transform:none}
   .service-photo .sp.was-active{opacity:1;clip-path:none;transform:none;transition:none}
@@ -402,3 +404,10 @@ body.show-notes .window::after{bottom:auto;top:100px}
 .site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 @media (min-width:821px){.wa-fab{right:32px;bottom:32px}}
 @media (max-width:360px){.wa-fab .wa-q{display:none}}
+/* Phones: the bar became a compact icon button so it never sits on top of Book buttons, hours or reviews. */
+@media (max-width:820px){
+  .wa-fab{width:50px;height:50px;min-height:0;padding:0;justify-content:center;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .wa-fab .wa-ico{width:22px;height:22px}
+  .wa-fab>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .site-footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}

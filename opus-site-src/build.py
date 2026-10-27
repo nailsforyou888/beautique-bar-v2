@@ -19,7 +19,7 @@ import markdown
 
 SRC = Path(__file__).resolve().parent
 OUT = SRC.parent / 'opus-design-v1'
-VERSION = '8'
+VERSION = '9'
 e = html.escape
 CUR = ' aria-current="page"'
 LAZY = ' loading="lazy"'
@@ -1346,7 +1346,7 @@ def home_head():
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 {head_common('/', HOME_TITLE, HOME_DESC)}
-<link rel="preload" as="image" href="/img/yonge-pedicure-row-1600.webp" imagesrcset="/img/yonge-pedicure-row-800.webp 800w, /img/yonge-pedicure-row-1200.webp 1200w, /img/yonge-pedicure-row-1600.webp 1600w, /img/yonge-pedicure-row.webp 2400w" imagesizes="100vw" fetchpriority="high">
+<link rel="preload" as="image" href="/img/yonge-pedicure-row-1600.webp" imagesrcset="/img/yonge-pedicure-row-800.webp 800w, /img/yonge-pedicure-row-1200.webp 1200w, /img/yonge-pedicure-row-1600.webp 1600w, /img/yonge-pedicure-row.webp 2400w" imagesizes="(max-aspect-ratio:4/3) 134vh, 100vw" fetchpriority="high">
 <link rel="stylesheet" href="/opus.css?v={VERSION}">
 {lds}<!--/HEAD-->'''
 

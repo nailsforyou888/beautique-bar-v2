@@ -76,7 +76,9 @@
     o.hands.style.transform = `scale(${lerp(1.08, 1, range(p, .78, 1))})`;
 
     const r = range(p, .76, .84);
-    o.rl.style.opacity = r; o.rr.style.opacity = r;
+    // As the scene scrolls away, the copy fades before it can slide under the header (matters on phones).
+    const exit = clamp((stage.getBoundingClientRect().bottom - 150) / 150);
+    o.rl.style.opacity = r * exit; o.rr.style.opacity = r * exit;
     o.rl.style.transform = `translateY(-50%) translate3d(${lerp(-24, 0, r)}px,0,0)`;
     o.rr.style.transform = `translateY(-50%) translate3d(${lerp(24, 0, r)}px,0,0)`;
 

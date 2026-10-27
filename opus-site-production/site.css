@@ -124,7 +124,7 @@ body.inner{background:var(--paper)}
 .ct-col h2{font-size:clamp(38px,3.4vw,58px);line-height:1;margin:16px 0}
 .ct-col .addr{font-size:15px;margin-bottom:26px}
 .ct-list{border-top:1px solid var(--hair)}
-.ct-list li{display:grid;grid-template-columns:90px 1fr;padding:14px 0;border-bottom:1px solid var(--hair);font-size:15.5px}
+.ct-list li{display:grid;grid-template-columns:104px 1fr;column-gap:12px;padding:14px 0;border-bottom:1px solid var(--hair);font-size:15.5px}
 .ct-list span{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;padding-top:3px}
 .ct-list a:hover{text-decoration:underline;text-underline-offset:5px}
 .ct-more{margin-top:80px;display:grid;gap:14px}
@@ -199,7 +199,8 @@ body.inner{background:var(--paper)}
   .facts>div,.facts>div+div{padding-left:0;border-left:0}
   .facts>div+div{border-top:1px solid var(--hair)}
   .svc>a{grid-template-columns:40px 1fr auto}.svc p,.svc .avail{margin-left:40px}
-  .ct-list li{grid-template-columns:70px 1fr}
+  .ct-list li{grid-template-columns:96px 1fr;column-gap:10px}
+  .ct-list a{overflow-wrap:anywhere}
 }
 @media (prefers-reduced-motion:reduce){
   .js .pg-sec .reveal-in{opacity:1;transform:none;transition:none}
@@ -220,3 +221,42 @@ body.inner{background:var(--paper)}
 @media (max-width:900px){.facts>div:nth-child(even){padding-left:4vw;border-left:1px solid var(--hair)}.facts>div:nth-child(odd){padding-left:0;border-left:0}}
 .gal--one{grid-template-columns:1fr}.gal--one .g1{height:72vh}
 @media (max-width:900px){.gal--one .g1{height:48vh}}
+
+/* WhatsApp (one shared number for both salons; the assistant asks which salon) */
+.wa-ico{width:1.05em;height:1.05em;vertical-align:-.16em;margin-right:.45em;flex:none}
+.wa-link{display:inline-flex;align-items:center}
+.dlg-wa{margin:26px 0 0;font-size:14px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.book-dialog .dlg-wa a{display:inline;padding:0;border:0;text-decoration:underline;text-underline-offset:3px}
+.book-dialog .dlg-wa .wa-ico{margin-right:4px;color:#1fa855}
+.wa-fab{display:inline-flex;align-items:center;gap:10px;position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;
+  background:var(--espresso);color:var(--paper);padding:0 18px 0 14px;min-height:44px;border-radius:2px;font:400 11.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  box-shadow:0 8px 24px rgba(23,20,17,.22),inset 0 0 0 1px rgba(238,233,223,.18);text-decoration:none;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.wa-fab:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(23,20,17,.3)}
+.wa-fab:focus-visible{outline:2px solid var(--paper);outline-offset:3px}
+.wa-fab .wa-ico{width:17px;height:17px;margin:0;color:var(--paper);opacity:.9}
+.wa-fab span{white-space:nowrap}
+.hero-actions .wa-link{background:none;border:1px solid currentColor;padding:16px 26px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin:0}
+.hero-actions .wa-link:hover{background:rgba(33,30,26,.06)}
+.hero-actions .wa-link .wa-ico{width:18px;height:18px;color:#1fa855}
+.site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+@media (min-width:821px){.wa-fab{right:32px;bottom:32px}}
+@media (max-width:360px){.wa-fab .wa-q{display:none}}
+/* Phones: the bar became a compact icon button so it never sits on top of Book buttons, hours or reviews. */
+@media (max-width:820px){
+  .wa-fab{width:50px;height:50px;min-height:0;padding:0;justify-content:center;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .wa-fab .wa-ico{width:22px;height:22px}
+  .wa-fab>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .site-footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+.proof{display:flex;flex-direction:column;gap:6px;margin-top:22px;font-size:13.5px;color:var(--ink)}
+.proof a{font-weight:500;letter-spacing:.02em;align-self:flex-start;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;padding-bottom:2px}
+.proof .pf-q{font:italic 400 15px/1.45 var(--serif);color:var(--espresso);max-width:46ch}
+.facts-sec .proof{margin-top:26px}
+.faq{border-top:1px solid var(--hair);max-width:860px}
+.faq-q{border-bottom:1px solid var(--hair)}
+.faq-q summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;padding:22px 0;font:400 clamp(19px,1.6vw,24px)/1.3 var(--serif)}
+.faq-q summary::-webkit-details-marker{display:none}
+.faq-q summary::after{content:"+";font-family:var(--sans);font-size:20px;line-height:1;transition:transform .3s var(--ease)}
+.faq-q[open] summary::after{transform:rotate(45deg)}
+.faq-q p{margin:0 0 24px;max-width:62ch;font-size:15px;line-height:1.6}
+.opt p a{border-bottom:1px solid currentColor}
