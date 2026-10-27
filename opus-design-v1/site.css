@@ -271,7 +271,7 @@ body.inner{background:var(--paper)}
 .gl-row dd{margin:0;font-size:16.5px;line-height:1.55;font-weight:400}
 .gl-row dd a{border-bottom:1px solid currentColor}
 .gl-p{display:flex;justify-content:space-between;gap:16px;max-width:380px}
-.gl-p b{font-weight:500;white-space:nowrap}
+.gl-p b{font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
 .gl-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 32px;margin-top:22px}
 .glance-date{font-size:14px;font-weight:400;max-width:640px}
 .glance-date time{white-space:nowrap}
