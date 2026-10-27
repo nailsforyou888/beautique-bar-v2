@@ -325,7 +325,7 @@ SEO = {
   '/eyelash-extensions/': ('Eyelash Extensions in Toronto & Scarborough | Beautique Bar',
               'Classic, hybrid and volume eyelash extensions and refills at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough. Book online.'),
   '/skin/facials/': ('Facials in Toronto & Scarborough | Beautique Bar',
-              'Deep-pore cleansing, relaxing, anti-wrinkle and firming facials at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
+              'Cleansing and deep-cleansing facials, plus relaxing facials, at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
   '/skin/facial-hair-removal/': ('Eyebrow Waxing & Threading in Toronto | Beautique Bar',
               'Eyebrow, lip, chin and full-face waxing, brow tinting and threading at Beautique Bar — Yonge & York Mills, Toronto and Bridlewood Mall, Scarborough.'),
   '/skin/body-hair-removal/': ('Body Waxing in Toronto & Scarborough | Beautique Bar',
@@ -975,7 +975,7 @@ add('/skin/', page('/skin/', 'Skin & Lashes | Beautique Bar', 'Eyelash extension
   {sec_head('Treatments', 'Choose your treatment', 't-h')}
   {svc_list([
     ('Eyelash Extensions', '/eyelash-extensions/', 'Classic, hybrid and volume sets, plus refills.', BOTH),
-    ('Facials', '/skin/facials/', 'From a deep-pore cleanse to an anti-wrinkle, hydrating facial.', BOTH),
+    ('Facials', '/skin/facials/', 'From a quick cleansing facial to a deep cleanse with massage and a custom mask.', BOTH),
     ('Facial Hair Removal', '/skin/facial-hair-removal/', 'Waxing and tinting for brows, lip, chin and full face; threading at Yonge.', BOTH),
     ('Body Hair Removal', '/skin/body-hair-removal/', 'Waxing for arms, legs, underarms, back, chest and bikini.', BOTH),
   ])}
@@ -1013,25 +1013,23 @@ add('/eyelash-extensions/', page('/eyelash-extensions/', 'Eyelash Extensions | B
 ''', active='/skin/'))
 
 # ---- /skin/facials/ --------------------------------------------------------------------------
-add('/skin/facials/', page('/skin/facials/', 'Facials | Beautique Bar', 'Deep-pore cleansing, relaxing, anti-wrinkle and firming facials at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
-{hero([('Home','/'),('Skin & Lashes','/skin/'),('Facials',None)], 'Facials', 'An hour for your skin — a deep-pore cleanse, a relaxing classic, or a hydrating or firming facial with a lifting mask.',
+add('/skin/facials/', page('/skin/facials/', 'Facials | Beautique Bar', 'Cleansing, deep-cleansing and relaxing facials at Beautique Bar — Yonge & York Mills and Bridlewood Mall.', f'''
+{hero([('Home','/'),('Skin & Lashes','/skin/'),('Facials',None)], 'Facials', 'A quick cleanse for a fresh face, or a full hour of deep cleansing, massage and a mask chosen for your skin.',
       img('img/skin-facial.webp', 1536, 1024, 'A relaxing facial with a cream mask, eyes closed', 'frame', '45% 50%', False, 'Licensed stock chosen by the owner.'))}
 {glance([
-    ('Deep-pore cleansing & relaxing facial', at_both('Deep-pore Cleansing & Relaxing Facial')),
-    ('Classic relaxing facial', only_at('warden', 'Classic Relaxing Facial')),
-    ('Anti-wrinkle or firming, with lifting mask', only_at('yonge', 'Anti-wrinkle & Hydrating Facial w/ Lifting Mask')),
+    ('Yonge & York Mills', (lambda a, b: a and b and a + b)(gl_price('Facial cleansing, 30 min', pfrom('yonge', 'Facial Cleansing Service (30 min)')), gl_price('Deep facial cleansing, 1 hr', pfrom('yonge', 'Deep Facial Cleansing Service (1 hr)')))),
+    ('Bridlewood Mall', (lambda a, b: a and b and a + b)(gl_price('Classic relaxing facial', pfrom('warden', 'Classic Relaxing Facial')), gl_price('Deep-pore cleansing &amp; relaxing', pfrom('warden', 'Deep-pore Cleansing & Relaxing Facial')))),
   ])}
 <section class="pg-sec" data-tone="light" aria-labelledby="opt-h">
   {sec_head('On the menus', 'Choose your facial', 'opt-h')}
   {options([
-    ('Deep-pore Cleansing & Relaxing Facial', 'At both salons.'),
+    ('Facial Cleansing Service · 30 min', 'Cleanse, exfoliate, extractions if you want them, then moisturiser and SPF for a fresh finish. At Yonge &amp; York Mills.'),
+    ('Deep Facial Cleansing Service · 1 hr', 'A deep cleanse with exfoliation and steam, extractions, a face, neck and shoulder massage, a mask chosen for your skin, then serums and moisturiser. At Yonge &amp; York Mills.'),
+    ('Deep-pore Cleansing & Relaxing Facial', 'At Bridlewood Mall.'),
     ('Classic Relaxing Facial', 'At Bridlewood Mall.'),
-    ('Anti-wrinkle & Hydrating Facial', 'With a lifting mask. At Yonge &amp; York Mills.'),
-    ('Regeneration & Firming Facial', 'With a lifting mask. At Yonge &amp; York Mills.'),
-    ('Back Facial Exfoliation', 'At Yonge &amp; York Mills.'),
   ])}
 </section>
-{book_pair({'yonge': ['Deep-pore Cleansing & Relaxing Facial', 'Anti-wrinkle & Hydrating Facial w/ Lifting Mask', 'Regeneration & Firming Facial w/ Lifting Mask', 'Back Facial Exfoliation'],
+{book_pair({'yonge': ['Facial Cleansing Service (30 min)', 'Deep Facial Cleansing Service (1 hr)'],
             'warden': ['Deep-pore Cleansing & Relaxing Facial', 'Classic Relaxing Facial']})}
 {reading(['facial-frequency'])}
 {close_band()}
@@ -1091,7 +1089,7 @@ add('/skin/body-piercing/', page('/skin/body-piercing/', 'Body Piercing | Beauti
   {sec_head('Still at both salons', 'Explore our other treatments', 't-h')}
   {svc_list([
     ('Eyelash Extensions', '/eyelash-extensions/', 'Classic, hybrid and volume sets, plus refills.', BOTH),
-    ('Facials', '/skin/facials/', 'From a deep-pore cleanse to an anti-wrinkle, hydrating facial.', BOTH),
+    ('Facials', '/skin/facials/', 'From a quick cleansing facial to a deep cleanse with massage and a custom mask.', BOTH),
     ('Facial Hair Removal', '/skin/facial-hair-removal/', 'Waxing and tinting for brows, lip, chin and full face; threading at Yonge.', BOTH),
     ('Nails', '/nails/', 'Manicures, pedicures, Shellac, Bio Gel and acrylic.', BOTH),
   ])}
