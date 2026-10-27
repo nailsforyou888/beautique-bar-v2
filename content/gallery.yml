@@ -4,6 +4,12 @@
 # To remove a photo from the gallery, delete its entry here (the image files can stay).
 # drive_id = the Google Drive file it came from (the weekly Tuesday task uses it to never post the same photo twice).
 photos:
+- file: amber-with-gold-foil
+  width: 1200
+  height: 1600
+  caption: Amber with gold foil
+  drive_id: 1G_jXTS4F1JONV_tfFFf3F4X1XSr21Asg
+  added: '2026-10-27'
 - file: plum-chrome-gems
   width: 1320
   height: 1320
