@@ -1310,7 +1310,7 @@ add('/ig/yonge/', ig_landing('yonge'))
 # Linked from nowhere on the site; make_production.py keeps it noindex, nofollow and out of the sitemap.
 # GTM (production) receives winback_view on load, winback_code_copy on Copy, and the usual
 # bb_book / bb_call (bb_salon 'bridlewood', bb_placement 'winback') so the existing GA4/Ads wiring counts them.
-WB_CODE, WB_ENDS = 'COMEBACK15', 'November 30, 2026'
+WB_CODE, WB_ENDS = 'COMEBACK15', 'November 15, 2026'
 WB_CSS = IG_CSS + '''
 .wb-offer{font-size:16px;line-height:1.5;margin-top:12px}
 .wb-code{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:14px 16px;border:1px dashed currentColor}
