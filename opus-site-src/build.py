@@ -1304,6 +1304,77 @@ def ig_landing(k):
 
 add('/ig/yonge/', ig_landing('yonge'))
 
+# ---- /back/ — COMEBACK15 win-back text landing page (added 31 Oct 2026) -------------------------
+# Reached only from the win-back text message: beautiquebar.com/back 302s here with
+# utm_source=sms&utm_medium=text&utm_campaign=comeback15 (opus-design-v1/_redirects), so GA4 credits the visit to the text.
+# Linked from nowhere on the site; make_production.py keeps it noindex, nofollow and out of the sitemap.
+# GTM (production) receives winback_view on load, winback_code_copy on Copy, and the usual
+# bb_book / bb_call (bb_salon 'bridlewood', bb_placement 'winback') so the existing GA4/Ads wiring counts them.
+WB_CODE, WB_ENDS = 'COMEBACK15', 'November 30, 2026'
+WB_CSS = IG_CSS + '''
+.wb-offer{font-size:16px;line-height:1.5;margin-top:12px}
+.wb-code{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:14px 16px;border:1px dashed currentColor}
+.wb-code strong{font-size:24px;letter-spacing:.12em}
+.wb-copy{min-height:44px;padding:0 16px;border:1px solid currentColor;background:none;color:inherit;font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.wb-how{font-size:14px;line-height:1.5;margin-top:10px}
+.wb-fine{font-size:12.5px;opacity:.75;margin-top:14px;line-height:1.5}'''
+WB_JS = '''(() => {
+  const dl = window.dataLayer = window.dataLayer || [];
+  dl.push({event: 'winback_view', campaign: 'comeback15'});
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest && ev.target.closest('[data-wb]');
+    if (!a) return;
+    const kind = a.dataset.wb;
+    if (kind === 'copy') {
+      const done = () => { a.textContent = 'Copied'; };
+      try { navigator.clipboard.writeText('%s').then(done, done); } catch (_) { done(); }
+      dl.push({event: 'winback_code_copy', campaign: 'comeback15'});
+    } else {
+      dl.push({event: 'bb_' + kind, bb_salon: 'bridlewood', bb_link: a.href, bb_placement: 'winback'});
+    }
+  }, true);
+})();'''
+
+def winback_landing():
+    l = LOC['warden']
+    path, title = '/back/', 'Welcome back | 15% off at Beautique Bar Bridlewood'
+    desc = f'15% off your next visit of $50 or more at Beautique Bar & Nails For You, Bridlewood Mall. Code {WB_CODE}.'
+    return f'''<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{e(title)}</title>
+<meta name="description" content="{e(desc)}">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+{head_common(path, title, desc)}
+<link rel="stylesheet" href="/opus.css?v={VERSION}">
+<link rel="stylesheet" href="/site.css?v={VERSION}">
+<style>{WB_CSS}</style>
+<script>{WB_JS % WB_CODE}</script>
+</head>
+<body class="ig-page">
+<main class="ig" id="main">
+  <span class="lockup" role="img" aria-label="Beautique Bar"></span>
+  <h1>Welcome back.</h1>
+  <p class="wb-offer">We’ve missed you. Take <strong>15% off</strong> your next visit of $50 or more at Beautique Bar &amp; Nails For You, {e(l["name"])}.</p>
+  <div class="wb-code"><strong>{WB_CODE}</strong><button type="button" class="wb-copy" data-wb="copy">Copy code</button></div>
+  <p class="wb-how">Enter the code at checkout when you book online, or mention it at the front desk.</p>
+  <div class="ig-actions">
+    <a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener" data-wb="book">Book now <span aria-hidden="true">↗</span></a>
+    <a class="ig-call" href="{l["tel"]}" data-wb="call">Call {e(l["phone"])}</a>
+  </div>
+  <p class="wb-fine">Valid on services until {WB_ENDS}. One use per client, minimum sale $50. {e(l["addr"])}.</p>
+</main>
+</body>
+</html>
+'''
+
+add('/back/', winback_landing())
+
 # ---- /shop/ — retired 24 Sep 2026 (products were for a grant); /shop/ 301s to / via _redirects.
 
 # ---- /contact/ -------------------------------------------------------------------------------
