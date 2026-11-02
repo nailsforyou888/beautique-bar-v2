@@ -279,3 +279,13 @@ body.inner{background:var(--paper)}
 @media (max-width:520px){.glance{padding-top:48px;padding-bottom:48px}.gl-card{padding:28px 20px 22px;margin:0 -2vw}.gl-row dd{padding-right:0}}
 .gl-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
 @media (max-width:520px){.gl-actions .btn-solid{flex:1 1 100%;justify-content:center}}
+
+/* New client offer band on the location pages */
+.offer-sec{padding-top:0;padding-bottom:0}
+.offer-sec+.facts-sec{padding-top:70px}
+.offer{display:grid;grid-template-columns:1fr auto;gap:22px 48px;align-items:center;padding:34px 38px;background:var(--linen);border:1px solid var(--hair);border-left:3px solid var(--espresso)}
+.offer-h{font-size:clamp(28px,3.2vw,40px);line-height:1.08;margin-top:10px}
+.offer-p{font-size:15.5px;line-height:1.65;margin-top:12px;max-width:54ch}
+.offer-act{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.offer-fine{font-size:12.5px;line-height:1.5;opacity:.7;max-width:26ch}
+@media (max-width:760px){.offer{grid-template-columns:1fr;padding:26px 22px}.offer-act{align-items:stretch}.offer .btn-solid{justify-content:center}.offer-fine{max-width:none}}

@@ -1167,6 +1167,21 @@ def menu_html(k):
         blocks.append(f'<div class="mn-cat" id="{slug(c["title"])}"><h3>{e(c["title"])}</h3><ul class="mn-list">{rows(c["items"])}</ul>{subs}</div>')
     return ''.join(blocks)
 
+# New-client offer shown on both location pages (the pages the Google Ads land on). Mock-up 2 Nov 2026 — wording,
+# wording set by the owner 2 Nov 2026: new clients, booked online, services $50+, 10% taken off at checkout. The Book link is a Fresha link, so it counts as bb_book.
+OFFER_PCT = '10%'
+def new_client_offer(k):
+    l = LOC[k]
+    return f'''<section class="pg-sec offer-sec" data-tone="light" aria-labelledby="offer-h" id="offer">
+  <aside class="offer">
+    <div class="offer-text"><p class="eyebrow">New client offer</p>
+      <h2 class="offer-h" id="offer-h">{OFFER_PCT} off your first visit.</h2>
+      <p class="offer-p">New to Beautique Bar {e(l["short"])}? Book online and we’ll take {OFFER_PCT} off at checkout on any service of $50 or more.</p></div>
+    <div class="offer-act"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a>
+      <p class="offer-fine">New clients only, booked online, services $50 or more. One per client. Not combined with other offers.</p></div>
+  </aside>
+</section>'''
+
 for k, l in LOC.items():
     other = LOC['warden' if k == 'yonge' else 'yonge']
     if l['photo']:
@@ -1187,6 +1202,7 @@ for k, l in LOC.items():
     add(l['href'], page(l['href'], f'{l["name"]} Nail Salon | Beautique Bar', f'{l["long"]} — {l["addr"]}. Call {l["phone"]}. Book online.', f'''
 {hero([('Home','/'),('Locations','/locations/'),(l['name'],None)], e(H1_LOC[k]), f'{e(l["long"])} — {e(l["where"][0].lower() + l["where"][1:])} Serving {e(l["serves"])}.', media,
       actions=f'{proof(k)}<div class="hero-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a><a class="line-link wa-link" href="{WA}" target="_blank" rel="noopener">{WA_ICON}WhatsApp us</a><a class="line-link" href="{l["tel"]}">Call {e(l["phone"])}</a><a class="line-link" href="{e(l["maps"])}" target="_blank" rel="noopener">Directions <span aria-hidden="true">↗</span></a></div>')}
+{new_client_offer(k)}
 <section class="pg-sec facts-sec" data-tone="light" aria-label="Visit">
   <dl class="facts">
     <div><dt>Address</dt><dd>{e(l["addr"])} {e(l["postal"])}</dd></div>
