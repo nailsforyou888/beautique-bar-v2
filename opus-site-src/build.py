@@ -1168,7 +1168,7 @@ def menu_html(k):
     return ''.join(blocks)
 
 # New-client offer shown on both location pages (the pages the Google Ads land on). Mock-up 2 Nov 2026 — wording,
-# wording set by the owner 2 Nov 2026: new clients, booked online, services $50+, 10% taken off at checkout. The Book link is a Fresha link, so it counts as bb_book.
+# wording set by the owner 2 Nov 2026: new clients, booked online, 10% off ONE service of $50+, taken off at checkout. The Book link is a Fresha link, so it counts as bb_book.
 OFFER_PCT = '10%'
 def new_client_offer(k):
     l = LOC[k]
@@ -1176,9 +1176,9 @@ def new_client_offer(k):
   <aside class="offer">
     <div class="offer-text"><p class="eyebrow">New client offer</p>
       <h2 class="offer-h" id="offer-h">{OFFER_PCT} off your first visit.</h2>
-      <p class="offer-p">New to Beautique Bar {e(l["short"])}? Book online and we’ll take {OFFER_PCT} off at checkout on any service of $50 or more.</p></div>
+      <p class="offer-p">New to Beautique Bar {e(l["short"])}? Book online and we’ll take {OFFER_PCT} off one service of $50 or more at checkout.</p></div>
     <div class="offer-act"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book {e(l["short"])} online <span aria-hidden="true">↗</span></a>
-      <p class="offer-fine">New clients only, booked online, services $50 or more. One per client. Not combined with other offers.</p></div>
+      <p class="offer-fine">New clients only, booked online. Applies to one service of $50 or more. One per client. Not combined with other offers.</p></div>
   </aside>
 </section>'''
 
