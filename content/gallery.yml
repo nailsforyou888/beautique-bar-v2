@@ -4,6 +4,12 @@
 # To remove a photo from the gallery, delete its entry here (the image files can stay).
 # drive_id = the Google Drive file it came from (the weekly Tuesday task uses it to never post the same photo twice).
 photos:
+- file: purple-cat-eye-with-charms
+  width: 1320
+  height: 1589
+  caption: Purple cat eye with charms
+  drive_id: 1L7rfHKKM0PXyIT8Igs9UnvDNbtVQz_X1
+  added: '2026-11-03'
 - file: amber-with-gold-foil
   width: 1200
   height: 1600
