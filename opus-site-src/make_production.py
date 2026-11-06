@@ -14,6 +14,7 @@ Nothing here is deployed automatically.
 """
 import datetime, hashlib, html, json, re, shutil
 from pathlib import Path
+import llms
 from site_config import SITE_URL, GTM_ID, GOOGLE_SITE_VERIFICATION, BING_SITE_VERIFICATION
 
 SRC = Path(__file__).resolve().parent
@@ -106,6 +107,8 @@ def main():
     urls = ''.join(f'<url><loc>{SITE}{p}</loc><lastmod>{stamps[p][1]}</lastmod></url>' for p in pages)
     (OUT / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n'
                                      f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
+    if not tagtest:
+        llms.build(OUT, pages)   # /llms.txt for AI assistants, from the same facts as the pages
     print(f'{len(pages)} pages in sitemap; {"TAG-TEST (noindex)" if tagtest else "production"} copy written to {OUT}')
 
 if __name__ == '__main__':
