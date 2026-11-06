@@ -301,3 +301,4 @@ body.inner{background:var(--paper)}
 .ra-menu .pr{text-align:right;white-space:nowrap}
 .tbc{display:inline-block;font:500 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;padding:4px 6px;margin-left:6px;border:1px dashed currentColor;opacity:.7;vertical-align:middle}
 @media (max-width:760px){.howto li{grid-template-columns:1fr;gap:10px}.ra-menu li{flex-wrap:wrap}}
+.ra-same{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-left:6px}

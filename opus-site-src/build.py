@@ -1544,11 +1544,14 @@ RA_STEPS = [
     ('Buff and moisturise', 'Buff away any small bits left over, then use cuticle oil and hand cream.'),
 ]
 ra_rm = {k: pfrom(k, 'Artificial Nail Removal Only') for k in LOC}
+RA_SOAK = {'yonge': '$20', 'warden': '$20'}   # gentle soak-off removal, not on the menus yet (Steven, 6 Nov 2026)
 SERVICE_FAQ[RA_PATH] = qa(
     ('How do I remove acrylic nails at home?', 'File off the shiny top coat, soak your nails in 100% acetone for 20–30 minutes, then gently push the softened acrylic off with a cuticle pusher. Moisturise after. Expect it to take 45–60 minutes.'),
     ('Does removal damage my nails?', 'Done properly, no. Damage usually comes from peeling or picking acrylic off at home before it has softened.'),
     ('How long does acrylic removal take at the salon?', 'About 15 minutes, or about 30 minutes for the gentle soak-off removal.'),
     ('How much is acrylic removal at Beautique Bar?', both('Acrylic removal is {y} at Yonge & York Mills and {w} at Bridlewood Mall.', ra_rm['yonge'], ra_rm['warden'])),
+    ('How much is the gentle soak-off removal?', 'Gentle soak-off removal is $20 at both salons. At Yonge & York Mills it is the same price as regular removal.'),
+    ('Is removal cheaper if I get a new set?', 'Yes. Removal is $5 off when you get a new set in the same visit, at both salons.'),
     ('Can I remove Bio Gel the same way?', 'Yes. Bio Gel softens faster than acrylic, so soak for 10–15 minutes instead.'),
 )
 HOWTO[RA_PATH] = {
@@ -1563,8 +1566,8 @@ def ra_salon_col(k):
     l = LOC[k]
     rm = ra_rm[k]
     rows = [('Removal · 15 min', f'<b>{e(rm)}</b>' if rm else tbc('$10')),
-            ('Gentle soak-off removal · 30 min', tbc('$18')),
-            ('Removal with a new set', tbc('free / discounted'))]
+            ('Gentle soak-off removal · 30 min', f'<b>{e(RA_SOAK[k])}</b>' + (' <span class="ra-same">same price</span>' if RA_SOAK[k] == rm else '')),
+            ('Removal with a new set', '<b>$5 off</b>')]
     lis = ''.join(f'<li><span>{n}</span><span class="pr">{v}</span></li>' for n, v in rows)
     return f'''<div class="bp-col"><p class="eyebrow">{e(l["name"])}</p><ul class="bp-menu ra-menu">{lis}</ul>
       <div class="bp-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book removal at {e(l["short"])} <span aria-hidden="true">↗</span></a>
@@ -1604,7 +1607,7 @@ add(RA_PATH, page(RA_PATH, 'How to Remove Acrylic Nails at Home | Beautique Bar'
   {sec_head('Or let us do it', 'Done in about 15 minutes', 'book-h')}
   <p class="ra-intro">At Beautique Bar, our technicians take off acrylic, gel and Bio Gel quickly and safely with professional tools. Then they shape and prep your nails, so you’re ready for a new set or a break. For thin or sensitive nails, ask for our gentle soak-off removal.</p>
   <div class="book-pair">{ra_salon_col('yonge')}{ra_salon_col('warden')}</div>
-  <p class="bp-foot">Removal prices are from each salon’s current menu; “from” means the price can vary with the set. Prices marked placeholder are not final.</p>
+  <p class="bp-foot">Removal prices are from each salon’s current menu; “from” means the price can vary with the set. Removal is $5 off when you book a new set in the same visit.</p>
 </section>
 {faq_block(SERVICE_FAQ[RA_PATH], 'Questions', 'Acrylic removal FAQ')}
 {reading(['removing-bio-gel-nails', 'removing-shellac-manicures', 'acrylic-nails'])}
