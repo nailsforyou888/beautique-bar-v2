@@ -302,3 +302,4 @@ body.inner{background:var(--paper)}
 .tbc{display:inline-block;font:500 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;padding:4px 6px;margin-left:6px;border:1px dashed currentColor;opacity:.7;vertical-align:middle}
 @media (max-width:760px){.howto li{grid-template-columns:1fr;gap:10px}.ra-menu li{flex-wrap:wrap}}
 .ra-same{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-left:6px}
+@media (max-width:760px){.ra .pg-hero-media .frame{height:220px}.ra .pg-hero-media .frame img{height:100%;width:100%;object-fit:cover}.ra .glance{padding-top:28px}}
