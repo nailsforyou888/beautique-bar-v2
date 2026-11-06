@@ -1577,8 +1577,9 @@ ra_steps_html = ''.join(f'<li><h3>{i}. {e(t)}</h3><p>{e(d)}</p></li>' for i, (t,
 add(RA_PATH, page(RA_PATH, 'How to Remove Acrylic Nails at Home | Beautique Bar',
   'Remove acrylic nails at home in 5 steps with an acetone soak, without wrecking your natural nails. Or book a 15-minute removal at Beautique Bar.', f'''
 <article class="post ra">
-  <header class="pg-hero post-head" data-tone="light"><div class="pg-hero-text">{crumbs([('Home','/'),('Blog','/blog/'),('Acrylic Nails',None)])}
-    <h1>How to remove acrylic nails at home</h1><p class="lead">Without wrecking your natural nails.</p></div></header>
+  <header class="pg-hero has-media" data-tone="light"><div class="pg-hero-text">{crumbs([('Home','/'),('Blog','/blog/'),('Acrylic Nails',None)])}
+    <h1>How to remove acrylic nails at home</h1><p class="lead">Without wrecking your natural nails.</p></div>
+    <div class="pg-hero-media">{img('img/stock-acrylic-removal-home.webp', 1122, 1402, 'Bare natural nails resting on a linen towel beside cotton pads, foil squares, a cuticle pusher, a nail file and cuticle oil', 'frame', '50% 50%', False, 'AI-generated illustration (ChatGPT), approved by owner 6 Nov 2026. Not salon work.')}</div></header>
   <section class="pg-sec glance" data-tone="light" aria-labelledby="glance-h">
     <div class="gl-card"><p class="eyebrow">Quick answer</p><h2 id="glance-h" class="visually-hidden">Quick answer</h2>
     <p class="qa-answer">File off the shiny top coat, soak your nails in 100% acetone for 20–30 minutes, then gently push the softened acrylic off with a cuticle pusher. Moisturise after. Expect it to take 45–60 minutes.</p>
