@@ -1,6 +1,6 @@
 ---
-title: "How to Safely Remove Acrylic Nails at Home"
-description: "Learn how to remove acrylic nails at home without damaging your natural ones. Our experts share step-by-step tips!"
+title: "How to Remove Acrylic Nails at Home"
+description: "Remove acrylic nails at home in 5 steps with an acetone soak, without wrecking your natural nails. Or book a 15-minute removal at Beautique Bar."
 pubDate: 2023-12-11
 category: "Acrylic Nails"
 heroImage: "../../assets/blog/2023-12-remove-acrylic-nails.webp"

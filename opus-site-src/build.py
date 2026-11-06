@@ -19,7 +19,7 @@ import markdown
 
 SRC = Path(__file__).resolve().parent
 OUT = SRC.parent / 'opus-design-v1'
-VERSION = '11'
+VERSION = '12'
 e = html.escape
 CUR = ' aria-current="page"'
 LAZY = ' loading="lazy"'
@@ -350,6 +350,7 @@ SERVICE_NAMES = {'/nails/manicure-pedicure/': 'Manicure and pedicure', '/nails/b
                  '/nails/russian-manicure/': 'Russian manicure', '/nails/pedicure/': 'Pedicure', '/nails/nail-art/': 'Nail art'}
 SERVICE_AT = {'/nails/biab/': ['warden'], '/nails/russian-manicure/': ['warden']}   # services on one salon's menu only
 SERVICE_FAQ = {}   # path -> [(question, answer)], shown on the page and as FAQPage data
+HOWTO = {}         # path -> schema.org HowTo dict (step-by-step guides)
 
 def _price_amount(raw):
     m = re.match(r'^\$(\d+(?:\.\d{1,2})?)\+?$', (raw or '').strip())
@@ -420,6 +421,8 @@ def page_ld(path, title, desc, body):
                     'areaServed': [{'@type': 'City', 'name': n} for n in (['Scarborough'] if at == ['warden'] else ['Toronto', 'North York', 'Scarborough'])]})
     if path in SERVICE_FAQ:
         lds.append(faq_data(SERVICE_FAQ[path]))
+    if path in HOWTO:
+        lds.append(HOWTO[path])
     m = re.match(r'^/blog/([^/]+)/$', path)
     if m and m.group(1) in PBY:
         p = PBY[m.group(1)]
@@ -1497,7 +1500,10 @@ RELATED = {  # post -> (service label, href)
   'Facial Hair': ('Facial Hair Removal', '/skin/facial-hair-removal/'), 'Body Hair': ('Body Hair Removal', '/skin/body-hair-removal/'),
 }
 MD = markdown.Markdown(extensions=['tables', 'sane_lists'])
+CUSTOM_POSTS = {'removing-acrylic-nails'}   # built by hand below as a quick-answer how-to page
 for p in POSTS:
+    if p['slug'] in CUSTOM_POSTS:
+        continue
     body, removed = strip_prices(p['slug'], p['body'])
     MD.reset()
     art = MD.convert(body)
@@ -1520,6 +1526,92 @@ for p in POSTS:
   <p class="eyebrow">Related</p><a class="ol-link" href="{href}"><span>{e(lbl)}</span><small>Treatments, salons and prices</small><span aria-hidden="true">→</span></a>
   <p><a class="line-link" href="/blog/">← All articles</a></p>
 </section>
+{close_band()}''', active=None, bodyclass='is-post'))
+
+# ---- /blog/removing-acrylic-nails/ : quick-answer how-to page (MOCKUP, Nov 2026) --------------------
+# Written for people (and AI tools) asking "how do I remove acrylic nails at home?". The at-home method is
+# acetone soak-off. The salon section only says "professional tools" (never describes the salon's own technique),
+# and offers gentle soak-off as a separate upgrade. Prices marked "placeholder" are not on the menus yet.
+def tbc(p):
+    return f'<b>{e(p)}</b> <span class="tbc">placeholder</span>'
+
+RA_PATH = '/blog/removing-acrylic-nails/'
+RA_STEPS = [
+    ('Clip and file', 'Clip your nails short, then file the shiny top layer until it looks dull. This lets the acetone soak in.'),
+    ('Protect your skin', 'Put petroleum jelly on the skin around each nail. Acetone is very drying.'),
+    ('Soak and wrap', 'Soak cotton pads in 100% acetone, press one on each nail, and wrap the fingertip in a square of foil.'),
+    ('Wait, then push gently', 'Wait 20–30 minutes. When the acrylic has gone soft, push it off gently with a cuticle pusher. If it resists, wrap it again for another 5–10 minutes.'),
+    ('Buff and moisturise', 'Buff away any small bits left over, then use cuticle oil and hand cream.'),
+]
+ra_rm = {k: pfrom(k, 'Artificial Nail Removal Only') for k in LOC}
+RA_SOAK = {'yonge': '$20', 'warden': '$20'}   # gentle soak-off removal, not on the menus yet (Steven, 6 Nov 2026)
+SERVICE_FAQ[RA_PATH] = qa(
+    ('How do I remove acrylic nails at home?', 'File off the shiny top coat, soak your nails in 100% acetone for 20–30 minutes, then gently push the softened acrylic off with a cuticle pusher. Moisturise after. Expect it to take 45–60 minutes.'),
+    ('Does removal damage my nails?', 'Done properly, no. Damage usually comes from peeling or picking acrylic off at home before it has softened.'),
+    ('How long does acrylic removal take at the salon?', 'About 15 minutes, or about 30 minutes for the gentle soak-off removal.'),
+    ('How much is acrylic removal at Beautique Bar?', both('Acrylic removal is {y} at Yonge & York Mills and {w} at Bridlewood Mall.', ra_rm['yonge'], ra_rm['warden'])),
+    ('How much is the gentle soak-off removal?', 'Gentle soak-off removal is $20 at both salons. At Yonge & York Mills it is the same price as regular removal.'),
+    ('Is removal cheaper if I get a new set?', 'Yes. Removal is $5 off when you get a new set in the same visit, at both salons.'),
+    ('Can I remove Bio Gel the same way?', 'Yes. Bio Gel softens faster than acrylic, so soak for 10–15 minutes instead.'),
+)
+HOWTO[RA_PATH] = {
+    '@context': 'https://schema.org', '@type': 'HowTo', 'name': 'How to remove acrylic nails at home',
+    'description': 'Remove acrylic nails at home with an acetone soak, without damaging your natural nails.',
+    'totalTime': 'PT1H', 'url': SITE_URL + RA_PATH,
+    'supply': [{'@type': 'HowToSupply', 'name': n} for n in ['100% acetone', 'Cotton pads', 'Aluminium foil', 'Petroleum jelly', 'Cuticle oil']],
+    'tool': [{'@type': 'HowToTool', 'name': n} for n in ['Nail clippers', 'Nail file', 'Cuticle pusher', 'Buffer']],
+    'step': [{'@type': 'HowToStep', 'position': i, 'name': t, 'text': d} for i, (t, d) in enumerate(RA_STEPS, 1)],
+}
+def ra_salon_col(k):
+    l = LOC[k]
+    rm = ra_rm[k]
+    rows = [('Removal · 15 min', f'<b>{e(rm)}</b>' if rm else tbc('$10')),
+            ('Gentle soak-off removal · 30 min', f'<b>{e(RA_SOAK[k])}</b>' + (' <span class="ra-same">same price</span>' if RA_SOAK[k] == rm else '')),
+            ('Removal with a new set', '<b>$5 off</b>')]
+    lis = ''.join(f'<li><span>{n}</span><span class="pr">{v}</span></li>' for n, v in rows)
+    return f'''<div class="bp-col"><p class="eyebrow">{e(l["name"])}</p><ul class="bp-menu ra-menu">{lis}</ul>
+      <div class="bp-actions"><a class="btn-solid" href="{e(l["book"])}" target="_blank" rel="noopener">Book removal at {e(l["short"])} <span aria-hidden="true">↗</span></a>
+      <a class="line-link" href="{l["tel"]}">{e(l["phone"])}</a></div></div>'''
+
+ra_steps_html = ''.join(f'<li><h3>{i}. {e(t)}</h3><p>{e(d)}</p></li>' for i, (t, d) in enumerate(RA_STEPS, 1))
+add(RA_PATH, page(RA_PATH, 'How to Remove Acrylic Nails at Home | Beautique Bar',
+  'Remove acrylic nails at home in 5 steps with an acetone soak, without wrecking your natural nails. Or book a 15-minute removal at Beautique Bar.', f'''
+<article class="post ra">
+  <header class="pg-hero has-media" data-tone="light"><div class="pg-hero-text">{crumbs([('Home','/'),('Blog','/blog/'),('Acrylic Nails',None)])}
+    <h1>How to remove acrylic nails at home</h1><p class="lead">Without wrecking your natural nails.</p></div>
+    <div class="pg-hero-media">{img('img/stock-acrylic-removal-home.webp', 1122, 1402, 'Bare natural nails resting on a linen towel beside cotton pads, foil squares, a cuticle pusher, a nail file and cuticle oil', 'frame', '50% 50%', False, 'AI-generated illustration (ChatGPT), approved by owner 6 Nov 2026. Not salon work.')}</div></header>
+  <section class="pg-sec glance" data-tone="light" aria-labelledby="glance-h">
+    <div class="gl-card"><p class="eyebrow">Quick answer</p><h2 id="glance-h" class="visually-hidden">Quick answer</h2>
+    <p class="qa-answer">File off the shiny top coat, soak your nails in 100% acetone for 20–30 minutes, then gently push the softened acrylic off with a cuticle pusher. Moisturise after. Expect it to take 45–60 minutes.</p>
+    <dl class="gl-list">
+      <div class="gl-row"><dt>Time at home</dt><dd>45–60 minutes, both hands tied up</dd></div>
+      <div class="gl-row"><dt>You’ll need</dt><dd>100% acetone, cotton pads, foil, a file, a cuticle pusher, petroleum jelly, cuticle oil</dd></div>
+      <div class="gl-row"><dt>At the salon</dt><dd>{gl_price('Yonge &amp; York Mills', ra_rm['yonge'])}{gl_price('Bridlewood Mall', ra_rm['warden'])}<span class="gl-sub">About 15 minutes</span></dd></div>
+    </dl>
+    <!--GL-BOOK-->
+    <div class="gl-foot">{prices_updated_html()}<a class="line-link gl-book" href="#steps-h">Step by step <span aria-hidden="true">↓</span></a></div></div>
+  </section>
+  <section class="pg-sec" data-tone="light" aria-labelledby="steps-h">
+    {sec_head('Step by step', 'Five steps, about an hour', 'steps-h')}
+    <ol class="howto">{ra_steps_html}</ol>
+  </section>
+  <section class="pg-sec" data-tone="light" aria-labelledby="wrong-h">
+    {sec_head('Where it goes wrong', 'Three mistakes to avoid', 'wrong-h')}
+    {options([
+      ('Forcing it off', 'Peeling or prying the acrylic before it has softened can tear off layers of your natural nail. If it doesn’t lift easily, soak longer.'),
+      ('Soaking too long', 'Acetone dries out your skin and cuticles. Protect the skin first and moisturise as soon as you’re done.'),
+      ('Rushing it', 'Most people underestimate the time. It takes close to an hour, and both hands are busy the whole time.'),
+    ])}
+  </section>
+</article>
+<section class="pg-sec book-sec" data-tone="light" aria-labelledby="book-h">
+  {sec_head('Or let us do it', 'Done in about 15 minutes', 'book-h')}
+  <p class="ra-intro">At Beautique Bar, our technicians take off acrylic, gel and Bio Gel quickly and safely with professional tools. Then they shape and prep your nails, so you’re ready for a new set or a break. For thin or sensitive nails, ask for our gentle soak-off removal.</p>
+  <div class="book-pair">{ra_salon_col('yonge')}{ra_salon_col('warden')}</div>
+  <p class="bp-foot">Removal prices are from each salon’s current menu; “from” means the price can vary with the set. Removal is $5 off when you book a new set in the same visit.</p>
+</section>
+{faq_block(SERVICE_FAQ[RA_PATH], 'Questions', 'Acrylic removal FAQ')}
+{reading(['removing-bio-gel-nails', 'removing-shellac-manicures', 'acrylic-nails'])}
 {close_band()}''', active=None, bodyclass='is-post'))
 
 # ---- RSS -------------------------------------------------------------------------------------

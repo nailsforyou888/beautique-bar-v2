@@ -14,6 +14,6 @@
 - `/blog/costs-of-manicures-and-pedicures/` — 18 sentence(s)/list item(s) with generic industry prices removed; replaced by a note linking to the two salon menus.; Written January 1, 2024 — check trends and claims are still current.
 - `/blog/removing-shellac-manicures/` — Written December 27, 2023 — check trends and claims are still current.
 - `/blog/bio-gel-nails/` — 1 sentence(s)/list item(s) with generic industry prices removed; replaced by a note linking to the two salon menus.; Written December 21, 2023 — check trends and claims are still current.
-- `/blog/removing-acrylic-nails/` — Written December 11, 2023 — check trends and claims are still current.
+- `/blog/removing-acrylic-nails/` — no automatic flags
 - `/blog/acrylic-nails-costs/` — 2 sentence(s)/list item(s) with generic industry prices removed; replaced by a note linking to the two salon menus.; Written December 4, 2023 — check trends and claims are still current.
 - `/blog/acrylic-nails/` — 4 sentence(s)/list item(s) with generic industry prices removed; replaced by a note linking to the two salon menus.; Written December 1, 2023 — check trends and claims are still current.
