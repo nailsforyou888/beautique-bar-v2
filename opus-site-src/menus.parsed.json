@@ -282,20 +282,12 @@
    "title": "Facial Services",
    "items": [
     {
-     "name": "Deep-pore Cleansing & Relaxing Facial",
-     "price": "$100"
+     "name": "Facial Cleansing Service (30 min)",
+     "price": "$70"
     },
     {
-     "name": "Anti-wrinkle & Hydrating Facial w/ Lifting Mask",
-     "price": "$110"
-    },
-    {
-     "name": "Regeneration & Firming Facial w/ Lifting Mask",
-     "price": "$110"
-    },
-    {
-     "name": "Back Facial Exfoliation",
-     "price": "$80"
+     "name": "Deep Facial Cleansing Service (1 hr)",
+     "price": "$120"
     }
    ]
   },
