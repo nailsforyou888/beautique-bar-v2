@@ -1143,6 +1143,14 @@ def faq_items(k):
           ('What are your hours?', hours_inline(k).replace(' · ', '. ') + '.'),
           ('How do I book?', f'Book online with Fresha, {contact}, or message us on WhatsApp.'),
           ('Where are you?', f'{l["street"]}, {l["city"]}. {l["where"]}')]
+    # Answer page (Growth HQ Q261106-8, approved by the owner): prices follow the menu file; left out if any is missing.
+    bg = [first(n) for n in ('Bio Gel Overlay', 'Bio Gel Full Set w/ Tips', 'Bio Gel Refill')]
+    if k == 'warden' and all(bg):
+        o, s, r = (p.rstrip('+') for _, p in bg)
+        wa = f', or call or WhatsApp {l["phone"]}' if WA_NUMBER == '1' + ''.join(c for c in l['phone'] if c.isdigit()) else f', or call {l["phone"]}'
+        qs.append(('Where can I get Bio Gel nails in Scarborough?',
+                   f'At Beautique Bar in {l["addr"].removesuffix(", Scarborough, ON")}. Bio Gel overlays start at {o}, '
+                   f'full sets with tips at {s} and refills at {r}; these are starting prices. Book online on Fresha{wa}.'))
     if (g := first("Gentleman's Manicure", "Gentleman's Pedicure")):
         qs.append(('Do you do manicures and pedicures for men?', f'Yes. A {g[0]} is {g[1]}.'))
     if (s := first('Shellac Spa Pedicure')):
