@@ -4,6 +4,12 @@
 # To remove a photo from the gallery, delete its entry here (the image files can stay).
 # drive_id = the Google Drive file it came from (the weekly Tuesday task uses it to never post the same photo twice).
 photos:
+- file: red-chrome-nail-art
+  width: 1500
+  height: 1600
+  caption: Red chrome nail art
+  drive_id: 1Zm4-iMHPTP9ZN5mNcl682xdV1PCxUnVK
+  added: '2026-11-10'
 - file: purple-cat-eye-with-charms
   width: 1320
   height: 1589
