@@ -65,8 +65,8 @@
   //    bb_link: <href>, bb_placement: <where on the page>}
   // Google Tag Manager (GTM-M6WHQ2D5, production build only) turns these into GA4 events and Ads conversions.
   const SALON = [
-    [/e0fzhnga|4164847788|4374344884|3430|beautiquebar\.yonge@/i, 'yonge'],
-    [/bkuolnwc|m7weksrj|pId=32159|6477705232|Bridlewood|2900|beautiquebar88@/i, 'bridlewood'],
+    [/e0fzhnga|4164847788|4374344884|3430|beautiquebar\.yonge@|3115765850667802737/i, 'yonge'],
+    [/bkuolnwc|m7weksrj|pId=32159|6477705232|Bridlewood|2900|beautiquebar88@|11450623828444848637/i, 'bridlewood'],
   ];
   // Page context: on a salon page, a link without its own salon (the shared email) belongs to that salon.
   const PAGE_SALON = /^\/(locations\/)?yonge\/?$/.test(location.pathname) ? 'yonge'
@@ -89,7 +89,7 @@
     if (!a) return;
     const href = a.getAttribute('href');
     const kind = /wa\.me\//i.test(href) ? 'whatsapp' : /fresha\.com/i.test(href) ? 'book' : /^tel:/i.test(href) ? 'call' : /^sms:/i.test(href) ? 'text'
-      : /google\.[^/]+\/maps/i.test(href) ? 'directions' : /^mailto:/i.test(href) ? 'email' : null;
+      : /google\.[^/]+\/maps|maps\.google\.|maps\.app\.goo\.gl|goo\.gl\/maps/i.test(href) ? 'directions' : /^mailto:/i.test(href) ? 'email' : null;
     if (!kind) return;
     // WhatsApp: one shared number for both salons, so the salon is the page it was tapped on ('yonge' / 'bridlewood'),
     // or 'shared' anywhere else (the WhatsApp assistant then asks the customer which salon).
