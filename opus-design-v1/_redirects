@@ -1,6 +1,9 @@
 # Same forwards as the live site (astro.config.mjs + public/_redirects), plus the retired shop.
 # COMEBACK15 win-back text (Oct-Nov 2026): short link in the SMS -> landing page tagged for GA4
 /back  /back/?utm_source=sms&utm_medium=text&utm_campaign=comeback15  302
+# 3-week fill rebooking text (from Nov 2026): short link in the SMS -> Bridlewood Mall Fresha booking page
+/fill  https://www.fresha.com/a/nails-for-you-beautique-bar-toronto-2900-warden-avenue-bkuolnwc/booking?utm_source=sms&utm_medium=text&utm_campaign=fill_rebook  302
+/fill/  https://www.fresha.com/a/nails-for-you-beautique-bar-toronto-2900-warden-avenue-bkuolnwc/booking?utm_source=sms&utm_medium=text&utm_campaign=fill_rebook  302
 # Printed QR-code paths -> location pages
 /warden  /locations/warden/  301
 /warden/  /locations/warden/  301
