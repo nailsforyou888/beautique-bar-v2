@@ -24,7 +24,7 @@ SITE = SITE_URL
 GTM = GTM_ID
 LASTMOD = SRC / 'sitemap-lastmod.json'   # page -> [content hash, date first seen with that content]
 NOINDEX = {'thank-you/index.html', 'skin/body-piercing/index.html', '404.html'}
-HIDDEN = {'ig/yonge/index.html', 'back/index.html', 'yback/index.html'}   # /yback/ = Yonge COMEBACK15 win-back (Nov 2026)   # /back/ = COMEBACK15 win-back text landing page   # Instagram bio landing page: noindex, nofollow and never in the sitemap
+HIDDEN = {'ig/yonge/index.html', 'back/index.html', 'yback/index.html', 'fill/index.html', 'yonge-fill/index.html'}   # /fill/ + /yonge-fill/ = 3-week fill rebooking text landing pages (Nov 2026)   # /yback/ = Yonge COMEBACK15 win-back (Nov 2026)   # /back/ = COMEBACK15 win-back text landing page   # Instagram bio landing page: noindex, nofollow and never in the sitemap
 
 GTM_HEAD = ("<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
             "var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;"
