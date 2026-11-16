@@ -1151,6 +1151,14 @@ def faq_items(k):
         qs.append(('Where can I get Bio Gel nails in Scarborough?',
                    f'At Beautique Bar in {l["addr"].removesuffix(", Scarborough, ON")}. Bio Gel overlays start at {o}, '
                    f'full sets with tips at {s} and refills at {r}; these are starting prices. Book online on Fresha{wa}.'))
+    # Answer page (Growth HQ Q261109-3, approved by the owner): prices and hours follow the menu and salons.yml; left out if a price is missing.
+    ac = [first(n) for n in ('Crystal Gel / Acrylic Overlay', 'Crystal Gel / Acrylic Set w/Tips', 'Crystal Gel / Acrylic Refill')]
+    if k == 'warden' and all(ac):
+        o, s, r = (p.rstrip('+') for _, p in ac)
+        qs.append(('Best acrylic nails near Warden and Finch?',
+                   f'Beautique Bar at {l["addr"].removesuffix(", Scarborough, ON")} in Scarborough does acrylic and Crystal Gel nail sets. '
+                   f'An acrylic overlay starts at {o}, a set with tips at {s} and a refill at {r}; these are starting prices and your technician confirms the final price. '
+                   f'We are open {hours_inline(k).replace(" · ", ", ")}. Book online on Fresha or call {l["phone"]}.'))
     if (g := first("Gentleman's Manicure", "Gentleman's Pedicure")):
         qs.append(('Do you do manicures and pedicures for men?', f'Yes. A {g[0]} is {g[1]}.'))
     if (s := first('Shellac Spa Pedicure')):
