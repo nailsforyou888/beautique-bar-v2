@@ -1508,6 +1508,12 @@ RELATED = {  # post -> (service label, href)
   'Facial Hair': ('Facial Hair Removal', '/skin/facial-hair-removal/'), 'Body Hair': ('Body Hair Removal', '/skin/body-hair-removal/'),
 }
 MD = markdown.Markdown(extensions=['tables', 'sane_lists'])
+NAIL_SET_CTA = {'what-are-nail-enhancements'}   # posts that end with a Book button for the Bridlewood Mall nail sets (Growth HQ Q261109-4)
+SERVICE_FAQ['/blog/what-are-nail-enhancements/'] = qa(
+    ('What are nail enhancements?', 'Nail enhancements are products such as acrylic, gel, Gel-X, Bio Gel and dip powder added over your natural nails for extra length, strength and a longer-lasting finish than regular polish.'),
+    ('How long do nail enhancements last?', 'Acrylic and gel nails typically need a refill every 2-3 weeks to fill the growth gap and repair any lifting, and may need a complete replacement every 6-8 weeks or sooner if there is damage.'),
+    ('Are nail enhancements safe?', 'When properly applied and cared for, yes. Risks include infection if moisture gets trapped under the enhancement, allergic reactions and damage from overfilling or harsh removal, so choose a salon that uses sterilized tools and tell your technician about any pain, redness or swelling.'),
+)
 CUSTOM_POSTS = {'removing-acrylic-nails'}   # built by hand below as a quick-answer how-to page
 for p in POSTS:
     if p['slug'] in CUSTOM_POSTS:
@@ -1524,12 +1530,17 @@ for p in POSTS:
     if p['date'].year <= 2024:
         AUDIT.setdefault(p['slug'], []).append(f'Written {fmt_date(p["date"])} — check trends and claims are still current.')
     lbl, href = RELATED.get(p['cat'], ('Nails', '/nails/'))
+    faq_sec = faq_block(SERVICE_FAQ[f'/blog/{p["slug"]}/']) if f'/blog/{p["slug"]}/' in SERVICE_FAQ else ''
+    book_cta = (f'<section class="pg-sec" data-tone="light" aria-label="Book nail sets"><p class="eyebrow">{e(LOC["warden"]["name"])}</p>'
+                f'<p><a class="btn-solid" href="{e(LOC["warden"]["book"])}" target="_blank" rel="noopener">Book nail sets at {e(LOC["warden"]["short"])} <span aria-hidden="true">↗</span></a> '
+                f'<a class="line-link" href="{LOC["warden"]["href"]}">See the Bridlewood Mall salon</a></p></section>') if p['slug'] in NAIL_SET_CTA else ''
+    post_extra = ('\n' + faq_sec + book_cta) if (faq_sec or book_cta) else ''
     add(f'/blog/{p["slug"]}/', page(f'/blog/{p["slug"]}/', seo_title(p), p['desc'], f'''
 <article class="post">
   <header class="pg-hero post-head" data-tone="light"><div class="pg-hero-text">{crumbs([('Home','/'),('Blog','/blog/'),(p['cat'] or 'Article',None)])}
     <h1>{e(p["title"])}</h1><p class="lead">{e(p["desc"])}</p><p class="post-meta eyebrow"><time datetime="{p["date"].isoformat()}">{fmt_date(p["date"])}</time> · {e(p["cat"])}</p></div></header>
   <div class="pg-sec post-body" data-tone="light"><div class="prose">{note}{art}</div></div>
-</article>
+</article>{post_extra}
 <section class="pg-sec post-cta" data-tone="light" aria-label="Related service">
   <p class="eyebrow">Related</p><a class="ol-link" href="{href}"><span>{e(lbl)}</span><small>Treatments, salons and prices</small><span aria-hidden="true">→</span></a>
   <p><a class="line-link" href="/blog/">← All articles</a></p>
