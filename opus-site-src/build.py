@@ -1143,6 +1143,14 @@ def faq_items(k):
           ('What are your hours?', hours_inline(k).replace(' · ', '. ') + '.'),
           ('How do I book?', f'Book online with Fresha, {contact}, or message us on WhatsApp.'),
           ('Where are you?', f'{l["street"]}, {l["city"]}. {l["where"]}')]
+    # Answer page (Growth HQ Q261109-2, approved by the owner): facts come from LOC, the menu file and salons.yml; left out if a price is missing.
+    gx = [first(n) for n in ('Gel-X Full Set', 'Gel-X Refill')]
+    if k == 'yonge' and all(gx):
+        fs, rf = (p.rstrip('+') for _, p in gx)
+        qs.append(('Where can I get Gel-X nails near Yonge and York Mills?',
+                   f'Beautique Bar on Yonge, at {l["street"]} in Toronto, does Gel-X nails. {l["where"]} A Gel-X full set starts at {fs} and a refill at {rf}; '
+                   f'these are starting prices, and your technician confirms the final price before starting. We are open {hours_inline(k).replace(" · ", ", ")}. '
+                   f'Book online on Fresha or call {l["phone"]}.'))
     # Answer page (Growth HQ Q261106-8, approved by the owner): prices follow the menu file; left out if any is missing.
     bg = [first(n) for n in ('Bio Gel Overlay', 'Bio Gel Full Set w/ Tips', 'Bio Gel Refill')]
     if k == 'warden' and all(bg):
