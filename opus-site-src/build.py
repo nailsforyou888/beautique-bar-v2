@@ -136,8 +136,38 @@ REV = {
   'valerie': ('The space is beautiful, classy and clean, and the staff are so welcoming. A lovely experience every time.', 'Valerie'),
 }
 
-# Google rating shown beside each salon's Book buttons — copied from the live Google listings, 21 Oct 2026. Update every few months.
-RATING = {'yonge': ('4.8', 268, 'Beautique+Bar+on+Yonge+reviews'), 'warden': ('4.3', 568, 'Beautique+Bar+Bridlewood+Mall+reviews')}
+# Google rating shown beside each salon's Book buttons. The numbers live in content/reviews.yml (Growth HQ updates that file weekly).
+REVIEWS_FILE = SRC.parent / 'content' / 'reviews.yml'
+RATING_QUERY = {'yonge': 'Beautique+Bar+on+Yonge+reviews', 'warden': 'Beautique+Bar+Bridlewood+Mall+reviews'}
+def load_ratings():
+    import yaml
+    try:
+        data = yaml.safe_load(REVIEWS_FILE.read_text())
+    except FileNotFoundError:
+        raise SystemExit(f'{REVIEWS_FILE.relative_to(SRC.parent)} is missing. It holds each salon\'s Google rating and review count (yonge and warden).')
+    except yaml.YAMLError as err:
+        raise SystemExit(f'content/reviews.yml is not valid YAML: {err}')
+    if not isinstance(data, dict):
+        raise SystemExit('content/reviews.yml must list "yonge" and "warden", each with a rating and a count.')
+    out = {}
+    for k, q in RATING_QUERY.items():
+        row = data.get(k)
+        if not isinstance(row, dict):
+            raise SystemExit(f'content/reviews.yml: "{k}" must have a rating and a count.')
+        rating, count = row.get('rating'), row.get('count')
+        if isinstance(rating, bool) or not isinstance(rating, (int, float, str)):
+            raise SystemExit(f'content/reviews.yml: {k} rating "{rating}" must be a number such as 4.8.')
+        try:
+            rating = float(rating)
+        except ValueError:
+            raise SystemExit(f'content/reviews.yml: {k} rating "{rating}" must be a number such as 4.8.')
+        if not 1 <= rating <= 5:
+            raise SystemExit(f'content/reviews.yml: {k} rating {rating} must be between 1 and 5.')
+        if isinstance(count, bool) or not isinstance(count, int) or count < 1:
+            raise SystemExit(f'content/reviews.yml: {k} count "{count}" must be a whole number of reviews, 1 or more.')
+        out[k] = (f'{rating:.1f}', count, q)
+    return out
+RATING = load_ratings()
 LOC_REVIEW = {'yonge': 'samantha', 'warden': 'sangeetha'}   # which REV quote sits beside each salon's Book buttons (owner to confirm)
 
 def proof(k):
@@ -174,8 +204,6 @@ PRICE_NOTE = ('<aside class="note" role="note"><p class="eyebrow">Beautique Bar 
               '<a href="/locations/yonge/#menu">Yonge &amp; York Mills menu</a> or the '
               '<a href="/locations/warden/#menu">Bridlewood Mall menu</a>.</p></aside>')
 POST_NOTES = {
-  'full-body-laser-hair-removal-costs': '<aside class="note" role="note"><p class="eyebrow">Please note</p><p>Laser hair removal is not on either Beautique Bar menu. '
-      'Our salons offer waxing, and threading at Yonge &amp; York Mills — see <a href="/skin/body-hair-removal/">Body hair removal</a>.</p></aside>',
   'facial-hair-growth': '<aside class="note" role="note"><p class="eyebrow">Please note</p><p>This article covers several hair-removal methods. Beautique Bar offers waxing at both salons and threading at Yonge &amp; York Mills — see <a href="/skin/facial-hair-removal/">Facial hair removal</a>.</p></aside>',
 }
 AUDIT = {}   # slug -> list of review notes (written to SITE-REVIEW.md)
@@ -300,6 +328,7 @@ def dialog(path=None):
 </dialog>'''
 
 OG_IMAGE = '/img/og-default.jpg'
+
 # Search titles/descriptions: local keywords + both neighbourhoods; titles <= ~60 chars, descriptions <= 160.
 SEO = {
   '/nails/': ('Nails: Manicures, Shellac, Bio Gel & Acrylic | Beautique Bar',
@@ -1508,6 +1537,17 @@ RELATED = {  # post -> (service label, href)
   'Facial Hair': ('Facial Hair Removal', '/skin/facial-hair-removal/'), 'Body Hair': ('Body Hair Removal', '/skin/body-hair-removal/'),
 }
 MD = markdown.Markdown(extensions=['tables', 'sane_lists'])
+# Booking callout shown after the intro (before the first H2) on the posts AI tools cite most. slug -> one short sentence.
+# Only say a salon offers something if content/menus/*.yml lists it (Bio Gel and Gel-X are on both menus).
+BOOK_CALLOUT = {
+  'bio-gel-nails': 'Bio Gel is on the menu at both salons. Choose yours to see the menu or book.',
+  'removing-bio-gel-nails': 'Prefer to leave it to a professional? Choose your salon to see the menu or book.',
+  'what-are-nail-enhancements': 'Bio Gel and Gel-X are on the menu at both salons. Choose yours to see the menu or book.',
+}
+def book_callout(slug_, text):
+    return (f'<aside class="note post-book" role="note" aria-label="Book at Beautique Bar"><p class="eyebrow">Get it done at Beautique Bar</p><p>{text} '
+            f'<a href="/locations/yonge/">Yonge &amp; York Mills</a> · <a href="/locations/warden/">Bridlewood Mall, Scarborough</a></p>'
+            f'{gl_book(f"/blog/{slug_}/")}</aside>')
 CUSTOM_POSTS = {'removing-acrylic-nails'}   # built by hand below as a quick-answer how-to page
 for p in POSTS:
     if p['slug'] in CUSTOM_POSTS:
@@ -1516,6 +1556,11 @@ for p in POSTS:
     MD.reset()
     art = MD.convert(body)
     art = fix_heading_levels(art)
+    if p['slug'] in BOOK_CALLOUT:
+        cut = art.find('<h2')
+        if cut < 0:
+            raise SystemExit(f'BOOK_CALLOUT: blog/{p["slug"]}.md has no H2 to place the booking callout before')
+        art = art[:cut] + book_callout(p['slug'], BOOK_CALLOUT[p['slug']]) + art[cut:]
     note = POST_NOTES.get(p['slug'], '')
     if removed:
         note += PRICE_NOTE
