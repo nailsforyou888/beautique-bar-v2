@@ -1,0 +1,7 @@
+# Google star rating and review count for each salon, shown beside the Book buttons. Growth HQ updates this file weekly.
+yonge:
+  rating: 4.8
+  count: 277
+warden:
+  rating: 4.3
+  count: 592
