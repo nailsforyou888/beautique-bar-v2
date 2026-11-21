@@ -127,13 +127,14 @@ def slug(s):
     return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')
 
 # ----------------------------------------------------------------------------------------------
-# Reviews — verbatim from the live site (src/data/reviews.ts)
+# Reviews: word-for-word excerpts from each client's own Google review (checked against Google 21 Nov 2026). Never reword a quote; an excerpt must be consecutive sentences.
 REV = {
-  'sangeetha': ('I’ve had my nails done here for almost two decades. The quality and care keep me coming back.', 'Sangeetha J'),
-  'samantha': ('Just had a pedicure done by Michelle and it was absolutely perfect. So relaxing and so clean.', 'Samantha C'),
-  'julia': ('I love this nail salon! Hanna is a true artist — my acrylics always look incredible.', 'Julia Brown'),
-  'danielle': ('Iris did an amazing job rebuilding three of my broken nails. They look completely natural.', 'Danielle Kalaidjian'),
-  'valerie': ('The space is beautiful, classy and clean, and the staff are so welcoming. A lovely experience every time.', 'Valerie'),
+  'sangeetha': ('David should get a raise. He treats his clients With care; he very respectfully educates you on what’s the smartest choices for the best outcome!', 'Sangeetha J'),
+  'samantha': ('Just had a pedicure done by Michelle and it was amazing. She was knowledgeable and did a great job.', 'Samantha C'),
+  'julia': ('I love this nail salon! Hanna is a true artist, she’s very detail oriented and does the best designs.', 'Julia Brown'),
+  'danielle': ('Iris did an amazing job rebuilding 3 of my broken nails with powder gel. It was a huge job and they look perfect now.', 'Danielle Kalaidjian'),
+  'valerie': ('The space is beautiful, classy and clean.', 'Valerie'),
+  'arlett': ('Always excellent and very consistent regardless of who you see. Everyone is great.', 'Arlett Tygesen'),
 }
 
 # Google rating shown beside each salon's Book buttons. The numbers live in content/reviews.yml (Growth HQ updates that file weekly).
@@ -168,7 +169,7 @@ def load_ratings():
         out[k] = (f'{rating:.1f}', count, q)
     return out
 RATING = load_ratings()
-LOC_REVIEW = {'yonge': 'samantha', 'warden': 'sangeetha'}   # which REV quote sits beside each salon's Book buttons (owner to confirm)
+LOC_REVIEW = {'yonge': 'arlett', 'warden': 'sangeetha'}   # which REV quote sits beside each salon's Book buttons (owner to confirm)
 
 def proof(k):
     r, n, q = RATING[k]
