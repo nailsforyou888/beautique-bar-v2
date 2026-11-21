@@ -1189,6 +1189,12 @@ def faq_items(k):
                    f'Beautique Bar on Yonge, at {l["street"]} in {l["city"].removesuffix(", ON")}, does Gel-X nails right on the Yonge line, north of Lawrence Avenue and south of York Mills. '
                    f'A Gel-X full set starts at {s} and a refill at {r}; these are starting prices, and your technician confirms the final price before starting. '
                    f'We are open {hours_inline(k).replace(" · ", ", ")}. Book online on Fresha or call {l["phone"]}.'))
+    if k == 'warden' and all(gx):
+        s, r = (p.rstrip('+') for _, p in gx)
+        qs.append(('Where can I get Gel-X nails in Scarborough?',
+                   f'At Beautique Bar in {l["addr"].removesuffix(", Scarborough, ON")}. '
+                   f'A Gel-X full set starts at {s} and a refill at {r}; these are starting prices, and your technician confirms the final price before starting. '
+                   f'We are open {hours_inline(k).replace(" · ", ", ")}. Book online on Fresha or call {l["phone"]}.'))
     if (g := first("Gentleman's Manicure", "Gentleman's Pedicure")):
         qs.append(('Do you do manicures and pedicures for men?', f'Yes. A {g[0]} is {g[1]}.'))
     if (s := first('Shellac Spa Pedicure')):
