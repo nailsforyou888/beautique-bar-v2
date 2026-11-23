@@ -1195,14 +1195,6 @@ def faq_items(k):
                    f'At Beautique Bar in {l["addr"].removesuffix(", Scarborough, ON")}. '
                    f'A Gel-X full set starts at {s} and a refill at {r}; these are starting prices, and your technician confirms the final price before starting. '
                    f'We are open {hours_inline(k).replace(" · ", ", ")}. Book online on Fresha or call {l["phone"]}.'))
-    # Answer page (Growth HQ Q261109-3, approved by the owner): prices, address and hours follow the site files; left out if a price is missing.
-    ac = [first(n) for n in ('Crystal Gel / Acrylic Overlay', 'Crystal Gel / Acrylic Set w/Tips', 'Crystal Gel / Acrylic Refill')]
-    if k == 'warden' and all(ac):
-        o, s, r = (p.rstrip('+') for _, p in ac)
-        qs.append(('Best acrylic nails near Warden and Finch?',
-                   f'Beautique Bar at {l["addr"].removesuffix(", Scarborough, ON")}, Scarborough, does acrylic and Crystal Gel nail sets. '
-                   f'An acrylic overlay starts at {o}, a set with tips at {s} and a refill at {r}; these are starting prices, and your technician confirms the final price. '
-                   f'We are open {hours_inline(k).replace(" · ", ", ")}. Book online on Fresha or call {l["phone"]}.'))
     if (g := first("Gentleman's Manicure", "Gentleman's Pedicure")):
         qs.append(('Do you do manicures and pedicures for men?', f'Yes. A {g[0]} is {g[1]}.'))
     if (s := first('Shellac Spa Pedicure')):
