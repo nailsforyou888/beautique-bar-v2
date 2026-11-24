@@ -4,6 +4,12 @@
 # To remove a photo from the gallery, delete its entry here (the image files can stay).
 # drive_id = the Google Drive file it came from (the weekly Tuesday task uses it to never post the same photo twice).
 photos:
+- file: pink-stiletto-with-black-bows
+  width: 1200
+  height: 1600
+  caption: Pink stiletto with black bows
+  drive_id: 1c3ck0nwbFTS9UrIjQRliEm_2RQSjVIVz
+  added: '2026-11-24'
 - file: chocolate-dot-french
   width: 1200
   height: 1600
